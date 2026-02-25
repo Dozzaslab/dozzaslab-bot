@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>DozzasLab</title>
+  <link rel="stylesheet" href="/styles.css"/>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+  <div class="bg"></div>
+
+  <div id="loading" class="hl-window">
+    <div class="hl-title">
+      <span class="hl-icon"></span>
+      <span>Loading...</span>
+      <button class="hl-x" type="button" id="x1">✕</button>
+    </div>
+    <div class="hl-body">
+      <div class="hl-muted">Loading website resources...</div>
+      <div class="hl-progress"><div id="bar" class="hl-bar"></div></div>
+      <div class="hl-actions"><button class="hl-btn" id="cancelLoad">Cancel</button></div>
+    </div>
+  </div>
+
+  <div id="app" class="hl-window hidden">
+    <div class="hl-title">
+      <span class="hl-icon"></span>
+      <span>DozzasLab</span>
+      <button class="hl-x" type="button" id="x2">✕</button>
+    </div>
+
+    <div class="hl-tabs">
+      <button class="hl-tab active" data-page="contracts">Контракты</button>
+      <button class="hl-tab" data-page="catalog">Каталог</button>
+      <button class="hl-tab" data-page="collections">Коллекции</button>
+      <button class="hl-tab" data-page="tools">Сайты</button>
+      <button class="hl-tab" data-page="faq">FAQ</button>
+      <button class="hl-tab" data-page="suggest">Предложка</button>
+    </div>
+
+    <div class="hl-body">
+      <div class="page" data-page="contracts">
+        <div class="hl-muted">Контракты (Trade-Up) — скоро</div>
+        <div class="hl-text">Следующий шаг: выбор 10 скинов и расчёт шансов.</div>
+      </div>
+
+      <div class="page hidden" data-page="catalog">
+        <div class="hl-muted">Каталог</div>
+        <div class="hl-text">Здесь будет поиск скинов.</div>
+      </div>
+
+      <div class="page hidden" data-page="collections">
+        <div class="hl-muted">Коллекции</div>
+        <div class="hl-text">Здесь будет список коллекций.</div>
+      </div>
+
+      <div class="page hidden" data-page="tools">
+        <div class="hl-muted">Полезные сайты</div>
+        <div class="grid2">
+          <button class="hl-btn" data-open="https://steamcommunity.com/market/">Steam Market</button>
+          <button class="hl-btn" data-open="https://csgostash.com/">CSGOStash</button>
+          <button class="hl-btn" data-open="https://csfloat.com/">CSFloat</button>
+          <button class="hl-btn" data-open="https://pricempire.com/">Pricempire</button>
+        </div>
+      </div>
+
+      <div class="page hidden" data-page="faq">
+        <div class="hl-muted">FAQ</div>
+        <div class="hl-text">
+          • Контракт = 10 скинов одной редкости → 1 скин следующей редкости.<br/>
+          • Шансы зависят от доли коллекций среди 10 входных.
+        </div>
+      </div>
+
+      <div class="page hidden" data-page="suggest">
+        <div class="hl-muted">Предложка</div>
+        <textarea id="suggestText" class="hl-input" placeholder="Напиши идею/ссылку/улучшение..."></textarea>
+        <div class="hl-actions">
+          <button class="hl-btn primary" id="sendSuggest">Отправить</button>
+          <button class="hl-btn" id="clearSuggest">Очистить</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
