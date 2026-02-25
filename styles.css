@@ -1,0 +1,41 @@
+*{box-sizing:border-box;font-family:Tahoma,Arial,sans-serif}
+body{margin:0;height:100vh;overflow:hidden;background:#111}
+.bg{position:fixed;inset:0;background:
+radial-gradient(60% 60% at 30% 40%, rgba(255,255,255,.06), transparent 60%),
+radial-gradient(50% 50% at 70% 60%, rgba(255,255,255,.04), transparent 60%),
+linear-gradient(180deg, #151515, #0c0c0c);
+filter:grayscale(25%) contrast(115%)}
+
+.hl-window{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);
+width:min(760px,94vw);background:#4b5c3a;border:1px solid rgba(255,255,255,.25);
+box-shadow:0 12px 30px rgba(0,0,0,.55)}
+
+.hl-title{display:flex;align-items:center;gap:8px;padding:6px 8px;background:#3f4e31;
+border-bottom:1px solid rgba(0,0,0,.35);color:#e7f0d8;font-size:13px}
+.hl-icon{width:14px;height:14px;display:inline-block;background:rgba(255,255,255,.25);
+border:1px solid rgba(0,0,0,.35)}
+.hl-x{margin-left:auto;width:22px;height:18px;border:1px solid rgba(0,0,0,.4);
+background:#556846;color:#e7f0d8;cursor:pointer}
+
+.hl-tabs{display:flex;flex-wrap:wrap;gap:6px;padding:8px 8px 0 8px}
+.hl-tab{padding:4px 8px;border:1px solid rgba(0,0,0,.45);background:#556846;
+color:#e7f0d8;cursor:pointer;font-size:13px}
+.hl-tab.active{background:#6a7f54}
+
+.hl-body{padding:10px 10px 12px 10px;color:#e7f0d8}
+.hl-muted{opacity:.85;font-size:13px;margin-bottom:8px}
+.hl-text{margin:8px 0;font-size:13px;opacity:.95}
+
+.hl-progress{height:18px;border:1px solid rgba(0,0,0,.5);background:#3a482e;padding:2px;margin:8px 0 10px}
+.hl-bar{height:100%;width:0%;background:#d2b24c}
+
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px}
+@media (max-width:620px){.grid2{grid-template-columns:1fr}}
+
+.hl-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:10px}
+.hl-btn{padding:6px 10px;border:1px solid rgba(0,0,0,.5);background:#6a7f54;color:#e7f0d8;cursor:pointer;font-size:13px}
+.hl-btn.primary{background:#7f965f}
+
+.hl-input{width:100%;min-height:110px;background:#3a482e;color:#e7f0d8;border:1px solid rgba(0,0,0,.5);
+padding:8px;resize:vertical}
+.hidden{display:none!important}
