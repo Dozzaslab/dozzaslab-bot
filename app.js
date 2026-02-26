@@ -75,16 +75,30 @@ function openSuggestStep1() {
 pickIdea?.addEventListener('click', () => openSuggestStep2("idea"));
 pickCollab?.addEventListener('click', () => openSuggestStep2("collab"));
 
-sendFinal?.addEventListener('click', () => {
+sendFinal?.addEventListener('click', async () => {
   const ta = document.getElementById('suggestText');
   const text = ta?.value.trim();
   if (!text || !suggestTopic) return;
 
-  tgSend({ type: "suggestion", topic: suggestTopic, text });
+  const from =
+    window.Telegram?.WebApp?.initDataUnsafe?.user?.username
+      ? "@" + Telegram.WebApp.initDataUnsafe.user.username
+      : (window.Telegram?.WebApp?.initDataUnsafe?.user?.first_name || "user");
 
-  if (ta) ta.value = "";
+  const r = await fetch('/api/feedback', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ topic: suggestTopic, text, from })
+  });
 
-  alert("✅ Сообщение отправлено");
+  const j = await r.json().catch(() => ({}));
+
+  if (j.ok) {
+    if (ta) ta.value = "";
+    alert("✅ Сообщение отправлено");
+  } else {
+    alert("❌ Ошибка отправки");
+  }
 });
 
 clearBtn?.addEventListener('click', () => {
