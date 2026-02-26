@@ -21,7 +21,14 @@ export default async function handler(req, res) {
 
   const chatId = msg.chat?.id;
   const text = (msg.text || "").trim();
-
+// показать chat_id
+if (text === "/id") {
+  await tg("sendMessage", token, {
+    chat_id: chatId,
+    text: `Ваш chat_id: ${chatId}`,
+  });
+  return res.status(200).end();
+}
   // /start или /menu
   if (text === "/start" || text === "/menu") {
     await tg("sendMessage", token, {
