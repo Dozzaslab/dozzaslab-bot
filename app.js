@@ -1,10 +1,12 @@
 const loading = document.getElementById('loading');
 const app = document.getElementById('app');
 const bar = document.getElementById('bar');
+
 if (window.Telegram?.WebApp) {
   Telegram.WebApp.ready();
   Telegram.WebApp.expand();
 }
+
 function showPage(page) {
   document.querySelectorAll('.page').forEach(p => {
     p.classList.toggle('hidden', p.dataset.page !== page);
@@ -21,17 +23,16 @@ document.querySelectorAll('.hl-tab').forEach(btn => {
 document.querySelectorAll('[data-open]').forEach(btn => {
   btn.addEventListener('click', () => {
     const url = btn.dataset.open;
-    if (window.Telegram?.WebApp?.openLink) {
-      Telegram.WebApp.openLink(url);
-    } else {
-      window.open(url, '_blank');
-    }
+    if (window.Telegram?.WebApp?.openLink) Telegram.WebApp.openLink(url);
+    else window.open(url, '_blank');
   });
 });
 
 function tgSend(payload) {
   if (window.Telegram?.WebApp?.sendData) {
     Telegram.WebApp.sendData(JSON.stringify(payload));
+  } else {
+    alert("WebApp API недоступен (открой внутри Telegram)");
   }
 }
 
@@ -61,16 +62,13 @@ function openSuggestStep2(topic) {
 
   step1?.classList.add('hidden');
   step2?.classList.remove('hidden');
-
   document.getElementById('suggestText')?.focus();
 }
 
 function openSuggestStep1() {
   suggestTopic = null;
-
   step2?.classList.add('hidden');
   step1?.classList.remove('hidden');
-
   const ta = document.getElementById('suggestText');
   if (ta) ta.value = "";
 }
@@ -78,37 +76,15 @@ function openSuggestStep1() {
 pickIdea?.addEventListener('click', () => openSuggestStep2("idea"));
 pickCollab?.addEventListener('click', () => openSuggestStep2("collab"));
 
-sendFinal?.addEventListener('click', async () => {
+sendFinal?.addEventListener('click', () => {
   const ta = document.getElementById('suggestText');
   const text = ta?.value.trim();
   if (!text || !suggestTopic) return;
 
-  const u = window.Telegram?.WebApp?.initDataUnsafe?.user;
+  tgSend({ type: "suggestion", topic: suggestTopic, text });
 
-  const user_id = u?.id || null;
-  const username = u?.username || null;
-  const first_name = u?.first_name || null;
-
-  const r = await fetch('/api/feedback', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-   const initData = window.Telegram?.WebApp?.initData || "";
-
-body: JSON.stringify({
-  topic: suggestTopic,
-  text,
-  initData
-})
-  });
-
-  const j = await r.json().catch(() => ({}));
-
-  if (j.ok) {
-    if (ta) ta.value = "";
-    alert("✅ Сообщение отправлено");
-  } else {
-    alert("❌ Ошибка отправки");
-  }
+  if (ta) ta.value = "";
+  alert("✅ Сообщение отправлено");
 });
 
 clearBtn?.addEventListener('click', () => {
