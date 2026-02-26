@@ -31,40 +31,71 @@ function tgSend(payload) {
     Telegram.WebApp.sendData(JSON.stringify(payload));
   }
 }
-function getSuggestText() {
-  return document.getElementById('suggestText').value.trim();
+
+/* ===== Предложка: 2 шага ===== */
+let suggestTopic = null;
+
+const step1 = document.getElementById('suggestStep1');
+const step2 = document.getElementById('suggestStep2');
+const title = document.getElementById('suggestTitle');
+
+const pickIdea = document.getElementById('pickIdea');
+const pickCollab = document.getElementById('pickCollab');
+
+const sendFinal = document.getElementById('sendSuggestFinal');
+const backBtn = document.getElementById('backSuggest');
+const clearBtn = document.getElementById('clearSuggest');
+
+function openSuggestStep2(topic) {
+  suggestTopic = topic;
+
+  if (title) {
+    title.textContent =
+      topic === "collab"
+        ? "Тема: 🤝 Сотрудничество"
+        : "Тема: 💡 Идея / улучшение";
+  }
+
+  step1?.classList.add('hidden');
+  step2?.classList.remove('hidden');
+
+  document.getElementById('suggestText')?.focus();
 }
 
-const sendIdeaBtn = document.getElementById('sendIdea');
-if (sendIdeaBtn) {
-  sendIdeaBtn.addEventListener('click', () => {
-    const text = getSuggestText();
-    if (!text) return;
-    tgSend({ type: "suggestion", topic: "idea", text });
-    document.getElementById('suggestText').value = "";
-  });
+function openSuggestStep1() {
+  suggestTopic = null;
+
+  step2?.classList.add('hidden');
+  step1?.classList.remove('hidden');
+
+  const ta = document.getElementById('suggestText');
+  if (ta) ta.value = "";
 }
 
-const sendCollabBtn = document.getElementById('sendCollab');
-if (sendCollabBtn) {
-  sendCollabBtn.addEventListener('click', () => {
-    const text = getSuggestText();
-    if (!text) return;
-    tgSend({ type: "suggestion", topic: "collab", text });
-    document.getElementById('suggestText').value = "";
-  });
-}
+pickIdea?.addEventListener('click', () => openSuggestStep2("idea"));
+pickCollab?.addEventListener('click', () => openSuggestStep2("collab"));
 
-document.getElementById('clearSuggest').addEventListener('click', () => {
-  document.getElementById('suggestText').value = "";
+sendFinal?.addEventListener('click', () => {
+  const text = document.getElementById('suggestText')?.value.trim();
+  if (!text || !suggestTopic) return;
+  tgSend({ type: "suggestion", topic: suggestTopic, text });
+  openSuggestStep1();
 });
 
+clearBtn?.addEventListener('click', () => {
+  const ta = document.getElementById('suggestText');
+  if (ta) ta.value = "";
+});
+
+backBtn?.addEventListener('click', () => openSuggestStep1());
+
+/* ===== загрузка ===== */
 let p = 0;
-const t = setInterval(() => {
+const timer = setInterval(() => {
   p += Math.floor(Math.random() * 12) + 6;
   if (p >= 100) {
     p = 100;
-    clearInterval(t);
+    clearInterval(timer);
     loading.classList.add('hidden');
     app.classList.remove('hidden');
     showPage('contracts');
