@@ -1,7 +1,10 @@
 const loading = document.getElementById('loading');
 const app = document.getElementById('app');
 const bar = document.getElementById('bar');
-
+if (window.Telegram?.WebApp) {
+  Telegram.WebApp.ready();
+  Telegram.WebApp.expand();
+}
 function showPage(page) {
   document.querySelectorAll('.page').forEach(p => {
     p.classList.toggle('hidden', p.dataset.page !== page);
