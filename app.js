@@ -25,6 +25,7 @@ document.querySelectorAll('[data-open]').forEach(btn => {
     }
   });
 });
+
 function tgSend(payload) {
   if (window.Telegram?.WebApp?.sendData) {
     Telegram.WebApp.sendData(JSON.stringify(payload));
