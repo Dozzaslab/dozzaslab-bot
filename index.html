@@ -74,12 +74,29 @@
       </div>
 
       <div class="page hidden" data-page="suggest">
-        <div class="hl-muted">Предложка</div>
-        <textarea id="suggestText" class="hl-input" placeholder="Напиши идею/ссылку/улучшение..."></textarea>
-        <div class="hl-actions">
-  <button class="hl-btn primary" id="sendIdea">💡 Отправить идею</button>
-  <button class="hl-btn" id="sendCollab">🤝 Сотрудничество</button>
-  <button class="hl-btn" id="clearSuggest">Очистить</button>
+  <div class="hl-muted">Предложка</div>
+
+  <!-- Шаг 1: выбор типа -->
+  <div id="suggestStep1">
+    <div class="hl-text">Выбери тип:</div>
+    <div class="grid2">
+      <button class="hl-btn primary" id="pickIdea">💡 Идея / улучшение</button>
+      <button class="hl-btn" id="pickCollab">🤝 Сотрудничество</button>
+    </div>
+  </div>
+
+  <!-- Шаг 2: ввод текста -->
+  <div id="suggestStep2" class="hidden">
+    <div class="hl-text" id="suggestTitle">Тема: —</div>
+    <textarea id="suggestText" class="hl-input" placeholder="Напиши сообщение..."></textarea>
+
+    <div class="hl-actions">
+      <button class="hl-btn primary" id="sendSuggestFinal">Отправить</button>
+      <button class="hl-btn" id="clearSuggest">Очистить</button>
+      <button class="hl-btn" id="backSuggest">Назад</button>
+    </div>
+  </div>
+</div>
           </div>
         </div>
       </div>
