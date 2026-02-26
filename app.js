@@ -25,19 +25,34 @@ document.querySelectorAll('[data-open]').forEach(btn => {
     }
   });
 });
-
 function tgSend(payload) {
   if (window.Telegram?.WebApp?.sendData) {
     Telegram.WebApp.sendData(JSON.stringify(payload));
   }
 }
+function getSuggestText() {
+  return document.getElementById('suggestText').value.trim();
+}
 
-document.getElementById('sendSuggest').addEventListener('click', () => {
-  const text = document.getElementById('suggestText').value.trim();
-  if (!text) return;
-  tgSend({ type: "suggestion", text });
-  document.getElementById('suggestText').value = "";
-});
+const sendIdeaBtn = document.getElementById('sendIdea');
+if (sendIdeaBtn) {
+  sendIdeaBtn.addEventListener('click', () => {
+    const text = getSuggestText();
+    if (!text) return;
+    tgSend({ type: "suggestion", topic: "idea", text });
+    document.getElementById('suggestText').value = "";
+  });
+}
+
+const sendCollabBtn = document.getElementById('sendCollab');
+if (sendCollabBtn) {
+  sendCollabBtn.addEventListener('click', () => {
+    const text = getSuggestText();
+    if (!text) return;
+    tgSend({ type: "suggestion", topic: "collab", text });
+    document.getElementById('suggestText').value = "";
+  });
+}
 
 document.getElementById('clearSuggest').addEventListener('click', () => {
   document.getElementById('suggestText').value = "";
