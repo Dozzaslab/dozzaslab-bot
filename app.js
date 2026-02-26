@@ -92,13 +92,13 @@ sendFinal?.addEventListener('click', async () => {
   const r = await fetch('/api/feedback', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      topic: suggestTopic,
-      text,
-      user_id,
-      username,
-      first_name
-    })
+   const initData = window.Telegram?.WebApp?.initData || "";
+
+body: JSON.stringify({
+  topic: suggestTopic,
+  text,
+  initData
+})
   });
 
   const j = await r.json().catch(() => ({}));
