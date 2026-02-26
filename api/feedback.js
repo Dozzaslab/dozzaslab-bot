@@ -15,10 +15,9 @@ export default async function handler(req, res) {
   const token = process.env.BOT_TOKEN;
   if (!token) return res.status(500).json({ ok: false, error: "Missing BOT_TOKEN" });
 
-  let body = {};
-  try { body = req.body || {}; } catch {}
+  const body = req.body || {};
+  const { topic, text, user_id, username, first_name } = body;
 
-  const { topic, text, from } = body;
   if (!text) return res.status(400).json({ ok: false, error: "Missing text" });
 
   const header =
@@ -26,12 +25,17 @@ export default async function handler(req, res) {
       ? "🤝 СОТРУДНИЧЕСТВО  #collab"
       : "💡 ИДЕЯ / УЛУЧШЕНИЕ  #idea";
 
+  const who = username ? `@${username}` : (first_name ? first_name : "user");
+  const replyHint = user_id ? `Reply chat_id: ${user_id}` : "Reply chat_id: (unknown)";
+
   await tg("sendMessage", token, {
     chat_id: ADMIN_ID,
     text:
       `${header}\n` +
-      (from ? `От: ${from}\n` : "") +
-      `\n${text}`,
+      `От: ${who}\n` +
+      (user_id ? `ID: ${user_id}\n` : "") +
+      `${replyHint}\n\n` +
+      `${text}`,
   });
 
   return res.status(200).json({ ok: true });
