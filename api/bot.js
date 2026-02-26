@@ -48,19 +48,34 @@ if (text === "/id") {
     let payload;
     try { payload = JSON.parse(webData); } catch { payload = { type: "raw", data: webData }; }
 
-   if (payload.type === "suggestion") {
+if (payload.type === "suggestion") {
+  const topic = payload.topic || "idea";
+
   // подтверждение пользователю
+  const userAck =
+    topic === "collab"
+      ? "✅ Запрос на сотрудничество отправлен! Я отвечу скоро."
+      : "✅ Идея/улучшение принято! Спасибо.";
+
   await tg("sendMessage", token, {
     chat_id: chatId,
-    text: "✅ Предложка принята! Спасибо.",
+    text: userAck,
   });
 
-  // отправка админу
+  // сообщение админу
+  const from =
+    msg.from?.username ? "@" + msg.from.username : (msg.from?.first_name || "user");
+
+  const header =
+    topic === "collab"
+      ? "🤝 СОТРУДНИЧЕСТВО  #collab"
+      : "💡 ИДЕЯ / УЛУЧШЕНИЕ  #idea";
+
   await tg("sendMessage", token, {
     chat_id: ADMIN_ID,
     text:
-      "📩 Новая предложка\n" +
-      `От: ${msg.from?.username ? "@" + msg.from.username : msg.from?.first_name || "user"}\n` +
+      `${header}\n` +
+      `От: ${from}\n` +
       `ID: ${chatId}\n\n` +
       `${payload.text}`,
   });
