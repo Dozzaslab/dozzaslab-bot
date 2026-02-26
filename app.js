@@ -80,15 +80,22 @@ sendFinal?.addEventListener('click', async () => {
   const text = ta?.value.trim();
   if (!text || !suggestTopic) return;
 
-  const from =
-    window.Telegram?.WebApp?.initDataUnsafe?.user?.username
-      ? "@" + Telegram.WebApp.initDataUnsafe.user.username
-      : (window.Telegram?.WebApp?.initDataUnsafe?.user?.first_name || "user");
+  const u = window.Telegram?.WebApp?.initDataUnsafe?.user;
+
+  const user_id = u?.id || null;
+  const username = u?.username || null;
+  const first_name = u?.first_name || null;
 
   const r = await fetch('/api/feedback', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ topic: suggestTopic, text, from })
+    body: JSON.stringify({
+      topic: suggestTopic,
+      text,
+      user_id,
+      username,
+      first_name
+    })
   });
 
   const j = await r.json().catch(() => ({}));
