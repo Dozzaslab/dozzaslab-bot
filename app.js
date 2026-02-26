@@ -76,10 +76,15 @@ pickIdea?.addEventListener('click', () => openSuggestStep2("idea"));
 pickCollab?.addEventListener('click', () => openSuggestStep2("collab"));
 
 sendFinal?.addEventListener('click', () => {
-  const text = document.getElementById('suggestText')?.value.trim();
+  const ta = document.getElementById('suggestText');
+  const text = ta?.value.trim();
   if (!text || !suggestTopic) return;
+
   tgSend({ type: "suggestion", topic: suggestTopic, text });
-  openSuggestStep1();
+
+  if (ta) ta.value = "";
+
+  alert("✅ Сообщение отправлено");
 });
 
 clearBtn?.addEventListener('click', () => {
