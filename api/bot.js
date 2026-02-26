@@ -1,5 +1,5 @@
 const WEBAPP_URL = "https://dozzaslab-bot.vercel.app"; // если домен другой — замени
-
+const ADMIN_ID = 8347406600;
 async function tg(method, token, payload) {
   const r = await fetch(`https://api.telegram.org/bot${token}/${method}`, {
     method: "POST",
@@ -48,13 +48,25 @@ if (text === "/id") {
     let payload;
     try { payload = JSON.parse(webData); } catch { payload = { type: "raw", data: webData }; }
 
-    if (payload.type === "suggestion") {
-      await tg("sendMessage", token, {
-        chat_id: chatId,
-        text: "✅ Предложка принята! Спасибо.",
-      });
-      return res.status(200).end();
-    }
+   if (payload.type === "suggestion") {
+  // подтверждение пользователю
+  await tg("sendMessage", token, {
+    chat_id: chatId,
+    text: "✅ Предложка принята! Спасибо.",
+  });
+
+  // отправка админу
+  await tg("sendMessage", token, {
+    chat_id: ADMIN_ID,
+    text:
+      "📩 Новая предложка\n" +
+      `От: ${msg.from?.username ? "@" + msg.from.username : msg.from?.first_name || "user"}\n` +
+      `ID: ${chatId}\n\n` +
+      `${payload.text}`,
+  });
+
+  return res.status(200).end();
+}
 
     await tg("sendMessage", token, {
       chat_id: chatId,
