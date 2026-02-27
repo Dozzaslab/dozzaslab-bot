@@ -6,9 +6,22 @@ radial-gradient(50% 50% at 70% 60%, rgba(255,255,255,.04), transparent 60%),
 linear-gradient(180deg, #151515, #0c0c0c);
 filter:grayscale(25%) contrast(115%)}
 
-.hl-window{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);
-width:min(760px,94vw);background:#4b5c3a;border:1px solid rgba(255,255,255,.25);
-box-shadow:0 12px 30px rgba(0,0,0,.55)}
+.hl-window{
+  position:fixed;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+
+  width:min(760px,94vw);
+  height:min(720px, calc(100vh - 24px)); /* ✅ фиксируем высоту окна */
+  display:flex;                          /* ✅ */
+  flex-direction:column;                /* ✅ */
+
+  background:#4b5c3a;
+  border:1px solid rgba(255,255,255,.25);
+  box-shadow:0 12px 30px rgba(0,0,0,.55);
+  overflow:hidden;                      /* ✅ чтобы не "раздувалось" */
+}
 
 .hl-title{display:flex;align-items:center;gap:8px;padding:6px 8px;background:#3f4e31;
 border-bottom:1px solid rgba(0,0,0,.35);color:#e7f0d8;font-size:13px}
@@ -17,12 +30,26 @@ border:1px solid rgba(0,0,0,.35)}
 .hl-x{margin-left:auto;width:22px;height:18px;border:1px solid rgba(0,0,0,.4);
 background:#556846;color:#e7f0d8;cursor:pointer}
 
-.hl-tabs{display:flex;flex-wrap:wrap;gap:6px;padding:8px 8px 0 8px}
+.hl-tabs{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  padding:8px 8px 0 8px;
+  min-height:72px;   /* фиксируем минимальную высоту */
+}
 .hl-tab{padding:4px 8px;border:1px solid rgba(0,0,0,.45);background:#556846;
 color:#e7f0d8;cursor:pointer;font-size:13px}
 .hl-tab.active{background:#6a7f54}
 
-.hl-body{padding:10px 10px 12px 10px;color:#e7f0d8}
+.hl-body{
+  padding:10px 10px 12px 10px;
+  color:#e7f0d8;
+
+  flex:1;                 /* ✅ занимает всё оставшееся место */
+  overflow-y:scroll;      /* ✅ скролл всегда, без прыжков ширины */
+  -webkit-overflow-scrolling:touch;
+  scrollbar-gutter: stable; /* ✅ если поддерживается */
+}
 .hl-muted{opacity:.85;font-size:13px;margin-bottom:8px}
 .hl-text{margin:8px 0;font-size:13px;opacity:.95}
 
@@ -39,18 +66,6 @@ color:#e7f0d8;cursor:pointer;font-size:13px}
 .hl-input{width:100%;min-height:110px;background:#3a482e;color:#e7f0d8;border:1px solid rgba(0,0,0,.5);
 padding:8px;resize:vertical}
 .hidden{display:none!important}
-/* 1) окно приложения: ограничиваем высоту, чтобы внутри можно было скроллить */
-.hl-window{
-  max-height: calc(100vh - 24px);
-  overflow: hidden; /* чтобы скроллился именно контент, а не весь window */
-}
-
-/* 2) тело окна: включаем вертикальный скролл */
-.hl-body{
-  overflow-y: auto;
-  max-height: calc(100vh - 160px); /* запас под title + tabs */
-  -webkit-overflow-scrolling: touch;
-}
 
 /* 3) Поиск (в каталоге) — нужен инпут однострочный, а твой .hl-input сейчас textarea */
 .hl-search{
