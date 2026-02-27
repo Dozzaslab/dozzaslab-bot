@@ -45,8 +45,10 @@ color:#e7f0d8;cursor:pointer;font-size:13px}
 .hl-body{
   padding:10px 10px 12px 10px;
   color:#e7f0d8;
+
   flex:1;
-  overflow-y:auto;                 /* ✅ можно auto */
+  min-height:0;           /* ✅ ВОТ ЭТО НУЖНО */
+  overflow-y:auto;
   -webkit-overflow-scrolling:touch;
   scrollbar-gutter: stable;
 }
@@ -76,4 +78,8 @@ padding:8px;resize:vertical}
   background:#3a482e;
   color:#e7f0d8;
   border:1px solid rgba(0,0,0,.5);
+}
+
+.page{
+  min-height:0;           /* ✅ чтобы страницы внутри не раздували контейнер */
 }
