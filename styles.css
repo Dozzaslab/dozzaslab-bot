@@ -92,3 +92,16 @@ padding:8px;resize:vertical}
 .page{
   min-height:0;           /* ✅ чтобы страницы внутри не раздували контейнер */
 }
+
+/* ===== FIX LOADING SIZE ===== */
+#loading{
+  height:auto !important;
+  width:min(360px, calc(100vw - 24px)) !important;
+  top:20% !important;
+}
+
+#loading .hl-body{
+  flex:0 !important;
+  min-height:auto !important;
+  overflow:hidden !important;
+}
