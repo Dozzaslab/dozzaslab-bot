@@ -112,3 +112,92 @@ const timer = setInterval(() => {
 document.getElementById('x1').onclick = () => loading.classList.add('hidden');
 document.getElementById('x2').onclick = () => app.classList.add('hidden');
 document.getElementById('cancelLoad').onclick = () => loading.classList.add('hidden');
+/* ===== Кейсы/Капсулы: 2 уровня + поиск + скролл ===== */
+(function initCatalog() {
+  const home = document.getElementById("catalogHome");
+  const cases = document.getElementById("catalogCases");
+  const caps = document.getElementById("catalogCapsules");
+
+  const openCases = document.getElementById("openCases");
+  const openCaps = document.getElementById("openCapsules");
+
+  const back1 = document.getElementById("backToCatalogHome1");
+  const back2 = document.getElementById("backToCatalogHome2");
+
+  const casesSearch = document.getElementById("casesSearch");
+  const capsSearch = document.getElementById("capsulesSearch");
+
+  const casesList = document.getElementById("casesList");
+  const capsList = document.getElementById("capsulesList");
+
+  const scrollBox = document.querySelector("#app .hl-body"); // у тебя это контейнер контента
+
+  if (!home || !cases || !caps) return;
+
+  function scrollToTop() {
+    if (scrollBox) scrollBox.scrollTop = 0;
+  }
+
+  function filterList(listEl, query) {
+    if (!listEl) return;
+    const q = (query || "").trim().toLowerCase();
+    listEl.querySelectorAll(".catalog-item").forEach(btn => {
+      const t = (btn.textContent || "").toLowerCase();
+      btn.style.display = t.includes(q) ? "" : "none";
+    });
+  }
+
+  function showHome() {
+    home.classList.remove("hidden");
+    cases.classList.add("hidden");
+    caps.classList.add("hidden");
+
+    if (casesSearch) casesSearch.value = "";
+    if (capsSearch) capsSearch.value = "";
+
+    filterList(casesList, "");
+    filterList(capsList, "");
+
+    scrollToTop();
+  }
+
+  function showCases() {
+    home.classList.add("hidden");
+    cases.classList.remove("hidden");
+    caps.classList.add("hidden");
+    scrollToTop();
+    casesSearch?.focus();
+  }
+
+  function showCaps() {
+    home.classList.add("hidden");
+    cases.classList.add("hidden");
+    caps.classList.remove("hidden");
+    scrollToTop();
+    capsSearch?.focus();
+  }
+
+  openCases?.addEventListener("click", showCases);
+  openCaps?.addEventListener("click", showCaps);
+  back1?.addEventListener("click", showHome);
+  back2?.addEventListener("click", showHome);
+
+  casesSearch?.addEventListener("input", (e) => {
+    filterList(casesList, e.target.value);
+    scrollToTop();
+  });
+
+  capsSearch?.addEventListener("input", (e) => {
+    filterList(capsList, e.target.value);
+    scrollToTop();
+  });
+
+  // если пользователь кликает по вкладкам — тоже поднимаем наверх
+  document.querySelectorAll(".hl-tab").forEach(tab => {
+    tab.addEventListener("click", () => {
+      scrollToTop();
+      // при входе в каталог — всегда показываем 2 кнопки, как ты хочешь
+      if (tab.dataset.page === "catalog") showHome();
+    });
+  });
+})();
