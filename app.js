@@ -7,16 +7,21 @@ if (window.Telegram?.WebApp) {
   Telegram.WebApp.expand();
 }
 
+const scrollBox = document.querySelector('#app .hl-body');
 function scrollToTop() {
-  const scrollBox = document.querySelector('#app .hl-body');
   if (scrollBox) scrollBox.scrollTop = 0;
 }
 
 /* ===== Навигация по вкладкам ===== */
 function showPage(page) {
-  document.querySelectorAll('.page').forEach(p => {
+  const root = document.querySelector('#app .hl-body');
+  if (!root) return;
+
+  // показываем только страницы верхнего уровня
+  root.querySelectorAll(':scope > .page').forEach(p => {
     p.classList.toggle('hidden', p.dataset.page !== page);
   });
+
   document.querySelectorAll('.hl-tab').forEach(t => {
     t.classList.toggle('active', t.dataset.page === page);
   });
@@ -29,8 +34,10 @@ function showPage(page) {
   }
 }
 
-document.querySelectorAll('.hl-tab').forEach(btn => {
-  btn.addEventListener('click', () => showPage(btn.dataset.page));
+document.addEventListener('click', (e) => {
+  const tab = e.target.closest('.hl-tab[data-page]');
+  if (!tab) return;
+  showPage(tab.dataset.page);
 });
 
 /* ===== Делегирование кликов по data-open (работает и для новых кнопок) ===== */
