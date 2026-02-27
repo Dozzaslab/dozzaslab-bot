@@ -9,18 +9,19 @@ filter:grayscale(25%) contrast(115%)}
 .hl-window{
   position:fixed;
   left:50%;
-  top:50%;
-  transform:translate(-50%,-50%);
+  top:12px;                 /* ✅ прибили к верху */
+  transform:translateX(-50%);/* ✅ только по X, без Y */
 
   width:min(760px,94vw);
-  height:min(720px, calc(100vh - 24px)); /* ✅ фиксируем высоту окна */
-  display:flex;                          /* ✅ */
-  flex-direction:column;                /* ✅ */
+  height:calc(100vh - 24px); /* ✅ ровно по высоте экрана (без “длинного” 720) */
+
+  display:flex;
+  flex-direction:column;
 
   background:#4b5c3a;
   border:1px solid rgba(255,255,255,.25);
   box-shadow:0 12px 30px rgba(0,0,0,.55);
-  overflow:hidden;                      /* ✅ чтобы не "раздувалось" */
+  overflow:hidden;
 }
 
 .hl-title{display:flex;align-items:center;gap:8px;padding:6px 8px;background:#3f4e31;
@@ -44,11 +45,10 @@ color:#e7f0d8;cursor:pointer;font-size:13px}
 .hl-body{
   padding:10px 10px 12px 10px;
   color:#e7f0d8;
-
-  flex:1;                 /* ✅ занимает всё оставшееся место */
-  overflow-y:scroll;      /* ✅ скролл всегда, без прыжков ширины */
+  flex:1;
+  overflow-y:auto;                 /* ✅ можно auto */
   -webkit-overflow-scrolling:touch;
-  scrollbar-gutter: stable; /* ✅ если поддерживается */
+  scrollbar-gutter: stable;
 }
 .hl-muted{opacity:.85;font-size:13px;margin-bottom:8px}
 .hl-text{margin:8px 0;font-size:13px;opacity:.95}
