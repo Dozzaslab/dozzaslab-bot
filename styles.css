@@ -39,3 +39,26 @@ color:#e7f0d8;cursor:pointer;font-size:13px}
 .hl-input{width:100%;min-height:110px;background:#3a482e;color:#e7f0d8;border:1px solid rgba(0,0,0,.5);
 padding:8px;resize:vertical}
 .hidden{display:none!important}
+/* 1) окно приложения: ограничиваем высоту, чтобы внутри можно было скроллить */
+.hl-window{
+  max-height: calc(100vh - 24px);
+  overflow: hidden; /* чтобы скроллился именно контент, а не весь window */
+}
+
+/* 2) тело окна: включаем вертикальный скролл */
+.hl-body{
+  overflow-y: auto;
+  max-height: calc(100vh - 160px); /* запас под title + tabs */
+  -webkit-overflow-scrolling: touch;
+}
+
+/* 3) Поиск (в каталоге) — нужен инпут однострочный, а твой .hl-input сейчас textarea */
+.hl-search{
+  width:100%;
+  height:34px;
+  min-height:34px;
+  padding:6px 8px;
+  background:#3a482e;
+  color:#e7f0d8;
+  border:1px solid rgba(0,0,0,.5);
+}
