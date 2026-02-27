@@ -1,10 +1,19 @@
 *{box-sizing:border-box;font-family:Tahoma,Arial,sans-serif}
 body{margin:0;height:100vh;overflow:hidden;background:#111}
-.bg{position:fixed;inset:0;background:
-radial-gradient(60% 60% at 30% 40%, rgba(255,255,255,.06), transparent 60%),
-radial-gradient(50% 50% at 70% 60%, rgba(255,255,255,.04), transparent 60%),
-linear-gradient(180deg, #151515, #0c0c0c);
-filter:grayscale(25%) contrast(115%)}
+.bg{
+  position:fixed;
+  inset:0;
+
+  background-image:
+    linear-gradient(rgba(0,0,0,.55), rgba(0,0,0,.75)),
+    url("assets/cs16-bg.jpg");
+
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+
+  filter:grayscale(15%) contrast(115%);
+}
 
 .hl-window{
   position:fixed;
