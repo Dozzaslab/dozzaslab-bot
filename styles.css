@@ -65,7 +65,30 @@ color:#e7f0d8;cursor:pointer;font-size:13px}
 .hl-text{margin:8px 0;font-size:13px;opacity:.95}
 
 .hl-progress{height:18px;border:1px solid rgba(0,0,0,.5);background:#3a482e;padding:2px;margin:8px 0 10px}
-.hl-bar{height:100%;width:0%;background:#d2b24c}
+/* ===== CS 1.6 segmented loading bar ===== */
+#loading .hl-bar{
+  height:100%;
+  width:0%;
+
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      #d2b24c 0px,
+      #d2b24c 6px,
+      transparent 6px,
+      transparent 10px
+    );
+
+  background-size:10px 100%;
+
+  /* лёгкое движение сегментов */
+  animation: csLoadMove .35s linear infinite;
+}
+
+@keyframes csLoadMove{
+  from { background-position:0 0; }
+  to   { background-position:10px 0; }
+}
 
 .grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px}
 @media (max-width:620px){.grid2{grid-template-columns:1fr}}
