@@ -41,6 +41,8 @@
       <button class="hl-tab" data-page="tools">🌐Сайты для торговли</button>
       <button class="hl-tab" data-page="faq">🧠FAQ</button>
       <button class="hl-tab" data-page="suggest">📬Предложка</button>
+      <button class="hl-tab" data-page="about">🧑‍💻 О себе</button>
+      <button class="hl-tab" data-page="invest">💼Другие проекты</button>
     </div>
 
     <div class="hl-body">
@@ -142,32 +144,73 @@
         </div>
       </div>
 
-      <!-- SUGGEST -->
-      <div class="page hidden" data-page="suggest">
-        <div class="hl-muted">📬Предложка</div>
+     <!-- SUGGEST -->
+<div class="page hidden" data-page="suggest">
+  <div class="hl-muted">📬Предложка</div>
 
-        <div id="suggestStep1">
-          <div class="hl-text">Выбери тип:</div>
-          <div class="grid2">
-            <button class="hl-btn primary" id="pickIdea">💡 Идея / улучшение</button>
-            <button class="hl-btn" id="pickCollab">🤝 Сотрудничество</button>
-          </div>
-        </div>
-
-        <div id="suggestStep2" class="hidden">
-          <div class="hl-text" id="suggestTitle">Тема: —</div>
-          <textarea id="suggestText" class="hl-input" placeholder="Напиши сообщение..."></textarea>
-
-          <div class="hl-actions">
-            <button class="hl-btn primary" id="sendSuggestFinal">Отправить</button>
-            <button class="hl-btn" id="clearSuggest">Очистить</button>
-            <button class="hl-btn" id="backSuggest">Назад</button>
-          </div>
-        </div>
-      </div>
-
+  <div id="suggestStep1">
+    <div class="hl-text">Выбери тип:</div>
+    <div class="grid2">
+      <button class="hl-btn primary" id="pickIdea">💡 Идея / улучшение</button>
+      <button class="hl-btn" id="pickCollab">🤝 Сотрудничество</button>
     </div>
   </div>
+
+  <div id="suggestStep2" class="hidden">
+    <div class="hl-text" id="suggestTitle">Тема: —</div>
+    <textarea id="suggestText" class="hl-input" placeholder="Напиши сообщение..."></textarea>
+
+    <div class="hl-actions">
+      <button class="hl-btn primary" id="sendSuggestFinal">Отправить</button>
+      <button class="hl-btn" id="clearSuggest">Очистить</button>
+      <button class="hl-btn" id="backSuggest">Назад</button>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<div class="page hidden" data-page="about">
+  <div class="hl-muted">🧑‍💻 О себе</div>
+  <div class="hl-text">
+    Здесь будет описание проекта.
+  </div>
+</div>
+
+<!-- INVEST -->
+<div class="page hidden" data-page="invest">
+  <div class="hl-muted">💼 Другие проекты инвестирования</div>
+
+  <details class="hl-accordion">
+    <summary class="hl-btn primary">🕳️ Deadlock</summary>
+    <div class="hl-text" style="margin-top:10px;">
+      Тут будут новости после официальных стартов продаж скинов и запуска маркета.
+    </div>
+  </details>
+
+  <div style="height:10px;"></div>
+
+  <details class="hl-accordion">
+    <summary class="hl-btn">🧱 S&amp;box</summary>
+
+    <details style="margin-top:8px;">
+      <summary class="hl-btn">🎮 Как получить игру</summary>
+      <div class="hl-text" style="margin-top:10px;">Инструкция по получению доступа.</div>
+    </details>
+
+    <details style="margin-top:8px;">
+      <summary class="hl-btn">🛒 Маркет скинов</summary>
+      <div class="hl-text" style="margin-top:10px;">Информация о рынке скинов.</div>
+    </details>
+
+    <details style="margin-top:8px;">
+      <summary class="hl-btn">📊 Трекинг портфелей</summary>
+      <div class="hl-text" style="margin-top:10px;">Здесь будет ссылка на трекер.</div>
+    </details>
+  </details>
+</div>
+
+    </div> <!-- /.hl-body -->
+  </div>   <!-- /#app -->
 
   <script src="/app.js"></script>
 </body>
