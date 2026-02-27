@@ -47,45 +47,58 @@
 
      <div class="page hidden" data-page="catalog">
 
+  <div class="page hidden" data-page="catalog">
+
   <div class="hl-muted">🎁 Кейсы и капсулы</div>
 
-  <!-- 2.1 Кейсы -->
-  <div class="hl-text" style="margin-top:10px;">📦 2.1 Кейсы</div>
-  <div class="grid2">
-
-    <button class="hl-btn" data-open="https://csgostash.com/case/1/Fracture-Case">
-      📦 Fracture Case
-    </button>
-
-    <button class="hl-btn" data-open="https://csgostash.com/case/304/Recoil-Case">
-      📦 Recoil Case
-    </button>
-
-    <button class="hl-btn" data-open="https://csgostash.com/case/338/Revolution-Case">
-      📦 Revolution Case
-    </button>
-
+  <!-- Главный экран: выбор раздела -->
+  <div id="catalogHome">
+    <div class="hl-text" style="margin-top:10px;">Выбери раздел:</div>
+    <div class="grid2" style="margin-top:10px;">
+      <button class="hl-btn primary" id="openCases">📦 Кейсы</button>
+      <button class="hl-btn" id="openCapsules">🧪 Капсулы</button>
+    </div>
   </div>
 
-  <div style="height:15px;"></div>
+  <!-- Экран: Кейсы -->
+  <div id="catalogCases" class="hidden">
+    <div class="hl-actions" style="margin-top:6px;">
+      <button class="hl-btn" id="backToCatalogHome1">⬅️ Назад</button>
+    </div>
 
-  <!-- 2.2 Капсулы -->
-  <div class="hl-text">🧪 2.2 Капсулы</div>
-  <div class="grid2">
+    <input id="casesSearch" class="hl-input" placeholder="🔎 Поиск кейса..." style="margin-top:10px;" />
 
-    <button class="hl-btn" data-open="https://csgostash.com/stickers/capsule/330/Paris-2023-Contenders">
-      🧪 Paris 2023 Contenders
-    </button>
+    <div class="hl-text" style="margin-top:10px;">📦 Список кейсов</div>
+    <div class="grid2" id="casesList" style="margin-top:10px;">
 
-    <button class="hl-btn" data-open="https://csgostash.com/stickers/capsule/349/Copenhagen-2024-Challengers">
-      🧪 Copenhagen 2024 Challengers
-    </button>
+      <!-- добавляй кейсы сюда (кнопки как раньше) -->
+      <button class="hl-btn catalog-item" data-open="https://csgostash.com/case/1/Fracture-Case">📦 Fracture Case</button>
+      <button class="hl-btn catalog-item" data-open="https://csgostash.com/case/304/Recoil-Case">📦 Recoil Case</button>
+      <button class="hl-btn catalog-item" data-open="https://csgostash.com/case/338/Revolution-Case">📦 Revolution Case</button>
 
-    <button class="hl-btn" data-open="https://csgostash.com/stickers/capsule/354/Shanghai-2024-Legends">
-      🧪 Shanghai 2024 Legends
-    </button>
-
+    </div>
   </div>
+
+  <!-- Экран: Капсулы -->
+  <div id="catalogCapsules" class="hidden">
+    <div class="hl-actions" style="margin-top:6px;">
+      <button class="hl-btn" id="backToCatalogHome2">⬅️ Назад</button>
+    </div>
+
+    <input id="capsulesSearch" class="hl-input" placeholder="🔎 Поиск капсулы..." style="margin-top:10px;" />
+
+    <div class="hl-text" style="margin-top:10px;">🧪 Список капсул</div>
+    <div class="grid2" id="capsulesList" style="margin-top:10px;">
+
+      <!-- добавляй капсулы сюда -->
+      <button class="hl-btn catalog-item" data-open="https://csgostash.com/stickers/capsule/330/Paris-2023-Contenders">🧪 Paris 2023 Contenders</button>
+      <button class="hl-btn catalog-item" data-open="https://csgostash.com/stickers/capsule/349/Copenhagen-2024-Challengers">🧪 Copenhagen 2024 Challengers</button>
+      <button class="hl-btn catalog-item" data-open="https://csgostash.com/stickers/capsule/354/Shanghai-2024-Legends">🧪 Shanghai 2024 Legends</button>
+
+    </div>
+  </div>
+
+</div>
 
 </div>
 
