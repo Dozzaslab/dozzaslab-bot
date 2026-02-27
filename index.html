@@ -10,6 +10,7 @@
 <body>
   <div class="bg"></div>
 
+  <!-- LOADING WINDOW -->
   <div id="loading" class="hl-window">
     <div class="hl-title">
       <span class="hl-icon"></span>
@@ -19,10 +20,13 @@
     <div class="hl-body">
       <div class="hl-muted">Loading website resources...</div>
       <div class="hl-progress"><div id="bar" class="hl-bar"></div></div>
-      <div class="hl-actions"><button class="hl-btn" id="cancelLoad">Cancel</button></div>
+      <div class="hl-actions">
+        <button class="hl-btn" id="cancelLoad">Cancel</button>
+      </div>
     </div>
   </div>
 
+  <!-- APP WINDOW -->
   <div id="app" class="hl-window hidden">
     <div class="hl-title">
       <span class="hl-icon"></span>
@@ -40,166 +44,96 @@
     </div>
 
     <div class="hl-body">
+
+      <!-- CONTRACTS -->
       <div class="page" data-page="contracts">
         <div class="hl-muted">🧪Контракты (Trade-Up) — скоро</div>
         <div class="hl-text">Следующий шаг: выбор 10 скинов и расчёт шансов.</div>
       </div>
 
+      <!-- CATALOG -->
+      <div class="page hidden" data-page="catalog">
+        <div class="hl-muted">🎁 Кейсы и капсулы</div>
 
-<div class="page hidden" data-page="catalog">
+        <!-- HOME -->
+        <div id="catalogHome">
+          <div class="hl-text">Выбери раздел:</div>
+          <div class="grid2">
+            <button class="hl-btn primary" id="openCases">📦 Кейсы</button>
+            <button class="hl-btn" id="openCapsules">🧪 Капсулы</button>
+          </div>
+        </div>
 
-  <div class="hl-muted">🎁 Кейсы и капсулы</div>
+        <!-- CASES -->
+        <div id="catalogCases" class="hidden">
+          <div class="hl-actions" style="justify-content:flex-start;">
+            <button class="hl-btn" id="backToCatalogHome1">⬅️ Назад</button>
+          </div>
 
-  <!-- HOME -->
-  <div id="catalogHome">
-    <div class="hl-text">Выбери раздел:</div>
-    <div class="grid2">
-      <button class="hl-btn primary" id="openCases">📦 Кейсы</button>
-      <button class="hl-btn" id="openCapsules">🧪 Капсулы</button>
-    </div>
-  </div>
+          <input id="casesSearch" class="hl-search" placeholder="🔎 Поиск кейса..." />
 
-  <!-- CASES -->
-  <div id="catalogCases" class="hidden">
-    <div class="hl-actions" style="justify-content:flex-start;">
-      <button class="hl-btn" id="backToCatalogHome1">⬅️ Назад</button>
-    </div>
+          <div class="hl-text">📦 Список кейсов</div>
+          <div class="grid2" id="casesList">
+            <button class="hl-btn catalog-item" data-open="https://csgostash.com/case/1/Fracture-Case">📦 Fracture Case</button>
+            <button class="hl-btn catalog-item" data-open="https://csgostash.com/case/304/Recoil-Case">📦 Recoil Case</button>
+            <button class="hl-btn catalog-item" data-open="https://csgostash.com/case/338/Revolution-Case">📦 Revolution Case</button>
+          </div>
+        </div>
 
-    <input id="casesSearch" class="hl-search" placeholder="🔎 Поиск кейса..." />
+        <!-- CAPSULES -->
+        <div id="catalogCapsules" class="hidden">
+          <div class="hl-actions" style="justify-content:flex-start;">
+            <button class="hl-btn" id="backToCatalogHome2">⬅️ Назад</button>
+          </div>
 
-    <div class="hl-text">📦 Список кейсов</div>
-    <div class="grid2" id="casesList">
+          <input id="capsulesSearch" class="hl-search" placeholder="🔎 Поиск капсулы..." />
 
-      <!-- ✅ ВАЖНО: добавь class="catalog-item" чтобы работал поиск -->
-      <button class="hl-btn catalog-item" data-open="https://csgostash.com/case/1/Fracture-Case">📦 Fracture Case</button>
-      <button class="hl-btn catalog-item" data-open="https://csgostash.com/case/304/Recoil-Case">📦 Recoil Case</button>
-      <button class="hl-btn catalog-item" data-open="https://csgostash.com/case/338/Revolution-Case">📦 Revolution Case</button>
+          <div class="hl-text">🧪 Список капсул</div>
+          <div class="grid2" id="capsulesList">
+            <button class="hl-btn catalog-item" data-open="https://csgostash.com/stickers/capsule/330/Paris-2023-Contenders">🧪 Paris 2023 Contenders</button>
+            <button class="hl-btn catalog-item" data-open="https://csgostash.com/stickers/capsule/349/Copenhagen-2024-Challengers">🧪 Copenhagen 2024 Challengers</button>
+            <button class="hl-btn catalog-item" data-open="https://csgostash.com/stickers/capsule/354/Shanghai-2024-Legends">🧪 Shanghai 2024 Legends</button>
+          </div>
+        </div>
+      </div>
 
-      <!-- сюда добавляй остальные -->
-    </div>
-  </div>
-
-  <!-- CAPSULES -->
-  <div id="catalogCapsules" class="hidden">
-    <div class="hl-actions" style="justify-content:flex-start;">
-      <button class="hl-btn" id="backToCatalogHome2">⬅️ Назад</button>
-    </div>
-
-    <input id="capsulesSearch" class="hl-search" placeholder="🔎 Поиск капсулы..." />
-
-    <div class="hl-text">🧪 Список капсул</div>
-    <div class="grid2" id="capsulesList">
-
-      <button class="hl-btn catalog-item" data-open="https://csgostash.com/stickers/capsule/330/Paris-2023-Contenders">🧪 Paris 2023 Contenders</button>
-      <button class="hl-btn catalog-item" data-open="https://csgostash.com/stickers/capsule/349/Copenhagen-2024-Challengers">🧪 Copenhagen 2024 Challengers</button>
-      <button class="hl-btn catalog-item" data-open="https://csgostash.com/stickers/capsule/354/Shanghai-2024-Legends">🧪 Shanghai 2024 Legends</button>
-
-      <!-- сюда добавляй остальные -->
-    </div>
-  </div>
-
-</div>
-
-  <!-- Экран: Капсулы -->
-  <div id="catalogCapsules" class="hidden">
-    <div class="hl-actions" style="margin-top:6px;">
-      <button class="hl-btn" id="backToCatalogHome2">⬅️ Назад</button>
-    </div>
-
-    <input id="capsulesSearch" class="hl-input" placeholder="🔎 Поиск капсулы..." style="margin-top:10px;" />
-
-    <div class="hl-text" style="margin-top:10px;">🧪 Список капсул</div>
-    <div class="grid2" id="capsulesList" style="margin-top:10px;">
-
-      <!-- добавляй капсулы сюда -->
-      <button class="hl-btn catalog-item" data-open="https://csgostash.com/stickers/capsule/330/Paris-2023-Contenders">🧪 Paris 2023 Contenders</button>
-      <button class="hl-btn catalog-item" data-open="https://csgostash.com/stickers/capsule/349/Copenhagen-2024-Challengers">🧪 Copenhagen 2024 Challengers</button>
-      <button class="hl-btn catalog-item" data-open="https://csgostash.com/stickers/capsule/354/Shanghai-2024-Legends">🧪 Shanghai 2024 Legends</button>
-
-    </div>
-  </div>
-
-</div>
-
-</div>
-
+      <!-- COLLECTIONS -->
       <div class="page hidden" data-page="collections">
         <div class="hl-muted">📦Коллекции</div>
         <div class="hl-text">Здесь будет список коллекций.</div>
       </div>
 
-    <div class="page hidden" data-page="tools">
-  <div class="hl-muted">🌐 Сайты для торговли</div>
+      <!-- TOOLS -->
+      <div class="page hidden" data-page="tools">
+        <div class="hl-muted">🌐 Сайты для торговли</div>
 
-  <!-- Маркетплейсы -->
-<div class="hl-text">🛒 Маркетплейсы</div>
-<div class="hl-muted">🔒 Лично проверено — торговал на этих площадках</div>
+        <div class="hl-text">🛒 Маркетплейсы</div>
+        <div class="hl-muted">🔒 Лично проверено — торговал на этих площадках</div>
 
-<div class="grid2">
+        <div class="grid2">
+          <button class="hl-btn" data-open="https://csfloat.com/">🟢 CSFloat ⭐ Рекомендовано</button>
+          <button class="hl-btn" data-open="https://cs.money/ru/market/buy/">🔵 CS.MONEY ⭐ Рекомендовано</button>
+          <button class="hl-btn" data-open="https://dmarket.com/">🟣 DMarket ⭐ Рекомендовано</button>
+          <button class="hl-btn" data-open="https://white.market/ru">⚪ White.Market ⭐ Рекомендовано</button>
+          <button class="hl-btn" data-open="https://buff.market/home">🟡 BUFF.Market ⭐ Рекомендовано</button>
+          <button class="hl-btn" data-open="https://buff.163.com/goods/33960">🟠 BUFF163 (China) ⭐ Рекомендовано</button>
+        </div>
 
-  <button class="hl-btn" data-open="https://csfloat.com/">
-    🟢 CSFloat ⭐ Рекомендовано
-  </button>
+        <div style="height:10px;"></div>
 
-  <button class="hl-btn" data-open="https://cs.money/ru/market/buy/">
-    🔵 CS.MONEY ⭐ Рекомендовано
-  </button>
+        <div class="hl-text">🧰 Инструменты</div>
+        <div class="grid2">
+          <button class="hl-btn" data-open="https://pricempire.com/">📊 PriceEmpire ⭐ Рекомендовано</button>
+          <button class="hl-btn" data-open="https://pricempire.com/app/portfolio">💼 Portfolio</button>
+          <button class="hl-btn" data-open="https://pricempire.com/app/comparison">⚖️ Сравнение цен</button>
+          <button class="hl-btn" data-open="https://steamdt.com/en">🚀 SteamDT ⭐ Рекомендовано</button>
+          <button class="hl-btn" data-open="https://www.steamanalyst.com/">📈 SteamAnalyst</button>
+          <button class="hl-btn" data-open="https://www.csgodatabase.com/">📚 CS:GO Database</button>
+          <button class="hl-btn" data-open="https://csgostash.com/">🎨 CSGOStash</button>
+        </div>
+      </div>
 
-  <button class="hl-btn" data-open="https://dmarket.com/">
-    🟣 DMarket ⭐ Рекомендовано
-  </button>
-
-  <button class="hl-btn" data-open="https://white.market/ru">
-    ⚪ White.Market ⭐ Рекомендовано
-  </button>
-
-  <button class="hl-btn" data-open="https://buff.market/home">
-    🟡 BUFF.Market ⭐ Рекомендовано
-  </button>
-
-  <button class="hl-btn" data-open="https://buff.163.com/goods/33960">
-    🟠 BUFF163 (China) ⭐ Рекомендовано
-  </button>
-
-</div>
-
-  <div style="height:10px;"></div>
-
-  <!-- Инструменты -->
-  <div class="hl-text">🧰 Инструменты</div>
-  <div class="grid2">
-
-    <button class="hl-btn" data-open="https://pricempire.com/">
-      📊 PriceEmpire ⭐ Рекомендовано
-    </button>
-
-    <button class="hl-btn" data-open="https://pricempire.com/app/portfolio">
-      💼 Portfolio
-    </button>
-
-    <button class="hl-btn" data-open="https://pricempire.com/app/comparison">
-      ⚖️ Сравнение цен
-    </button>
-
-    <button class="hl-btn" data-open="https://steamdt.com/en">
-      🚀 SteamDT ⭐ Рекомендовано
-    </button>
-
-    <button class="hl-btn" data-open="https://www.steamanalyst.com/">
-      📈 SteamAnalyst
-    </button>
-
-    <button class="hl-btn" data-open="https://www.csgodatabase.com/">
-      📚 CS:GO Database
-    </button>
-
-    <button class="hl-btn" data-open="https://csgostash.com/">
-      🎨 CSGOStash
-    </button>
-
-  </div>
-</div>
-
+      <!-- FAQ -->
       <div class="page hidden" data-page="faq">
         <div class="hl-muted">🧠FAQ</div>
         <div class="hl-text">
@@ -208,33 +142,30 @@
         </div>
       </div>
 
+      <!-- SUGGEST -->
       <div class="page hidden" data-page="suggest">
-  <div class="hl-muted">📬Предложка</div>
+        <div class="hl-muted">📬Предложка</div>
 
-  <!-- Шаг 1: выбор типа -->
-  <div id="suggestStep1">
-    <div class="hl-text">Выбери тип:</div>
-    <div class="grid2">
-      <button class="hl-btn primary" id="pickIdea">💡 Идея / улучшение</button>
-      <button class="hl-btn" id="pickCollab">🤝 Сотрудничество</button>
-    </div>
-  </div>
+        <div id="suggestStep1">
+          <div class="hl-text">Выбери тип:</div>
+          <div class="grid2">
+            <button class="hl-btn primary" id="pickIdea">💡 Идея / улучшение</button>
+            <button class="hl-btn" id="pickCollab">🤝 Сотрудничество</button>
+          </div>
+        </div>
 
-  <!-- Шаг 2: ввод текста -->
-  <div id="suggestStep2" class="hidden">
-    <div class="hl-text" id="suggestTitle">Тема: —</div>
-    <textarea id="suggestText" class="hl-input" placeholder="Напиши сообщение..."></textarea>
+        <div id="suggestStep2" class="hidden">
+          <div class="hl-text" id="suggestTitle">Тема: —</div>
+          <textarea id="suggestText" class="hl-input" placeholder="Напиши сообщение..."></textarea>
 
-    <div class="hl-actions">
-      <button class="hl-btn primary" id="sendSuggestFinal">Отправить</button>
-      <button class="hl-btn" id="clearSuggest">Очистить</button>
-      <button class="hl-btn" id="backSuggest">Назад</button>
-    </div>
-  </div>
-</div>
+          <div class="hl-actions">
+            <button class="hl-btn primary" id="sendSuggestFinal">Отправить</button>
+            <button class="hl-btn" id="clearSuggest">Очистить</button>
+            <button class="hl-btn" id="backSuggest">Назад</button>
           </div>
         </div>
       </div>
+
     </div>
   </div>
 
