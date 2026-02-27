@@ -7,6 +7,12 @@ if (window.Telegram?.WebApp) {
   Telegram.WebApp.expand();
 }
 
+function scrollToTop() {
+  const scrollBox = document.querySelector('#app .hl-body');
+  if (scrollBox) scrollBox.scrollTop = 0;
+}
+
+/* ===== Навигация по вкладкам ===== */
 function showPage(page) {
   document.querySelectorAll('.page').forEach(p => {
     p.classList.toggle('hidden', p.dataset.page !== page);
@@ -15,11 +21,9 @@ function showPage(page) {
     t.classList.toggle('active', t.dataset.page === page);
   });
 
-  // ✅ скролл наверх при смене вкладки
-  const scrollBox = document.querySelector('#app .hl-body');
-  if (scrollBox) scrollBox.scrollTop = 0;
+  scrollToTop();
 
-  // ✅ при входе в каталог всегда показываем 2 кнопки (Кейсы/Капсулы)
+  // при входе в каталог всегда показываем 2 кнопки
   if (page === 'catalog' && window.__catalogShowHome) {
     window.__catalogShowHome();
   }
@@ -29,6 +33,7 @@ document.querySelectorAll('.hl-tab').forEach(btn => {
   btn.addEventListener('click', () => showPage(btn.dataset.page));
 });
 
+/* ===== Делегирование кликов по data-open (работает и для новых кнопок) ===== */
 document.addEventListener('click', (e) => {
   const btn = e.target.closest('[data-open]');
   if (!btn) return;
@@ -106,25 +111,7 @@ clearBtn?.addEventListener('click', () => {
 
 backBtn?.addEventListener('click', () => openSuggestStep1());
 
-/* ===== загрузка ===== */
-let p = 0;
-const timer = setInterval(() => {
-  p += Math.floor(Math.random() * 12) + 6;
-  if (p >= 100) {
-    p = 100;
-    clearInterval(timer);
-    loading.classList.add('hidden');
-    app.classList.remove('hidden');
-    showPage('contracts');
-    if (window.Telegram?.WebApp) Telegram.WebApp.expand();
-  }
-  bar.style.width = p + '%';
-}, 120);
-
-document.getElementById('x1').onclick = () => loading.classList.add('hidden');
-document.getElementById('x2').onclick = () => app.classList.add('hidden');
-document.getElementById('cancelLoad').onclick = () => loading.classList.add('hidden');
-/* ===== Кейсы/Капсулы: 2 уровня + поиск + скролл ===== */
+/* ===== Кейсы/Капсулы: 2 уровня + поиск ===== */
 (function initCatalog() {
   const home = document.getElementById("catalogHome");
   const cases = document.getElementById("catalogCases");
@@ -142,13 +129,7 @@ document.getElementById('cancelLoad').onclick = () => loading.classList.add('hid
   const casesList = document.getElementById("casesList");
   const capsList = document.getElementById("capsulesList");
 
-  const scrollBox = document.querySelector("#app .hl-body"); // у тебя это контейнер контента
-
   if (!home || !cases || !caps) return;
-
-  function scrollToTop() {
-    if (scrollBox) scrollBox.scrollTop = 0;
-  }
 
   function filterList(listEl, query) {
     if (!listEl) return;
@@ -204,12 +185,28 @@ document.getElementById('cancelLoad').onclick = () => loading.classList.add('hid
     scrollToTop();
   });
 
-  // если пользователь кликает по вкладкам — тоже поднимаем наверх
-  document.querySelectorAll(".hl-tab").forEach(tab => {
-    tab.addEventListener("click", () => {
-      scrollToTop();
-      // при входе в каталог — всегда показываем 2 кнопки, как ты хочешь
-      if (tab.dataset.page === "catalog") showHome();
-    });
-  });
+  // ✅ экспортируем showHome, чтобы showPage('catalog') мог вызвать
+  window.__catalogShowHome = showHome;
+
+  // стартовое состояние каталога
+  showHome();
 })();
+
+/* ===== загрузка ===== */
+let p = 0;
+const timer = setInterval(() => {
+  p += Math.floor(Math.random() * 12) + 6;
+  if (p >= 100) {
+    p = 100;
+    clearInterval(timer);
+    loading.classList.add('hidden');
+    app.classList.remove('hidden');
+    showPage('contracts');
+    if (window.Telegram?.WebApp) Telegram.WebApp.expand();
+  }
+  bar.style.width = p + '%';
+}, 120);
+
+document.getElementById('x1').onclick = () => loading.classList.add('hidden');
+document.getElementById('x2').onclick = () => app.classList.add('hidden');
+document.getElementById('cancelLoad').onclick = () => loading.classList.add('hidden');
