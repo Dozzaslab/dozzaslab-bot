@@ -14,18 +14,30 @@ function showPage(page) {
   document.querySelectorAll('.hl-tab').forEach(t => {
     t.classList.toggle('active', t.dataset.page === page);
   });
+
+  // ✅ скролл наверх при смене вкладки
+  const scrollBox = document.querySelector('#app .hl-body');
+  if (scrollBox) scrollBox.scrollTop = 0;
+
+  // ✅ при входе в каталог всегда показываем 2 кнопки (Кейсы/Капсулы)
+  if (page === 'catalog' && window.__catalogShowHome) {
+    window.__catalogShowHome();
+  }
 }
 
 document.querySelectorAll('.hl-tab').forEach(btn => {
   btn.addEventListener('click', () => showPage(btn.dataset.page));
 });
 
-document.querySelectorAll('[data-open]').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const url = btn.dataset.open;
-    if (window.Telegram?.WebApp?.openLink) Telegram.WebApp.openLink(url);
-    else window.open(url, '_blank');
-  });
+document.addEventListener('click', (e) => {
+  const btn = e.target.closest('[data-open]');
+  if (!btn) return;
+
+  const url = btn.dataset.open;
+  if (!url) return;
+
+  if (window.Telegram?.WebApp?.openLink) Telegram.WebApp.openLink(url);
+  else window.open(url, '_blank');
 });
 
 function tgSend(payload) {
