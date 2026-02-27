@@ -45,39 +45,60 @@
         <div class="hl-text">Следующий шаг: выбор 10 скинов и расчёт шансов.</div>
       </div>
 
-     <div class="page hidden" data-page="catalog">
 
-  <div class="page hidden" data-page="catalog">
+<div class="page hidden" data-page="catalog">
 
   <div class="hl-muted">🎁 Кейсы и капсулы</div>
 
-  <!-- Главный экран: выбор раздела -->
+  <!-- HOME -->
   <div id="catalogHome">
-    <div class="hl-text" style="margin-top:10px;">Выбери раздел:</div>
-    <div class="grid2" style="margin-top:10px;">
+    <div class="hl-text">Выбери раздел:</div>
+    <div class="grid2">
       <button class="hl-btn primary" id="openCases">📦 Кейсы</button>
       <button class="hl-btn" id="openCapsules">🧪 Капсулы</button>
     </div>
   </div>
 
-  <!-- Экран: Кейсы -->
+  <!-- CASES -->
   <div id="catalogCases" class="hidden">
-    <div class="hl-actions" style="margin-top:6px;">
+    <div class="hl-actions" style="justify-content:flex-start;">
       <button class="hl-btn" id="backToCatalogHome1">⬅️ Назад</button>
     </div>
 
-    <input id="casesSearch" class="hl-input" placeholder="🔎 Поиск кейса..." style="margin-top:10px;" />
+    <input id="casesSearch" class="hl-search" placeholder="🔎 Поиск кейса..." />
 
-    <div class="hl-text" style="margin-top:10px;">📦 Список кейсов</div>
-    <div class="grid2" id="casesList" style="margin-top:10px;">
+    <div class="hl-text">📦 Список кейсов</div>
+    <div class="grid2" id="casesList">
 
-      <!-- добавляй кейсы сюда (кнопки как раньше) -->
+      <!-- ✅ ВАЖНО: добавь class="catalog-item" чтобы работал поиск -->
       <button class="hl-btn catalog-item" data-open="https://csgostash.com/case/1/Fracture-Case">📦 Fracture Case</button>
       <button class="hl-btn catalog-item" data-open="https://csgostash.com/case/304/Recoil-Case">📦 Recoil Case</button>
       <button class="hl-btn catalog-item" data-open="https://csgostash.com/case/338/Revolution-Case">📦 Revolution Case</button>
 
+      <!-- сюда добавляй остальные -->
     </div>
   </div>
+
+  <!-- CAPSULES -->
+  <div id="catalogCapsules" class="hidden">
+    <div class="hl-actions" style="justify-content:flex-start;">
+      <button class="hl-btn" id="backToCatalogHome2">⬅️ Назад</button>
+    </div>
+
+    <input id="capsulesSearch" class="hl-search" placeholder="🔎 Поиск капсулы..." />
+
+    <div class="hl-text">🧪 Список капсул</div>
+    <div class="grid2" id="capsulesList">
+
+      <button class="hl-btn catalog-item" data-open="https://csgostash.com/stickers/capsule/330/Paris-2023-Contenders">🧪 Paris 2023 Contenders</button>
+      <button class="hl-btn catalog-item" data-open="https://csgostash.com/stickers/capsule/349/Copenhagen-2024-Challengers">🧪 Copenhagen 2024 Challengers</button>
+      <button class="hl-btn catalog-item" data-open="https://csgostash.com/stickers/capsule/354/Shanghai-2024-Legends">🧪 Shanghai 2024 Legends</button>
+
+      <!-- сюда добавляй остальные -->
+    </div>
+  </div>
+
+</div>
 
   <!-- Экран: Капсулы -->
   <div id="catalogCapsules" class="hidden">
