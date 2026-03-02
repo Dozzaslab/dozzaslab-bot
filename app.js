@@ -277,7 +277,35 @@ backBtn?.addEventListener('click', () => openSuggestStep1());
 /* ===== Инициализация subnav для вкладки INVEST + TOOLS ===== */
 initSubnav("invest", "investHome");
 initSubnav("tools", "toolsHome");
+/* ===== Typewriter for welcome ===== */
+function typeWelcomeText() {
+  const sourceEl = document.getElementById("welcomeSource");
+  const targetEl = document.getElementById("welcomeTyped");
+  if (!sourceEl || !targetEl) return;
 
+  const text = sourceEl.innerText.trim();
+  targetEl.innerHTML = "";
+  let i = 0;
+
+  const speed = 18; // скорость печати (меньше = быстрее)
+
+  function type() {
+    if (i < text.length) {
+      const char = text[i];
+
+      if (char === "\n") {
+        targetEl.innerHTML += "<br/>";
+      } else {
+        targetEl.innerHTML += char;
+      }
+
+      i++;
+      setTimeout(type, speed);
+    }
+  }
+
+  type();
+}
 /* ===== загрузка ===== */
 let p = 0;
 const timer = setInterval(() => {
@@ -291,7 +319,8 @@ const timer = setInterval(() => {
     // ✅ стартуем без вкладок
     app?.classList.remove('menu-mode');
 
-    showPage('welcome'); // стартуем с приветственного экрана
+   showPage('welcome');
+setTimeout(typeWelcomeText, 200); // стартуем с приветственного экрана
     if (window.Telegram?.WebApp) Telegram.WebApp.expand();
   }
   if (bar) bar.style.width = p + '%';
