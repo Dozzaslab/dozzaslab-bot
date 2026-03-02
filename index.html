@@ -310,47 +310,73 @@
 <div class="page hidden" data-page="invest">
   <div class="hl-muted">💼 Другие проекты инвестирования</div>
 
-  <details class="hl-accordion">
-    <summary class="hl-btn primary">🕳️ Deadlock</summary>
-    <div class="hl-text" style="margin-top:10px;">
+  <!-- SCREEN: ROOT -->
+  <div data-screen="investHome">
+    <div class="hl-text">Выбери проект:</div>
+    <div class="grid2">
+      <button class="hl-btn primary" data-go="deadlock">🕳️ Deadlock</button>
+      <button class="hl-btn" data-go="sbox">🧱 S&amp;box</button>
+    </div>
+  </div>
+
+  <!-- SCREEN: DEADLOCK -->
+  <div class="hidden" data-screen="deadlock">
+    <div class="hl-actions" style="justify-content:flex-start;">
+      <button class="hl-btn" data-back>⬅️ Назад</button>
+    </div>
+
+    <div class="hl-text">
       Тут будут новости после официальных стартов продаж скинов и запуска маркета.
     </div>
-  </details>
+  </div>
 
-  <div style="height:10px;"></div>
+  <!-- SCREEN: SBOX -->
+  <div class="hidden" data-screen="sbox">
+    <div class="hl-actions" style="justify-content:flex-start;">
+      <button class="hl-btn" data-back>⬅️ Назад</button>
+    </div>
 
-  <details class="hl-accordion">
-    <summary class="hl-btn">🧱 S&amp;box</summary>
+    <div class="hl-text">Что тебя интересует?</div>
+    <div class="grid2">
+      <button class="hl-btn primary" data-go="sboxGet">🎮 Как получить игру</button>
+      <button class="hl-btn" data-go="sboxMarket">🛒 Маркет скинов</button>
+      <button class="hl-btn" data-go="sboxTracker">📊 Трекинг портфелей</button>
+    </div>
+  </div>
 
-   <details style="margin-top:8px;">
-  <summary class="hl-btn">🎮 Как получить игру</summary>
-  <div class="hl-text" style="margin-top:10px;">
-    Официальный сайт игры.
+  <!-- SCREEN: SBOX GET -->
+  <div class="hidden" data-screen="sboxGet">
+    <div class="hl-actions" style="justify-content:flex-start;">
+      <button class="hl-btn" data-back>⬅️ Назад</button>
+    </div>
+    <div class="hl-text">Официальный сайт игры.</div>
+    <div class="grid2" style="margin-top:10px;">
+      <button class="hl-btn primary" data-open="https://sbox.game/">🌐 Открыть s&amp;box</button>
+    </div>
   </div>
-  <div class="grid2" style="margin-top:10px;">
-    <button class="hl-btn primary" data-open="https://sbox.game/">🌐 Открыть s&box</button>
-  </div>
-</details>
 
-<details style="margin-top:8px;">
-  <summary class="hl-btn">🛒 Маркет скинов</summary>
-  <div class="hl-text" style="margin-top:10px;">
-    Официальный item store.
+  <!-- SCREEN: SBOX MARKET -->
+  <div class="hidden" data-screen="sboxMarket">
+    <div class="hl-actions" style="justify-content:flex-start;">
+      <button class="hl-btn" data-back>⬅️ Назад</button>
+    </div>
+    <div class="hl-text">Официальный item store.</div>
+    <div class="grid2" style="margin-top:10px;">
+      <button class="hl-btn primary" data-open="https://sbox.game/itemstore">🛍️ Открыть маркет</button>
+    </div>
   </div>
-  <div class="grid2" style="margin-top:10px;">
-    <button class="hl-btn primary" data-open="https://sbox.game/itemstore">🛍️ Открыть маркет</button>
-  </div>
-</details>
 
-<details style="margin-top:8px;">
-  <summary class="hl-btn">📊 Трекинг портфелей</summary>
-  <div class="hl-text" style="margin-top:10px;">
-    Просмотр инвентаря и трекинг.
+  <!-- SCREEN: SBOX TRACKER -->
+  <div class="hidden" data-screen="sboxTracker">
+    <div class="hl-actions" style="justify-content:flex-start;">
+      <button class="hl-btn" data-back>⬅️ Назад</button>
+    </div>
+    <div class="hl-text">Просмотр инвентаря и трекинг.</div>
+    <div class="grid2" style="margin-top:10px;">
+      <button class="hl-btn primary" data-open="https://sbox.scmm.app/inventory">📈 Открыть трекер</button>
+    </div>
   </div>
-  <div class="grid2" style="margin-top:10px;">
-    <button class="hl-btn primary" data-open="https://sbox.scmm.app/inventory">📈 Открыть трекер</button>
-  </div>
-</details>
+</div>
 
     </div> <!-- /.hl-body -->
   </div>   <!-- /#app -->
