@@ -51,9 +51,6 @@ function showPage(page) {
 
   scrollToTop();
 
-  // welcome режим: скрываем табы, чтобы фокус был на кнопках (канал/чат)
-  app?.classList.toggle('welcome-mode', page === 'welcome');
-
   // при входе в каталог всегда показываем 2 кнопки
   if (page === 'catalog' && window.__catalogShowHome) {
     window.__catalogShowHome();
@@ -290,6 +287,10 @@ const timer = setInterval(() => {
     clearInterval(timer);
     loading?.classList.add('hidden');
     app?.classList.remove('hidden');
+
+    // ✅ стартуем без вкладок
+    app?.classList.remove('menu-mode');
+
     showPage('welcome'); // стартуем с приветственного экрана
     if (window.Telegram?.WebApp) Telegram.WebApp.expand();
   }
@@ -308,4 +309,8 @@ cancelLoad && (cancelLoad.onclick = () => loading?.classList.add('hidden'));
 /* ===== Welcome buttons ===== */
 document.getElementById("btnChannel")?.addEventListener("click", () => openTgLink(CHANNEL_URL));
 document.getElementById("btnChat")?.addEventListener("click", () => openTgLink(CHAT_URL));
-document.getElementById("btnMenu")?.addEventListener("click", () => showPage("catalog")); // "Войти в меню" -> каталог
+document.getElementById("btnMenu")?.addEventListener("click", () => {
+  // ✅ показываем вкладки только после клика "Войти в меню"
+  app?.classList.add("menu-mode");
+  showPage("catalog");
+});
