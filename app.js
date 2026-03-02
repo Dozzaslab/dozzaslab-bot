@@ -2,6 +2,28 @@ const loading = document.getElementById('loading');
 const app = document.getElementById('app');
 const bar = document.getElementById('bar');
 
+/* ===== LINKS ===== */
+const CHANNEL_URL = "https://t.me/dozza_8";
+const CHAT_URL    = "https://t.me/+YmGqLAkSQU0yYmUy";
+
+function openTgLink(url) {
+  if (!url) return;
+
+  // Внутри Telegram лучше открывать tg-ссылки так:
+  if (window.Telegram?.WebApp?.openTelegramLink) {
+    Telegram.WebApp.openTelegramLink(url);
+    return;
+  }
+
+  // fallback (иногда полезен для внешних url)
+  if (window.Telegram?.WebApp?.openLink) {
+    Telegram.WebApp.openLink(url);
+    return;
+  }
+
+  window.open(url, "_blank");
+}
+
 if (window.Telegram?.WebApp) {
   Telegram.WebApp.ready();
   Telegram.WebApp.expand();
@@ -28,6 +50,9 @@ function showPage(page) {
   });
 
   scrollToTop();
+
+  // welcome режим: скрываем табы, чтобы фокус был на кнопках (канал/чат)
+  app?.classList.toggle('welcome-mode', page === 'welcome');
 
   // при входе в каталог всегда показываем 2 кнопки
   if (page === 'catalog' && window.__catalogShowHome) {
@@ -252,9 +277,10 @@ backBtn?.addEventListener('click', () => openSuggestStep1());
   showHome();
 })();
 
-/* ===== Инициализация subnav для вкладки INVEST ===== */
+/* ===== Инициализация subnav для вкладки INVEST + TOOLS ===== */
 initSubnav("invest", "investHome");
 initSubnav("tools", "toolsHome");
+
 /* ===== загрузка ===== */
 let p = 0;
 const timer = setInterval(() => {
@@ -264,7 +290,7 @@ const timer = setInterval(() => {
     clearInterval(timer);
     loading?.classList.add('hidden');
     app?.classList.remove('hidden');
-    showPage('contracts');
+    showPage('welcome'); // стартуем с приветственного экрана
     if (window.Telegram?.WebApp) Telegram.WebApp.expand();
   }
   if (bar) bar.style.width = p + '%';
@@ -278,3 +304,8 @@ const cancelLoad = document.getElementById('cancelLoad');
 x1 && (x1.onclick = () => loading?.classList.add('hidden'));
 x2 && (x2.onclick = () => app?.classList.add('hidden'));
 cancelLoad && (cancelLoad.onclick = () => loading?.classList.add('hidden'));
+
+/* ===== Welcome buttons ===== */
+document.getElementById("btnChannel")?.addEventListener("click", () => openTgLink(CHANNEL_URL));
+document.getElementById("btnChat")?.addEventListener("click", () => openTgLink(CHAT_URL));
+document.getElementById("btnMenu")?.addEventListener("click", () => showPage("catalog")); // "Войти в меню" -> каталог
