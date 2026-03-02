@@ -254,7 +254,7 @@ backBtn?.addEventListener('click', () => openSuggestStep1());
 
 /* ===== Инициализация subnav для вкладки INVEST ===== */
 initSubnav("invest", "investHome");
-
+initSubnav("tools", "toolsHome");
 /* ===== загрузка ===== */
 let p = 0;
 const timer = setInterval(() => {
