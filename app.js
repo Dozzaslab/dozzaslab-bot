@@ -310,7 +310,6 @@ cancelLoad && (cancelLoad.onclick = () => loading?.classList.add('hidden'));
 document.getElementById("btnChannel")?.addEventListener("click", () => openTgLink(CHANNEL_URL));
 document.getElementById("btnChat")?.addEventListener("click", () => openTgLink(CHAT_URL));
 document.getElementById("btnMenu")?.addEventListener("click", () => {
-  // ✅ показываем вкладки только после клика "Войти в меню"
-  app?.classList.add("menu-mode");
-  showPage("catalog");
+  app?.classList.add("menu-mode");   // включаем вкладки (всё меню)
+  showPage("contracts");             // стартовая вкладка меню
 });
