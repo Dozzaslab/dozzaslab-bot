@@ -40,13 +40,20 @@ border:1px solid rgba(0,0,0,.35)}
 .hl-x{margin-left:auto;width:22px;height:18px;border:1px solid rgba(0,0,0,.4);
 background:#556846;color:#e7f0d8;cursor:pointer}
 
+/* ===== TABS (HIDDEN ON WELCOME) ===== */
+/* По умолчанию вкладки НЕ видны */
 .hl-tabs{
-  display:flex;
+  display:none;
   flex-wrap:wrap;
   gap:6px;
   padding:8px 8px 0 8px;
   min-height:72px;   /* фиксируем минимальную высоту */
 }
+/* Когда вошли в меню: #app.menu-mode */
+#app.menu-mode .hl-tabs{
+  display:flex;
+}
+
 .hl-tab{padding:4px 8px;border:1px solid rgba(0,0,0,.45);background:#556846;
 color:#e7f0d8;cursor:pointer;font-size:13px}
 .hl-tab.active{background:#6a7f54}
@@ -114,6 +121,24 @@ padding:8px;resize:vertical}
 
 .page{
   min-height:0;           /* ✅ чтобы страницы внутри не раздували контейнер */
+}
+
+/* ===== WELCOME STYLES ===== */
+.grid1{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:8px;
+  margin-top:12px;
+}
+.welcome-title{
+  font-size:15px;
+  font-weight:700;
+  margin-bottom:10px;
+}
+.welcome-text{
+  font-size:13px;
+  line-height:1.45;
+  opacity:.95;
 }
 
 /* ===== FIX LOADING SIZE ===== */
