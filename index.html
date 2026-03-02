@@ -235,35 +235,56 @@
         <div class="hl-text">Здесь будет список коллекций.</div>
       </div>
 
-      <!-- TOOLS -->
-      <div class="page hidden" data-page="tools">
-        <div class="hl-muted">🌐 Сайты для торговли</div>
+    <!-- TOOLS -->
+<div class="page hidden" data-page="tools">
+  <div class="hl-muted">🌐 Сайты для торговли</div>
 
-        <div class="hl-text">🛒 Маркетплейсы</div>
-        <div class="hl-muted">🔒 Лично проверено — торговал на этих площадках</div>
+  <!-- SCREEN: HOME -->
+  <div data-screen="toolsHome">
+    <div class="hl-text">Выбери раздел:</div>
+    <div class="grid2">
+      <button class="hl-btn primary" data-go="toolsMarket">🛒 Маркетплейсы</button>
+      <button class="hl-btn" data-go="toolsInstruments">🧰 Инструменты</button>
+    </div>
+  </div>
 
-        <div class="grid2">
-          <button class="hl-btn" data-open="https://csfloat.com/">🟢 CSFloat ⭐ Рекомендовано</button>
-          <button class="hl-btn" data-open="https://cs.money/ru/market/buy/">🔵 CS.MONEY ⭐ Рекомендовано</button>
-          <button class="hl-btn" data-open="https://dmarket.com/">🟣 DMarket ⭐ Рекомендовано</button>
-          <button class="hl-btn" data-open="https://white.market/ru">⚪ White.Market ⭐ Рекомендовано</button>
-          <button class="hl-btn" data-open="https://buff.market/home">🟡 BUFF.Market ⭐ Рекомендовано</button>
-          <button class="hl-btn" data-open="https://buff.163.com/goods/33960">🟠 BUFF163 (China) ⭐ Рекомендовано</button>
-        </div>
+  <!-- SCREEN: MARKETPLACES -->
+  <div class="hidden" data-screen="toolsMarket">
+    <div class="hl-actions" style="justify-content:flex-start;">
+      <button class="hl-btn" data-back>⬅️ Назад</button>
+    </div>
 
-        <div style="height:10px;"></div>
+    <div class="hl-text">🛒 Маркетплейсы</div>
+    <div class="hl-muted">🔒 Лично проверено — торговал на этих площадках</div>
 
-        <div class="hl-text">🧰 Инструменты</div>
-        <div class="grid2">
-          <button class="hl-btn" data-open="https://pricempire.com/">📊 PriceEmpire ⭐ Рекомендовано</button>
-          <button class="hl-btn" data-open="https://pricempire.com/app/portfolio">💼 Portfolio</button>
-          <button class="hl-btn" data-open="https://pricempire.com/app/comparison">⚖️ Сравнение цен</button>
-          <button class="hl-btn" data-open="https://steamdt.com/en">🚀 SteamDT ⭐ Рекомендовано</button>
-          <button class="hl-btn" data-open="https://www.steamanalyst.com/">📈 SteamAnalyst</button>
-          <button class="hl-btn" data-open="https://www.csgodatabase.com/">📚 CS:GO Database</button>
-          <button class="hl-btn" data-open="https://csgostash.com/">🎨 CSGOStash</button>
-        </div>
-      </div>
+    <div class="grid2">
+      <button class="hl-btn" data-open="https://csfloat.com/">🟢 CSFloat ⭐ Рекомендовано</button>
+      <button class="hl-btn" data-open="https://cs.money/ru/market/buy/">🔵 CS.MONEY ⭐ Рекомендовано</button>
+      <button class="hl-btn" data-open="https://dmarket.com/">🟣 DMarket ⭐ Рекомендовано</button>
+      <button class="hl-btn" data-open="https://white.market/ru">⚪ White.Market ⭐ Рекомендовано</button>
+      <button class="hl-btn" data-open="https://buff.market/home">🟡 BUFF.Market ⭐ Рекомендовано</button>
+      <button class="hl-btn" data-open="https://buff.163.com/goods/33960">🟠 BUFF163 (China) ⭐ Рекомендовано</button>
+    </div>
+  </div>
+
+  <!-- SCREEN: INSTRUMENTS -->
+  <div class="hidden" data-screen="toolsInstruments">
+    <div class="hl-actions" style="justify-content:flex-start;">
+      <button class="hl-btn" data-back>⬅️ Назад</button>
+    </div>
+
+    <div class="hl-text">🧰 Инструменты</div>
+    <div class="grid2">
+      <button class="hl-btn" data-open="https://pricempire.com/">📊 PriceEmpire ⭐ Рекомендовано</button>
+      <button class="hl-btn" data-open="https://pricempire.com/app/portfolio">💼 Portfolio</button>
+      <button class="hl-btn" data-open="https://pricempire.com/app/comparison">⚖️ Сравнение цен</button>
+      <button class="hl-btn" data-open="https://steamdt.com/en">🚀 SteamDT ⭐ Рекомендовано</button>
+      <button class="hl-btn" data-open="https://www.steamanalyst.com/">📈 SteamAnalyst</button>
+      <button class="hl-btn" data-open="https://www.csgodatabase.com/">📚 CS:GO Database</button>
+      <button class="hl-btn" data-open="https://csgostash.com/">🎨 CSGOStash</button>
+    </div>
+  </div>
+</div>
 
       <!-- FAQ -->
       <div class="page hidden" data-page="faq">
