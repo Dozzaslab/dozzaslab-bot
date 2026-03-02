@@ -22,6 +22,7 @@ function showPage(page) {
     p.classList.toggle('hidden', p.dataset.page !== page);
   });
 
+  // активная таб-кнопка
   document.querySelectorAll('.hl-tab').forEach(t => {
     t.classList.toggle('active', t.dataset.page === page);
   });
@@ -31,6 +32,11 @@ function showPage(page) {
   // при входе в каталог всегда показываем 2 кнопки
   if (page === 'catalog' && window.__catalogShowHome) {
     window.__catalogShowHome();
+  }
+
+  // ✅ при входе в любую вкладку сбрасываем вложенные экраны (если есть)
+  if (window.__resetSubnav?.[page]) {
+    window.__resetSubnav[page]();
   }
 }
 
@@ -58,6 +64,53 @@ function tgSend(payload) {
   } else {
     alert("WebApp API недоступен (открой внутри Telegram)");
   }
+}
+
+/* ===== Навигация внутри одной вкладки (провалился / назад) ===== */
+function initSubnav(pageName, initialScreenId) {
+  const page = document.querySelector(`.page[data-page="${pageName}"]`);
+  if (!page) return;
+
+  const stack = [];
+
+  function show(screenId, { push = true } = {}) {
+    const screens = page.querySelectorAll("[data-screen]");
+    const target = page.querySelector(`[data-screen="${screenId}"]`);
+    if (!target) return;
+
+    const current = [...screens].find(s => !s.classList.contains("hidden"));
+    const currentId = current?.dataset?.screen;
+
+    if (push && currentId && currentId !== screenId) stack.push(currentId);
+
+    screens.forEach(s => s.classList.toggle("hidden", s.dataset.screen !== screenId));
+    scrollToTop();
+  }
+
+  function back() {
+    const prev = stack.pop();
+    if (prev) show(prev, { push: false });
+    else show(initialScreenId, { push: false });
+  }
+
+  // Делегирование кликов внутри этой вкладки
+  page.addEventListener("click", (e) => {
+    const go = e.target.closest("[data-go]");
+    if (go) return show(go.dataset.go);
+
+    const b = e.target.closest("[data-back]");
+    if (b) return back();
+  });
+
+  // экспортируем reset на вкладку (чтобы при входе сбрасывать в корень)
+  window.__resetSubnav = window.__resetSubnav || {};
+  window.__resetSubnav[pageName] = () => {
+    stack.length = 0;
+    show(initialScreenId, { push: false });
+  };
+
+  // стартовое состояние
+  show(initialScreenId, { push: false });
 }
 
 /* ===== Предложка: 2 шага ===== */
@@ -199,6 +252,9 @@ backBtn?.addEventListener('click', () => openSuggestStep1());
   showHome();
 })();
 
+/* ===== Инициализация subnav для вкладки INVEST ===== */
+initSubnav("invest", "investHome");
+
 /* ===== загрузка ===== */
 let p = 0;
 const timer = setInterval(() => {
@@ -206,14 +262,19 @@ const timer = setInterval(() => {
   if (p >= 100) {
     p = 100;
     clearInterval(timer);
-    loading.classList.add('hidden');
-    app.classList.remove('hidden');
+    loading?.classList.add('hidden');
+    app?.classList.remove('hidden');
     showPage('contracts');
     if (window.Telegram?.WebApp) Telegram.WebApp.expand();
   }
-  bar.style.width = p + '%';
+  if (bar) bar.style.width = p + '%';
 }, 120);
 
-document.getElementById('x1').onclick = () => loading.classList.add('hidden');
-document.getElementById('x2').onclick = () => app.classList.add('hidden');
-document.getElementById('cancelLoad').onclick = () => loading.classList.add('hidden');
+/* ===== закрытие окон (без падений если элемента нет) ===== */
+const x1 = document.getElementById('x1');
+const x2 = document.getElementById('x2');
+const cancelLoad = document.getElementById('cancelLoad');
+
+x1 && (x1.onclick = () => loading?.classList.add('hidden'));
+x2 && (x2.onclick = () => app?.classList.add('hidden'));
+cancelLoad && (cancelLoad.onclick = () => loading?.classList.add('hidden'));
