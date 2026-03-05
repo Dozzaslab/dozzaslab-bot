@@ -71,10 +71,22 @@
   </div>
 </div>
       <!-- CONTRACTS -->
-      <div class="page" data-page="contracts">
-        <div class="hl-muted">🧪Контракты (Trade-Up) — скоро</div>
-        <div class="hl-text">Следующий шаг: выбор 10 скинов и расчёт шансов.</div>
-      </div>
+     <div class="page hidden" data-page="contracts">
+  <div class="hl-muted">🧪 Контракты (Trade-Up)</div>
+  <div class="hl-text">Вставь 10 строк в формате:</div>
+  <div class="hl-muted">Collection | Rarity | Float</div>
+
+  <textarea id="tradeupInput" class="hl-input" rows="10"
+    placeholder="Anubis | Mil-Spec | 0.12&#10;Anubis | Mil-Spec | 0.11&#10;... (10 строк)"></textarea>
+
+  <div class="hl-actions" style="margin-top:10px;">
+    <button class="hl-btn primary" id="tradeupCalc">Рассчитать</button>
+    <button class="hl-btn" id="tradeupFillDemo">Демо</button>
+    <button class="hl-btn" id="tradeupClear">Очистить</button>
+  </div>
+
+  <div id="tradeupResult" class="hl-text" style="margin-top:10px;"></div>
+</div>
 
       <!-- CATALOG -->
       <div class="page hidden" data-page="catalog">
