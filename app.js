@@ -607,7 +607,7 @@ function renderContract() {
   if (!el) return;
 
   const rarity = contractItems[0]?.rarity || "";
-  const need = needCountByRarity(rarity || "");
+ const need = contractItems[0]?.rarity === "Covert" ? 5 : 10;
 
   let html = `<div class="hl-muted">Нужно <b>${need}</b> строк. Сейчас: <b>${contractItems.length}</b>${rarity ? ` • Rarity: <b>${escapeHtml(rarity)}</b>` : ""}</div>`;
 
@@ -689,10 +689,11 @@ document.addEventListener("click", (e) => {
     const r = currentRarity || s.rarity;
     const need = needCountByRarity(r);
 
-    if (contractItems.length >= need) {
-      alert(`Лимит: ${need} предметов.`);
-      return;
-    }
+    const need = (s.rarity === "Covert") ? 5 : 10;
+if (contractItems.length >= need) {
+  alert(`Лимит: ${need} предметов.`);
+  return;
+}
 
     // default float: 0.01 если min<=0.01, иначе min (потом clamp в max)
     let float = s.min <= 0.01 ? 0.01 : s.min;
@@ -717,11 +718,11 @@ document.addEventListener("click", (e) => {
     const it = contractItems[i];
     if (!it) return;
 
-    const need = needCountByRarity(it.rarity);
-    if (contractItems.length >= need) {
-      alert(`Лимит: ${need} предметов.`);
-      return;
-    }
+   const need = (contractItems[0]?.rarity === "Covert") ? 5 : 10;
+if (contractItems.length >= need) {
+  alert(`Лимит: ${need} предметов.`);
+  return;
+}
 
     const min = Number.isFinite(it.min) ? it.min : 0;
     const max = Number.isFinite(it.max) ? it.max : 1;
@@ -789,12 +790,11 @@ document.getElementById("tradeupCalc")?.addEventListener("click", async () => {
     return;
   }
 
-  const need = needCountByRarity(r);
-
-  if (contractItems.length !== need) {
-    renderTradeupResult({ error: `Нужно ровно ${need} предметов. Сейчас: ${contractItems.length}` });
-    return;
-  }
+const need = (contractItems[0]?.rarity === "Covert") ? 5 : 10;
+if (contractItems.length !== need) {
+  renderTradeupResult({ error: `Нужно ровно ${need} предметов. Сейчас: ${contractItems.length}` });
+  return;
+}
 
   if (contractItems.some((x) => x.rarity !== r)) {
     renderTradeupResult({ error: "Все предметы должны быть одной редкости." });
