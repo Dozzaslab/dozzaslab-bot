@@ -336,6 +336,31 @@ document.getElementById("btnMenu")?.addEventListener("click", () => {
    TRADE-UP (TABLE UI) — только новая версия
    =========================================================== */
 
+// ===== rarity colors + dot + need count =====
+const RARITY_COLOR = {
+  "Consumer": "#b0b0b0",
+  "Industrial": "#5e98d9",
+  "Mil-Spec": "#4b69ff",
+  "Restricted": "#8847ff",
+  "Classified": "#d32ce6",
+  "Covert": "#eb4b4b",
+  "Extraordinary": "#ffd700",
+};
+
+function rarityDot(rarity) {
+  const c = RARITY_COLOR[rarity] || "#888";
+  return `<span style="
+    display:inline-block;
+    width:10px;height:10px;border-radius:999px;
+    margin-right:6px; vertical-align:middle;
+    background:${c}; box-shadow:0 0 0 1px rgba(0,0,0,.35);
+  "></span>`;
+}
+
+function needCountByRarity(r) {
+  return r === "Covert" ? 5 : 10;
+}
+
 function escapeHtml(s) {
   return String(s ?? "").replace(/[&<>"']/g, (c) => ({
     "&": "&amp;",
@@ -355,8 +380,6 @@ function getRarityName(s) {
 }
 
 function getCollectionName(s) {
-  // ByMykel skins.json: коллекции лежат в массиве "collections"
-  // Нам для trade-up нужна 1 основная коллекция (обычно первая)
   const arr = s?.collections;
   if (Array.isArray(arr) && arr.length) {
     const c0 = arr[0];
@@ -364,7 +387,6 @@ function getCollectionName(s) {
     if (typeof c0 === "object" && c0.name) return String(c0.name).trim();
   }
 
-  // fallback на старые версии (если вдруг попадётся поле collection)
   const c = s?.collection;
   if (!c) return "";
   if (typeof c === "string") return c.trim();
@@ -428,29 +450,29 @@ function renderTradeupResult(result) {
   for (const o of result.outcomes.slice(0, 60)) {
     const p = (Number(o.prob) * 100).toFixed(2);
 
-   const stashBtn = o.links?.stash
-  ? `<button class="hl-btn" style="margin-right:6px;" data-open="${escapeHtml(o.links.stash)}">Stash</button>`
-  : "";
+    const stashBtn = o.links?.stash
+      ? `<button class="hl-btn" style="margin-right:6px;" data-open="${escapeHtml(o.links.stash)}">Stash</button>`
+      : "";
 
-const csfloatBtn = o.links?.csfloat
-  ? `<button class="hl-btn" style="margin-right:6px;" data-open="${escapeHtml(o.links.csfloat)}">CSFloat</button>`
-  : "";
+    const csfloatBtn = o.links?.csfloat
+      ? `<button class="hl-btn" style="margin-right:6px;" data-open="${escapeHtml(o.links.csfloat)}">CSFloat</button>`
+      : "";
 
-const clashBtn = o.links?.clash
-  ? `<button class="hl-btn" style="margin-right:6px;" data-open="${escapeHtml(o.links.clash)}">Clash</button>`
-  : "";
+    const clashBtn = o.links?.clash
+      ? `<button class="hl-btn" style="margin-right:6px;" data-open="${escapeHtml(o.links.clash)}">Clash</button>`
+      : "";
 
-const steamBtn = o.links?.steam
-  ? `<button class="hl-btn" data-open="${escapeHtml(o.links.steam)}">Steam</button>`
-  : "";
+    const steamBtn = o.links?.steam
+      ? `<button class="hl-btn" data-open="${escapeHtml(o.links.steam)}">Steam</button>`
+      : "";
 
     html += `<div style="margin-top:10px;">
-      • <b>${p}%</b> — ${escapeHtml(o.name)}
+      • <b>${p}%</b> — ${rarityDot(result.output_rarity)}${escapeHtml(o.name)}
       <span class="hl-muted">(${escapeHtml(o.collection)})</span>
       — float≈${escapeHtml(o.float_out)}
-     <div style="margin-top:6px; display:flex; gap:6px; flex-wrap:wrap;">
-  ${stashBtn}${csfloatBtn}${clashBtn}${steamBtn}
-</div>
+      <div style="margin-top:6px; display:flex; gap:6px; flex-wrap:wrap;">
+        ${stashBtn}${csfloatBtn}${clashBtn}${steamBtn}
+      </div>
     </div>`;
   }
 
@@ -458,33 +480,35 @@ const steamBtn = o.links?.steam
 }
 
 /* ===== NEW TRADEUP UI (TABLE) ===== */
-let skinsDB = [];          // нормализованная база для UI
-let contractItems = [];    // [{name, collection, rarity, float}]
+let skinsDB = [];
+let contractItems = []; // [{name, collection, rarity, float, min, max}]
 
 async function loadTradeupSkins() {
-  // прогреваем индекс (tradeup.js) — нужен simulateTradeup
   await ensureTradeupReady();
 
   const res = await fetch("/data/skins.json", { cache: "force-cache" });
-  if (!res.ok) throw new Error(`Не удалось загрузить /data/skins.json (HTTP ${res.status})`);
+  if (!res.ok)
+    throw new Error(`Не удалось загрузить /data/skins.json (HTTP ${res.status})`);
   const data = await res.json();
 
-  // Нормализуем, чтобы UI был стабильным
   skinsDB = (Array.isArray(data) ? data : [])
     .map((s, idx) => {
-      const name = (s?.name || s?.market_hash_name || s?.marketHashName || "").trim();
+      const name = (
+        s?.name ||
+        s?.market_hash_name ||
+        s?.marketHashName ||
+        ""
+      ).trim();
       const collection = getCollectionName(s);
       const rarity = normalizeRarityUI(getRarityName(s));
       const min = getMinFloat(s);
       const max = getMaxFloat(s);
 
       if (!name || !collection || !rarity) return null;
-
-      // Если вдруг есть мусорные сущности — можешь расширить фильтр позже
       if (s?.souvenir === true) return null;
 
       return {
-        id: idx, // стабильный id
+        id: idx,
         name,
         nameLower: name.toLowerCase(),
         collection,
@@ -564,7 +588,7 @@ function renderSkinsTable() {
   list.forEach((s) => {
     html += `
   <tr>
-    <td style="padding:6px 4px;">${escapeHtml(s.name)}</td>
+    <td style="padding:6px 4px;">${rarityDot(s.rarity)}${escapeHtml(s.name)}</td>
     <td style="padding:6px 4px;opacity:.9;">${escapeHtml(s.collection)}</td>
     <td style="padding:6px 4px;">${escapeHtml(s.rarity)}</td>
     <td style="padding:6px 4px;opacity:.9;">${s.min.toFixed(2)}-${s.max.toFixed(2)}</td>
@@ -583,7 +607,7 @@ function renderContract() {
   if (!el) return;
 
   const rarity = contractItems[0]?.rarity || "";
-  const need = 10;
+  const need = needCountByRarity(rarity || "");
 
   let html = `<div class="hl-muted">Нужно <b>${need}</b> строк. Сейчас: <b>${contractItems.length}</b>${rarity ? ` • Rarity: <b>${escapeHtml(rarity)}</b>` : ""}</div>`;
 
@@ -597,25 +621,28 @@ function renderContract() {
     html += `
 <div style="margin-top:6px; padding:6px; border:1px solid rgba(0,0,0,.35); background:rgba(0,0,0,.10);">
   <div>
-    <b>${i + 1}.</b> ${escapeHtml(s.name)} 
+    <b>${i + 1}.</b> ${rarityDot(s.rarity)}${escapeHtml(s.name)} 
     <span class="hl-muted">(${escapeHtml(s.collection)})</span>
   </div>
- <div class="hl-muted">
-float:
-<input
-  type="number"
-  step="0.0000001"
-  min="${s.min}"
-  max="${s.max}"
-  value="${Number(s.float).toFixed(6)}"
-  class="hl-input floatInput"
-  data-i="${i}"
-  style="width:110px;"
->
-<span style="opacity:.6;font-size:11px;">
-(${s.min.toFixed(2)} – ${s.max.toFixed(2)})
-</span>
-</div>
+
+  <div class="hl-muted" style="margin-top:6px; display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+    <span>float:</span>
+    <input
+      type="number"
+      inputmode="decimal"
+      step="0.000001"
+      min="${Number(s.min)}"
+      max="${Number(s.max)}"
+      value="${Number(s.float).toFixed(6)}"
+      class="hl-input floatInput"
+      data-i="${i}"
+      style="width:88px;height:24px;padding:2px 6px;line-height:1;font-size:12px;"
+    />
+    <span style="opacity:.6;font-size:11px;">
+      (${Number(s.min).toFixed(2)} – ${Number(s.max).toFixed(2)})
+    </span>
+  </div>
+
   <div style="margin-top:6px; display:flex; gap:6px; flex-wrap:wrap;">
     <button class="hl-btn dup" data-i="${i}">Duplicate</button>
     <button class="hl-btn rem" data-i="${i}">Remove</button>
@@ -653,19 +680,21 @@ document.addEventListener("click", (e) => {
     const s = skinsDB.find((x) => x.id === id);
     if (!s) return;
 
-    // правило: один контракт = одна редкость
     const currentRarity = contractItems[0]?.rarity;
     if (currentRarity && s.rarity !== currentRarity) {
       alert("Все предметы в контракте должны быть одной редкости.");
       return;
     }
 
-    if (contractItems.length >= 10) {
-      alert("Лимит: 10 предметов.");
+    const r = currentRarity || s.rarity;
+    const need = needCountByRarity(r);
+
+    if (contractItems.length >= need) {
+      alert(`Лимит: ${need} предметов.`);
       return;
     }
 
-    // default float: 0.01 если min=0, иначе min
+    // default float: 0.01 если min<=0.01, иначе min (потом clamp в max)
     let float = s.min <= 0.01 ? 0.01 : s.min;
     float = Math.min(float, s.max);
 
@@ -688,12 +717,12 @@ document.addEventListener("click", (e) => {
     const it = contractItems[i];
     if (!it) return;
 
-    if (contractItems.length >= 10) {
-      alert("Лимит: 10 предметов.");
+    const need = needCountByRarity(it.rarity);
+    if (contractItems.length >= need) {
+      alert(`Лимит: ${need} предметов.`);
       return;
     }
 
-    // гарантируем min/max
     const min = Number.isFinite(it.min) ? it.min : 0;
     const max = Number.isFinite(it.max) ? it.max : 1;
     let float = Number.isFinite(it.float) ? it.float : (min <= 0.01 ? 0.01 : min);
@@ -720,7 +749,6 @@ function clamp(v, a, b) {
   return Math.min(b, Math.max(a, v));
 }
 
-// обновляем значение без “прыжков” курсора: форматируем на blur/change
 document.addEventListener("input", (e) => {
   const f = e.target.closest(".floatInput");
   if (!f) return;
@@ -749,21 +777,27 @@ document.addEventListener("change", (e) => {
   const min = Number.isFinite(item.min) ? item.min : 0;
   const max = Number.isFinite(item.max) ? item.max : 1;
 
-  // приводим к диапазону и красиво форматируем
   item.float = clamp(Number(item.float), min, max);
   f.value = Number(item.float).toFixed(6);
 });
+
 /* --- calc/clear --- */
 document.getElementById("tradeupCalc")?.addEventListener("click", async () => {
-  if (contractItems.length !== 10) {
-    renderTradeupResult({ error: `Нужно ровно 10 предметов. Сейчас: ${contractItems.length}` });
+  const r = contractItems[0]?.rarity;
+  if (!r) {
+    renderTradeupResult({ error: "Добавь предметы в контракт." });
     return;
   }
 
-  // правило: одна редкость
-  const r = contractItems[0]?.rarity;
-  if (!r || contractItems.some((x) => x.rarity !== r)) {
-    renderTradeupResult({ error: "Все 10 предметов должны быть одной редкости." });
+  const need = needCountByRarity(r);
+
+  if (contractItems.length !== need) {
+    renderTradeupResult({ error: `Нужно ровно ${need} предметов. Сейчас: ${contractItems.length}` });
+    return;
+  }
+
+  if (contractItems.some((x) => x.rarity !== r)) {
+    renderTradeupResult({ error: "Все предметы должны быть одной редкости." });
     return;
   }
 
