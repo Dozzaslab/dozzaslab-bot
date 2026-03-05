@@ -70,22 +70,42 @@
     Совет: подпишись, чтобы не пропускать колы 🔥.
   </div>
 </div>
-      <!-- CONTRACTS -->
      <div class="page hidden" data-page="contracts">
-  <div class="hl-muted">🧪 Контракты (Trade-Up)</div>
-  <div class="hl-text">Вставь 10 строк в формате:</div>
-  <div class="hl-muted">Collection | Rarity | Float</div>
 
-  <textarea id="tradeupInput" class="hl-input" rows="10"
-    placeholder="Anubis | Mil-Spec | 0.12&#10;Anubis | Mil-Spec | 0.11&#10;... (10 строк)"></textarea>
+<div class="hl-muted">🧪 Контракты (Trade-Up)</div>
 
-  <div class="hl-actions" style="margin-top:10px;">
-    <button class="hl-btn primary" id="tradeupCalc">Рассчитать</button>
-    <button class="hl-btn" id="tradeupFillDemo">Демо</button>
-    <button class="hl-btn" id="tradeupClear">Очистить</button>
-  </div>
+<input id="skinSearch" class="hl-search" placeholder="🔎 Search skin...">
 
-  <div id="tradeupResult" class="hl-text" style="margin-top:10px;"></div>
+<div class="grid2" style="margin-top:6px;">
+<select id="rarityFilter" class="hl-search">
+<option value="">Any Rarity</option>
+<option>Consumer</option>
+<option>Industrial</option>
+<option>Mil-Spec</option>
+<option>Restricted</option>
+<option>Classified</option>
+<option>Covert</option>
+</select>
+
+<select id="collectionFilter" class="hl-search">
+<option value="">Any Collection</option>
+</select>
+</div>
+
+<div id="skinsTable" style="margin-top:10px;"></div>
+
+<hr style="margin:10px 0;opacity:.2">
+
+<div class="hl-text">Contract Items</div>
+<div id="contractList"></div>
+
+<div class="hl-actions">
+<button class="hl-btn primary" id="tradeupCalc">Calculate</button>
+<button class="hl-btn" id="tradeupClear">Clear</button>
+</div>
+
+<div id="tradeupResult" class="hl-text" style="margin-top:10px;"></div>
+
 </div>
 
       <!-- CATALOG -->
