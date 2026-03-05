@@ -1,4 +1,4 @@
-import { simulateTradeup } from "./tradeup.js"
+import { ensureTradeupReady, simulateTradeup } from "./tradeup.js";
 const loading = document.getElementById('loading');
 const app = document.getElementById('app');
 const bar = document.getElementById('bar');
@@ -356,6 +356,7 @@ const testItems = [
  {collection:"Anubis", float:0.12}
 ]
 
+// ===== TRADE-UP UI (вставить в самый низ app.js) =====
 
 function parseTradeupInput(text) {
   const lines = (text || "").split("\n").map(l => l.trim()).filter(Boolean);
@@ -364,10 +365,11 @@ function parseTradeupInput(text) {
   const items = [];
   for (let i = 0; i < lines.length; i++) {
     const parts = lines[i].split("|").map(s => s.trim());
-    if (parts.length !== 3) return { error: `Строка ${i + 1}: формат должен быть "Collection | Rarity | Float"` };
+    if (parts.length !== 3) return { error: `Строка ${i + 1}: формат "Collection | Rarity | Float"` };
 
     const [collection, rarity, floatStr] = parts;
     const f = Number(floatStr);
+
     if (!collection || !rarity || Number.isNaN(f) || f < 0 || f > 1) {
       return { error: `Строка ${i + 1}: проверь collection/rarity/float (float 0..1)` };
     }
@@ -382,39 +384,73 @@ function renderTradeupResult(result) {
   if (!out) return;
 
   if (result?.error) {
-    out.innerHTML = `❌ ${result.error}`;
+    out.innerHTML = `❌ ${escapeHtml(result.error)}`;
     return;
   }
 
   let html = "";
-  html += `<div><b>Input rarity:</b> ${result.input_rarity}</div>`;
-  html += `<div><b>Output rarity:</b> ${result.output_rarity}</div>`;
+  html += `<div><b>Input rarity:</b> ${escapeHtml(result.input_rarity)}</div>`;
+  html += `<div><b>Output rarity:</b> ${escapeHtml(result.output_rarity)}</div>`;
   html += `<div><b>Avg float:</b> ${result.avg_float}</div>`;
 
+  if (typeof result.total_prob_covered === "number") {
+    html += `<div><b>Covered prob:</b> ${(result.total_prob_covered * 100).toFixed(2)}%</div>`;
+  }
+
   if (result.missing_collections?.length) {
-    html += `<div style="margin-top:6px;">⚠️ Нет данных по коллекциям: <b>${result.missing_collections.join(", ")}</b></div>`;
+    html += `<div style="margin-top:6px;">⚠️ Нет данных по коллекциям: <b>${result.missing_collections.map(escapeHtml).join(", ")}</b></div>`;
   }
 
   html += `<div style="margin-top:10px;"><b>Outcomes:</b></div>`;
+
   if (!result.outcomes?.length) {
-    html += `<div>Пусто (нужно заполнить outcomesDB для этих коллекций).</div>`;
+    html += `<div>Пусто (для этих коллекций/редкости нет outcomes в базе).</div>`;
     out.innerHTML = html;
     return;
   }
 
-  html += `<div class="hl-muted" style="margin-top:6px;">Шанс | Outcome | Float</div>`;
-  for (const o of result.outcomes.slice(0, 50)) {
+  for (const o of result.outcomes.slice(0, 80)) {
     const p = (o.prob * 100).toFixed(2);
-    html += `<div>• <b>${p}%</b> — ${o.name} <span class="hl-muted">(${o.collection})</span> — float≈${o.float_out}</div>`;
+
+    const stash = o.links?.stash ? `<a href="${o.links.stash}" target="_blank">Stash</a>` : "";
+    const csfloat = o.links?.csfloat ? `<a href="${o.links.csfloat}" target="_blank">CSFloat</a>` : "";
+    const steam = o.links?.steam ? `<a href="${o.links.steam}" target="_blank">Steam</a>` : "";
+    const links = [stash, csfloat, steam].filter(Boolean).join(" | ");
+
+    html += `<div style="margin-top:6px;">
+      • <b>${p}%</b> — ${escapeHtml(o.name)}
+      <span class="hl-muted">(${escapeHtml(o.collection)})</span>
+      — float≈${o.float_out}
+      <div class="hl-muted">${links}</div>
+    </div>`;
   }
 
   out.innerHTML = html;
 }
 
-document.getElementById("tradeupCalc")?.addEventListener("click", () => {
+function escapeHtml(s) {
+  return String(s || "").replace(/[&<>"']/g, c => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;",
+  }[c]));
+}
+
+document.getElementById("tradeupCalc")?.addEventListener("click", async () => {
   const ta = document.getElementById("tradeupInput");
   const parsed = parseTradeupInput(ta?.value || "");
   if (parsed.error) return renderTradeupResult({ error: parsed.error });
+
+  const out = document.getElementById("tradeupResult");
+  if (out) out.innerHTML = "⏳ Загружаю базу скинов…";
+
+  try {
+    await ensureTradeupReady();
+  } catch (e) {
+    return renderTradeupResult({ error: String(e?.message || e) });
+  }
 
   const result = simulateTradeup(parsed.items);
   renderTradeupResult(result);
@@ -430,6 +466,7 @@ document.getElementById("tradeupClear")?.addEventListener("click", () => {
 document.getElementById("tradeupFillDemo")?.addEventListener("click", () => {
   const ta = document.getElementById("tradeupInput");
   if (!ta) return;
+
   ta.value = [
     "Anubis | Mil-Spec | 0.12",
     "Anubis | Mil-Spec | 0.11",
@@ -440,6 +477,6 @@ document.getElementById("tradeupFillDemo")?.addEventListener("click", () => {
     "Anubis | Mil-Spec | 0.08",
     "Anubis | Mil-Spec | 0.14",
     "Anubis | Mil-Spec | 0.07",
-    "Anubis | Mil-Spec | 0.12"
+    "Anubis | Mil-Spec | 0.12",
   ].join("\n");
 });
