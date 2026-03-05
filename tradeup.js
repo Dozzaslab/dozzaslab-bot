@@ -196,8 +196,15 @@ function getName(s) {
 }
 
 function getCollection(s) {
-  // ByMykel часто даёт collection как строку.
-  // Иногда может быть object { name: "..."}.
+  // ByMykel skins.json: коллекция(и) лежат в массиве collections[]
+  const arr = s?.collections;
+  if (Array.isArray(arr) && arr.length) {
+    const c0 = arr[0];
+    if (typeof c0 === "string") return c0.trim();
+    if (typeof c0 === "object" && c0.name) return String(c0.name).trim();
+  }
+
+  // fallback на старые структуры (если вдруг другой json)
   const c = s?.collection;
   if (!c) return "";
   if (typeof c === "string") return c.trim();
