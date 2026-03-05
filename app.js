@@ -355,6 +355,16 @@ function getRarityName(s) {
 }
 
 function getCollectionName(s) {
+  // ByMykel skins.json: коллекции лежат в массиве "collections"
+  // Нам для trade-up нужна 1 основная коллекция (обычно первая)
+  const arr = s?.collections;
+  if (Array.isArray(arr) && arr.length) {
+    const c0 = arr[0];
+    if (typeof c0 === "string") return c0.trim();
+    if (typeof c0 === "object" && c0.name) return String(c0.name).trim();
+  }
+
+  // fallback на старые версии (если вдруг попадётся поле collection)
   const c = s?.collection;
   if (!c) return "";
   if (typeof c === "string") return c.trim();
