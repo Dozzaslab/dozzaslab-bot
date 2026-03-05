@@ -461,3 +461,213 @@ document.getElementById("tradeupFillDemo")?.addEventListener("click", () => {
     "Anubis | Mil-Spec | 0.12",
   ].join("\n");
 });
+/* ===== NEW TRADEUP UI ===== */
+
+let skinsDB = []
+let contractItems = []
+
+async function loadTradeupSkins(){
+
+ await ensureTradeupReady()
+
+ const res = await fetch("/data/skins.json")
+ const data = await res.json()
+
+ skinsDB = data.filter(s =>
+  s.rarity &&
+  s.collection &&
+  !s.souvenir
+ )
+ 
+ renderCollections()
+ renderSkinsTable()
+}
+
+function renderCollections(){
+
+ const select = document.getElementById("collectionFilter")
+ if(!select) return
+
+ const set = new Set()
+
+ skinsDB.forEach(s=>{
+  const c = typeof s.collection === "string"
+   ? s.collection
+   : s.collection?.name
+
+  if(c) set.add(c)
+ })
+
+ const arr = [...set].sort()
+
+ arr.forEach(c=>{
+  const opt = document.createElement("option")
+  opt.textContent = c
+  select.appendChild(opt)
+ })
+}
+
+function renderSkinsTable(){
+
+ const table = document.getElementById("skinsTable")
+ if(!table) return
+
+ const search = document.getElementById("skinSearch").value.toLowerCase()
+ const rarity = document.getElementById("rarityFilter").value
+ const collection = document.getElementById("collectionFilter").value
+
+ let list = skinsDB.filter(s=>{
+
+  const name = (s.name||"").toLowerCase()
+
+  const coll = typeof s.collection==="string"
+   ? s.collection
+   : s.collection?.name
+
+  if(search && !name.includes(search)) return false
+  if(rarity && s.rarity.name !== rarity) return false
+  if(collection && coll !== collection) return false
+
+  return true
+ })
+
+ list = list.slice(0,40)
+
+ let html = `
+<table style="width:100%;font-size:12px">
+<tr>
+<th align="left">Skin</th>
+<th>Collection</th>
+<th>Rarity</th>
+<th>Float</th>
+<th></th>
+</tr>
+`
+
+ list.forEach((s,i)=>{
+
+ const coll = typeof s.collection==="string"
+  ? s.collection
+  : s.collection?.name
+
+ const r = s.rarity.name
+
+ html += `
+<tr>
+<td>${escapeHtml(s.name)}</td>
+<td>${escapeHtml(coll)}</td>
+<td>${escapeHtml(r)}</td>
+<td>${s.min_float}-${s.max_float}</td>
+<td>
+<button class="hl-btn addSkin" data-id="${i}">+</button>
+</td>
+</tr>`
+ })
+
+ html += "</table>"
+
+ table.innerHTML = html
+}
+
+document.addEventListener("input",(e)=>{
+
+ if(
+  e.target.id==="skinSearch" ||
+  e.target.id==="rarityFilter" ||
+  e.target.id==="collectionFilter"
+ ){
+  renderSkinsTable()
+ }
+})
+
+document.addEventListener("click",(e)=>{
+
+ const add = e.target.closest(".addSkin")
+ if(add){
+
+  const id = add.dataset.id
+  const s = skinsDB[id]
+
+  const float = (s.min_float+s.max_float)/2
+
+  const coll = typeof s.collection==="string"
+   ? s.collection
+   : s.collection?.name
+
+  contractItems.push({
+   name:s.name,
+   collection:coll,
+   rarity:s.rarity.name,
+   float:float
+  })
+
+  renderContract()
+ }
+
+})
+
+function renderContract(){
+
+ const el = document.getElementById("contractList")
+
+ if(!el) return
+
+ let html = ""
+
+ contractItems.forEach((s,i)=>{
+
+ html += `
+<div style="margin-top:6px">
+${i+1}. ${escapeHtml(s.name)} 
+float ${s.float.toFixed(3)}
+
+<button class="hl-btn dup" data-i="${i}">Duplicate</button>
+<button class="hl-btn rem" data-i="${i}">Remove</button>
+</div>
+`
+ })
+
+ el.innerHTML = html
+}
+
+document.addEventListener("click",(e)=>{
+
+ const dup = e.target.closest(".dup")
+ if(dup){
+
+  const i = dup.dataset.i
+  contractItems.push({...contractItems[i]})
+  renderContract()
+ }
+
+ const rem = e.target.closest(".rem")
+ if(rem){
+
+  const i = rem.dataset.i
+  contractItems.splice(i,1)
+  renderContract()
+ }
+
+})
+
+document.getElementById("tradeupCalc")?.addEventListener("click",()=>{
+
+ if(contractItems.length !== 10){
+
+  alert("Need 10 skins")
+  return
+ }
+
+ const result = simulateTradeup(contractItems)
+ renderTradeupResult(result)
+
+})
+
+document.getElementById("tradeupClear")?.addEventListener("click",()=>{
+
+ contractItems=[]
+ renderContract()
+
+})
+
+loadTradeupSkins()
