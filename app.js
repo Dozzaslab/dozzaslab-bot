@@ -1,3 +1,4 @@
+import { simulateTradeup } from "./tradeup.js"
 const loading = document.getElementById('loading');
 const app = document.getElementById('app');
 const bar = document.getElementById('bar');
