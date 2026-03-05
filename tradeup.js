@@ -13,7 +13,9 @@ const RARITY_UP = {
   "Mil-Spec": "Restricted",
   "Restricted": "Classified",
   "Classified": "Covert",
-  // дальше можно не надо для классики trade-up
+  // Covert -> Special (ножи/перчатки). В этой версии движка
+  // считаем как "Extraordinary" (gold). Если в базе таких нет — outcomes будут пустыми.
+  "Covert": "Extraordinary",
 };
 
 // --- Public API ---
@@ -48,10 +50,10 @@ export function getCollectionsList() {
 export function simulateTradeup(items) {
   if (!_index) return { error: "База ещё не загружена. Вызови ensureTradeupReady() перед расчетом." };
 
-  if (!Array.isArray(items) || items.length !== 10) {
-    return { error: "Нужно ровно 10 предметов." };
-  }
-
+if (!Array.isArray(items) || (items.length !== 10 && items.length !== 5)) {
+  return { error: "Нужно ровно 10 предметов (обычный контракт) или 5 предметов (Covert -> gold)." };
+}
+const N = items.length;
   // Validate and normalize
   const rarities = new Set();
   const normalized = items.map((it, i) => {
@@ -71,16 +73,25 @@ export function simulateTradeup(items) {
     return { collection: matchedCollection, rarity, float: fl, _rawCollection: collection };
   });
 
-  if (rarities.size !== 1) {
-    return { error: "Все 10 предметов должны быть одной редкости." };
-  }
+ if (rarities.size !== 1) {
+  return { error: `Все предметы должны быть одной редкости.` };
+}
 
-  const inRarity = normalized[0].rarity;
+const inRarity = normalized[0].rarity;
+
+// Правило количества:
+if (inRarity === "Covert" && N !== 5) {
+  return { error: "Для Covert контракта нужно ровно 5 предметов (Covert -> gold)." };
+}
+if (inRarity !== "Covert" && N !== 10) {
+  return { error: "Для этого контракта нужно ровно 10 предметов." };
+}
+
   const outRarity = RARITY_UP[inRarity];
   if (!outRarity) return { error: `Нет апгрейда для rarity: ${inRarity}` };
 
   // Average float
-  const avgFloat = normalized.reduce((s, x) => s + x.float, 0) / 10;
+  const avgFloat = normalized.reduce((s, x) => s + x.float, 0) / N;
 
   // Count collections
   const counts = {};
@@ -97,7 +108,7 @@ export function simulateTradeup(items) {
       continue;
     }
 
-    const weightCol = n / 10;
+    const weightCol = n / N;
     const k = pool.length;
     const pEach = weightCol / k;
 
@@ -241,6 +252,7 @@ function normalizeRarity(r) {
   if (x.includes("restricted")) return "Restricted";
   if (x.includes("classified")) return "Classified";
   if (x.includes("covert")) return "Covert";
+  if (x.includes("extraordinary") || x.includes("gold") || x.includes("rare special")) return "Extraordinary";
 
   // Если пользователь вводит коротко
   if (x === "mil" || x === "mil-spec") return "Mil-Spec";
