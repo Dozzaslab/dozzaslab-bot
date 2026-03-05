@@ -333,18 +333,18 @@ document.getElementById("btnMenu")?.addEventListener("click", () => {
 });
 
 /* ===========================================================
-   TRADE-UP (TABLE UI) — только новая версия
+   TRADE-UP (TABLE UI)
    =========================================================== */
 
 // ===== rarity colors + dot + need count =====
 const RARITY_COLOR = {
-  "Consumer": "#b0b0b0",
-  "Industrial": "#5e98d9",
+  Consumer: "#b0b0b0",
+  Industrial: "#5e98d9",
   "Mil-Spec": "#4b69ff",
-  "Restricted": "#8847ff",
-  "Classified": "#d32ce6",
-  "Covert": "#eb4b4b",
-  "Extraordinary": "#ffd700",
+  Restricted: "#8847ff",
+  Classified: "#d32ce6",
+  Covert: "#eb4b4b",
+  Extraordinary: "#ffd700",
 };
 
 function rarityDot(rarity) {
@@ -414,6 +414,7 @@ function normalizeRarityUI(r) {
   if (x.includes("restricted")) return "Restricted";
   if (x.includes("classified")) return "Classified";
   if (x.includes("covert")) return "Covert";
+  if (x.includes("extraordinary") || x.includes("gold")) return "Extraordinary";
   return r || "";
 }
 
@@ -607,7 +608,7 @@ function renderContract() {
   if (!el) return;
 
   const rarity = contractItems[0]?.rarity || "";
- const need = contractItems[0]?.rarity === "Covert" ? 5 : 10;
+  const need = needCountByRarity(rarity);
 
   let html = `<div class="hl-muted">Нужно <b>${need}</b> строк. Сейчас: <b>${contractItems.length}</b>${rarity ? ` • Rarity: <b>${escapeHtml(rarity)}</b>` : ""}</div>`;
 
@@ -680,20 +681,19 @@ document.addEventListener("click", (e) => {
     const s = skinsDB.find((x) => x.id === id);
     if (!s) return;
 
+    // правило: один контракт = одна редкость
     const currentRarity = contractItems[0]?.rarity;
     if (currentRarity && s.rarity !== currentRarity) {
       alert("Все предметы в контракте должны быть одной редкости.");
       return;
     }
 
-    const r = currentRarity || s.rarity;
-    const need = needCountByRarity(r);
-
-    const need = (s.rarity === "Covert") ? 5 : 10;
-if (contractItems.length >= need) {
-  alert(`Лимит: ${need} предметов.`);
-  return;
-}
+    // лимит по редкости (Covert=5, иначе 10)
+    const limit = needCountByRarity(currentRarity || s.rarity);
+    if (contractItems.length >= limit) {
+      alert(`Лимит: ${limit} предметов.`);
+      return;
+    }
 
     // default float: 0.01 если min<=0.01, иначе min (потом clamp в max)
     let float = s.min <= 0.01 ? 0.01 : s.min;
@@ -718,11 +718,11 @@ if (contractItems.length >= need) {
     const it = contractItems[i];
     if (!it) return;
 
-   const need = (contractItems[0]?.rarity === "Covert") ? 5 : 10;
-if (contractItems.length >= need) {
-  alert(`Лимит: ${need} предметов.`);
-  return;
-}
+    const limit = needCountByRarity(contractItems[0]?.rarity);
+    if (contractItems.length >= limit) {
+      alert(`Лимит: ${limit} предметов.`);
+      return;
+    }
 
     const min = Number.isFinite(it.min) ? it.min : 0;
     const max = Number.isFinite(it.max) ? it.max : 1;
@@ -790,11 +790,13 @@ document.getElementById("tradeupCalc")?.addEventListener("click", async () => {
     return;
   }
 
-const need = (contractItems[0]?.rarity === "Covert") ? 5 : 10;
-if (contractItems.length !== need) {
-  renderTradeupResult({ error: `Нужно ровно ${need} предметов. Сейчас: ${contractItems.length}` });
-  return;
-}
+  const need = needCountByRarity(r);
+  if (contractItems.length !== need) {
+    renderTradeupResult({
+      error: `Нужно ровно ${need} предметов. Сейчас: ${contractItems.length}`,
+    });
+    return;
+  }
 
   if (contractItems.some((x) => x.rarity !== r)) {
     renderTradeupResult({ error: "Все предметы должны быть одной редкости." });
