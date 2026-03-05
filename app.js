@@ -1,4 +1,5 @@
 import { ensureTradeupReady, simulateTradeup } from "./tradeup.js";
+
 const loading = document.getElementById('loading');
 const app = document.getElementById('app');
 const bar = document.getElementById('bar');
@@ -10,18 +11,14 @@ const CHAT_URL    = "https://t.me/+YmGqLAkSQU0yYmUy";
 function openTgLink(url) {
   if (!url) return;
 
-  // Внутри Telegram лучше открывать tg-ссылки так:
   if (window.Telegram?.WebApp?.openTelegramLink) {
     Telegram.WebApp.openTelegramLink(url);
     return;
   }
-
-  // fallback (иногда полезен для внешних url)
   if (window.Telegram?.WebApp?.openLink) {
     Telegram.WebApp.openLink(url);
     return;
   }
-
   window.open(url, "_blank");
 }
 
@@ -40,24 +37,20 @@ function showPage(page) {
   const root = document.querySelector('#app .hl-body');
   if (!root) return;
 
-  // показываем только страницы верхнего уровня
   root.querySelectorAll(':scope > .page').forEach(p => {
     p.classList.toggle('hidden', p.dataset.page !== page);
   });
 
-  // активная таб-кнопка
   document.querySelectorAll('.hl-tab').forEach(t => {
     t.classList.toggle('active', t.dataset.page === page);
   });
 
   scrollToTop();
 
-  // при входе в каталог всегда показываем 2 кнопки
   if (page === 'catalog' && window.__catalogShowHome) {
     window.__catalogShowHome();
   }
 
-  // ✅ при входе в любую вкладку сбрасываем вложенные экраны (если есть)
   if (window.__resetSubnav?.[page]) {
     window.__resetSubnav[page]();
   }
@@ -116,7 +109,6 @@ function initSubnav(pageName, initialScreenId) {
     else show(initialScreenId, { push: false });
   }
 
-  // Делегирование кликов внутри этой вкладки
   page.addEventListener("click", (e) => {
     const go = e.target.closest("[data-go]");
     if (go) return show(go.dataset.go);
@@ -125,14 +117,12 @@ function initSubnav(pageName, initialScreenId) {
     if (b) return back();
   });
 
-  // экспортируем reset на вкладку (чтобы при входе сбрасывать в корень)
   window.__resetSubnav = window.__resetSubnav || {};
   window.__resetSubnav[pageName] = () => {
     stack.length = 0;
     show(initialScreenId, { push: false });
   };
 
-  // стартовое состояние
   show(initialScreenId, { push: false });
 }
 
@@ -268,16 +258,14 @@ backBtn?.addEventListener('click', () => openSuggestStep1());
     scrollToTop();
   });
 
-  // ✅ экспортируем showHome, чтобы showPage('catalog') мог вызвать
   window.__catalogShowHome = showHome;
-
-  // стартовое состояние каталога
   showHome();
 })();
 
 /* ===== Инициализация subnav для вкладки INVEST + TOOLS ===== */
 initSubnav("invest", "investHome");
 initSubnav("tools", "toolsHome");
+
 /* ===== Typewriter for welcome ===== */
 function typeWelcomeText() {
   const sourceEl = document.getElementById("welcomeSource");
@@ -288,25 +276,21 @@ function typeWelcomeText() {
   targetEl.innerHTML = "";
   let i = 0;
 
-  const speed = 18; // скорость печати (меньше = быстрее)
+  const speed = 18;
 
   function type() {
     if (i < text.length) {
       const char = text[i];
-
-      if (char === "\n") {
-        targetEl.innerHTML += "<br/>";
-      } else {
-        targetEl.innerHTML += char;
-      }
+      if (char === "\n") targetEl.innerHTML += "<br/>";
+      else targetEl.innerHTML += char;
 
       i++;
       setTimeout(type, speed);
     }
   }
-
   type();
 }
+
 /* ===== загрузка ===== */
 let p = 0;
 const timer = setInterval(() => {
@@ -317,17 +301,17 @@ const timer = setInterval(() => {
     loading?.classList.add('hidden');
     app?.classList.remove('hidden');
 
-    // ✅ стартуем без вкладок
     app?.classList.remove('menu-mode');
 
-   showPage('welcome');
-setTimeout(typeWelcomeText, 200); // стартуем с приветственного экрана
+    showPage('welcome');
+    setTimeout(typeWelcomeText, 200);
+
     if (window.Telegram?.WebApp) Telegram.WebApp.expand();
   }
   if (bar) bar.style.width = p + '%';
 }, 120);
 
-/* ===== закрытие окон (без падений если элемента нет) ===== */
+/* ===== закрытие окон ===== */
 const x1 = document.getElementById('x1');
 const x2 = document.getElementById('x2');
 const cancelLoad = document.getElementById('cancelLoad');
@@ -343,20 +327,8 @@ document.getElementById("btnMenu")?.addEventListener("click", () => {
   app?.classList.add("menu-mode");
   showPage("tools");
 });
-const testItems = [
- {collection:"Anubis", float:0.12},
- {collection:"Anubis", float:0.11},
- {collection:"Anubis", float:0.13},
- {collection:"Anubis", float:0.10},
- {collection:"Anubis", float:0.09},
- {collection:"Anubis", float:0.15},
- {collection:"Anubis", float:0.08},
- {collection:"Anubis", float:0.14},
- {collection:"Anubis", float:0.07},
- {collection:"Anubis", float:0.12}
-]
 
-// ===== TRADE-UP UI (вставить в самый низ app.js) =====
+/* ===== TRADE-UP UI ===== */
 
 function parseTradeupInput(text) {
   const lines = (text || "").split("\n").map(l => l.trim()).filter(Boolean);
@@ -377,6 +349,16 @@ function parseTradeupInput(text) {
     items.push({ collection, rarity, float: f });
   }
   return { items };
+}
+
+function escapeHtml(s) {
+  return String(s || "").replace(/[&<>"']/g, c => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;",
+  }[c]));
 }
 
 function renderTradeupResult(result) {
@@ -409,33 +391,32 @@ function renderTradeupResult(result) {
     return;
   }
 
-  for (const o of result.outcomes.slice(0, 80)) {
+  for (const o of result.outcomes.slice(0, 60)) {
     const p = (o.prob * 100).toFixed(2);
 
-    const stash = o.links?.stash ? `<a href="${o.links.stash}" target="_blank">Stash</a>` : "";
-    const csfloat = o.links?.csfloat ? `<a href="${o.links.csfloat}" target="_blank">CSFloat</a>` : "";
-    const steam = o.links?.steam ? `<a href="${o.links.steam}" target="_blank">Steam</a>` : "";
-    const links = [stash, csfloat, steam].filter(Boolean).join(" | ");
+    const stashBtn = o.links?.stash
+      ? `<button class="hl-btn" style="margin-right:6px;" data-open="${o.links.stash}">Stash</button>`
+      : "";
 
-    html += `<div style="margin-top:6px;">
+    const csfloatBtn = o.links?.csfloat
+      ? `<button class="hl-btn" style="margin-right:6px;" data-open="${o.links.csfloat}">CSFloat</button>`
+      : "";
+
+    const steamBtn = o.links?.steam
+      ? `<button class="hl-btn" data-open="${o.links.steam}">Steam</button>`
+      : "";
+
+    html += `<div style="margin-top:10px;">
       • <b>${p}%</b> — ${escapeHtml(o.name)}
       <span class="hl-muted">(${escapeHtml(o.collection)})</span>
       — float≈${o.float_out}
-      <div class="hl-muted">${links}</div>
+      <div style="margin-top:6px; display:flex; gap:6px; flex-wrap:wrap;">
+        ${stashBtn}${csfloatBtn}${steamBtn}
+      </div>
     </div>`;
   }
 
   out.innerHTML = html;
-}
-
-function escapeHtml(s) {
-  return String(s || "").replace(/[&<>"']/g, c => ({
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#39;",
-  }[c]));
 }
 
 document.getElementById("tradeupCalc")?.addEventListener("click", async () => {
