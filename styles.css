@@ -159,3 +159,19 @@ padding:8px;resize:vertical}
 .rarity-restricted{color:#8847ff}
 .rarity-classified{color:#d32ce6}
 .rarity-covert{color:#eb4b4b}
+
+/* Trade-up float input: make it compact (override hl-input defaults) */
+.floatInputSmall{
+  width: 78px !important;
+  min-width: 78px !important;
+  max-width: 78px !important;
+
+  height: 24px !important;
+  padding: 2px 6px !important;
+
+  font-size: 12px !important;
+  line-height: 1 !important;
+
+  display: inline-block !important;
+  box-sizing: border-box !important;
+}
