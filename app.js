@@ -428,25 +428,29 @@ function renderTradeupResult(result) {
   for (const o of result.outcomes.slice(0, 60)) {
     const p = (Number(o.prob) * 100).toFixed(2);
 
-    const stashBtn = o.links?.stash
-      ? `<button class="hl-btn" style="margin-right:6px;" data-open="${escapeHtml(o.links.stash)}">Stash</button>`
-      : "";
+   const stashBtn = o.links?.stash
+  ? `<button class="hl-btn" style="margin-right:6px;" data-open="${escapeHtml(o.links.stash)}">Stash</button>`
+  : "";
 
-    const csfloatBtn = o.links?.csfloat
-      ? `<button class="hl-btn" style="margin-right:6px;" data-open="${escapeHtml(o.links.csfloat)}">CSFloat</button>`
-      : "";
+const csfloatBtn = o.links?.csfloat
+  ? `<button class="hl-btn" style="margin-right:6px;" data-open="${escapeHtml(o.links.csfloat)}">CSFloat</button>`
+  : "";
 
-    const steamBtn = o.links?.steam
-      ? `<button class="hl-btn" data-open="${escapeHtml(o.links.steam)}">Steam</button>`
-      : "";
+const clashBtn = o.links?.clash
+  ? `<button class="hl-btn" style="margin-right:6px;" data-open="${escapeHtml(o.links.clash)}">Clash</button>`
+  : "";
+
+const steamBtn = o.links?.steam
+  ? `<button class="hl-btn" data-open="${escapeHtml(o.links.steam)}">Steam</button>`
+  : "";
 
     html += `<div style="margin-top:10px;">
       • <b>${p}%</b> — ${escapeHtml(o.name)}
       <span class="hl-muted">(${escapeHtml(o.collection)})</span>
       — float≈${escapeHtml(o.float_out)}
-      <div style="margin-top:6px; display:flex; gap:6px; flex-wrap:wrap;">
-        ${stashBtn}${csfloatBtn}${steamBtn}
-      </div>
+     <div style="margin-top:6px; display:flex; gap:6px; flex-wrap:wrap;">
+  ${stashBtn}${csfloatBtn}${clashBtn}${steamBtn}
+</div>
     </div>`;
   }
 
