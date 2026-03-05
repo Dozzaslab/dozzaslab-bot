@@ -356,4 +356,90 @@ const testItems = [
  {collection:"Anubis", float:0.12}
 ]
 
-console.log(simulateTradeup(testItems))
+
+function parseTradeupInput(text) {
+  const lines = (text || "").split("\n").map(l => l.trim()).filter(Boolean);
+  if (lines.length !== 10) return { error: `Нужно 10 строк. Сейчас: ${lines.length}` };
+
+  const items = [];
+  for (let i = 0; i < lines.length; i++) {
+    const parts = lines[i].split("|").map(s => s.trim());
+    if (parts.length !== 3) return { error: `Строка ${i + 1}: формат должен быть "Collection | Rarity | Float"` };
+
+    const [collection, rarity, floatStr] = parts;
+    const f = Number(floatStr);
+    if (!collection || !rarity || Number.isNaN(f) || f < 0 || f > 1) {
+      return { error: `Строка ${i + 1}: проверь collection/rarity/float (float 0..1)` };
+    }
+
+    items.push({ collection, rarity, float: f });
+  }
+  return { items };
+}
+
+function renderTradeupResult(result) {
+  const out = document.getElementById("tradeupResult");
+  if (!out) return;
+
+  if (result?.error) {
+    out.innerHTML = `❌ ${result.error}`;
+    return;
+  }
+
+  let html = "";
+  html += `<div><b>Input rarity:</b> ${result.input_rarity}</div>`;
+  html += `<div><b>Output rarity:</b> ${result.output_rarity}</div>`;
+  html += `<div><b>Avg float:</b> ${result.avg_float}</div>`;
+
+  if (result.missing_collections?.length) {
+    html += `<div style="margin-top:6px;">⚠️ Нет данных по коллекциям: <b>${result.missing_collections.join(", ")}</b></div>`;
+  }
+
+  html += `<div style="margin-top:10px;"><b>Outcomes:</b></div>`;
+  if (!result.outcomes?.length) {
+    html += `<div>Пусто (нужно заполнить outcomesDB для этих коллекций).</div>`;
+    out.innerHTML = html;
+    return;
+  }
+
+  html += `<div class="hl-muted" style="margin-top:6px;">Шанс | Outcome | Float</div>`;
+  for (const o of result.outcomes.slice(0, 50)) {
+    const p = (o.prob * 100).toFixed(2);
+    html += `<div>• <b>${p}%</b> — ${o.name} <span class="hl-muted">(${o.collection})</span> — float≈${o.float_out}</div>`;
+  }
+
+  out.innerHTML = html;
+}
+
+document.getElementById("tradeupCalc")?.addEventListener("click", () => {
+  const ta = document.getElementById("tradeupInput");
+  const parsed = parseTradeupInput(ta?.value || "");
+  if (parsed.error) return renderTradeupResult({ error: parsed.error });
+
+  const result = simulateTradeup(parsed.items);
+  renderTradeupResult(result);
+});
+
+document.getElementById("tradeupClear")?.addEventListener("click", () => {
+  const ta = document.getElementById("tradeupInput");
+  const out = document.getElementById("tradeupResult");
+  if (ta) ta.value = "";
+  if (out) out.innerHTML = "";
+});
+
+document.getElementById("tradeupFillDemo")?.addEventListener("click", () => {
+  const ta = document.getElementById("tradeupInput");
+  if (!ta) return;
+  ta.value = [
+    "Anubis | Mil-Spec | 0.12",
+    "Anubis | Mil-Spec | 0.11",
+    "Anubis | Mil-Spec | 0.13",
+    "Anubis | Mil-Spec | 0.10",
+    "Anubis | Mil-Spec | 0.09",
+    "Anubis | Mil-Spec | 0.15",
+    "Anubis | Mil-Spec | 0.08",
+    "Anubis | Mil-Spec | 0.14",
+    "Anubis | Mil-Spec | 0.07",
+    "Anubis | Mil-Spec | 0.12"
+  ].join("\n");
+});
