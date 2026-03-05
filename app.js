@@ -333,18 +333,18 @@ document.getElementById("btnMenu")?.addEventListener("click", () => {
 });
 
 /* ===========================================================
-   TRADE-UP (TABLE UI)
+   TRADE-UP (TABLE UI) — только новая версия
    =========================================================== */
 
 // ===== rarity colors + dot + need count =====
 const RARITY_COLOR = {
-  Consumer: "#b0b0b0",
-  Industrial: "#5e98d9",
+  "Consumer": "#b0b0b0",
+  "Industrial": "#5e98d9",
   "Mil-Spec": "#4b69ff",
-  Restricted: "#8847ff",
-  Classified: "#d32ce6",
-  Covert: "#eb4b4b",
-  Extraordinary: "#ffd700",
+  "Restricted": "#8847ff",
+  "Classified": "#d32ce6",
+  "Covert": "#eb4b4b",
+  "Extraordinary": "#ffd700",
 };
 
 function rarityDot(rarity) {
@@ -414,7 +414,6 @@ function normalizeRarityUI(r) {
   if (x.includes("restricted")) return "Restricted";
   if (x.includes("classified")) return "Classified";
   if (x.includes("covert")) return "Covert";
-  if (x.includes("extraordinary") || x.includes("gold")) return "Extraordinary";
   return r || "";
 }
 
@@ -488,18 +487,14 @@ async function loadTradeupSkins() {
   await ensureTradeupReady();
 
   const res = await fetch("/data/skins.json", { cache: "force-cache" });
-  if (!res.ok)
+  if (!res.ok) {
     throw new Error(`Не удалось загрузить /data/skins.json (HTTP ${res.status})`);
+  }
   const data = await res.json();
 
   skinsDB = (Array.isArray(data) ? data : [])
     .map((s, idx) => {
-      const name = (
-        s?.name ||
-        s?.market_hash_name ||
-        s?.marketHashName ||
-        ""
-      ).trim();
+      const name = (s?.name || s?.market_hash_name || s?.marketHashName || "").trim();
       const collection = getCollectionName(s);
       const rarity = normalizeRarityUI(getRarityName(s));
       const min = getMinFloat(s);
@@ -622,7 +617,7 @@ function renderContract() {
     html += `
 <div style="margin-top:6px; padding:6px; border:1px solid rgba(0,0,0,.35); background:rgba(0,0,0,.10);">
   <div>
-    <b>${i + 1}.</b> ${rarityDot(s.rarity)}${escapeHtml(s.name)} 
+    <b>${i + 1}.</b> ${rarityDot(s.rarity)}${escapeHtml(s.name)}
     <span class="hl-muted">(${escapeHtml(s.collection)})</span>
   </div>
 
@@ -635,9 +630,8 @@ function renderContract() {
       min="${Number(s.min)}"
       max="${Number(s.max)}"
       value="${Number(s.float).toFixed(6)}"
-      class="hl-input floatInput"
+      class="floatInputSmall floatInput"
       data-i="${i}"
-      style="width:88px;height:24px;padding:2px 6px;line-height:1;font-size:12px;"
     />
     <span style="opacity:.6;font-size:11px;">
       (${Number(s.min).toFixed(2)} – ${Number(s.max).toFixed(2)})
@@ -688,14 +682,15 @@ document.addEventListener("click", (e) => {
       return;
     }
 
-    // лимит по редкости (Covert=5, иначе 10)
-    const limit = needCountByRarity(currentRarity || s.rarity);
-    if (contractItems.length >= limit) {
-      alert(`Лимит: ${limit} предметов.`);
+    const contractRarity = currentRarity || s.rarity;
+    const need = needCountByRarity(contractRarity);
+
+    if (contractItems.length >= need) {
+      alert(`Лимит: ${need} предметов.`);
       return;
     }
 
-    // default float: 0.01 если min<=0.01, иначе min (потом clamp в max)
+    // default float: 0.01 если min<=0.01, иначе min (и clamp в max)
     let float = s.min <= 0.01 ? 0.01 : s.min;
     float = Math.min(float, s.max);
 
@@ -718,9 +713,10 @@ document.addEventListener("click", (e) => {
     const it = contractItems[i];
     if (!it) return;
 
-    const limit = needCountByRarity(contractItems[0]?.rarity);
-    if (contractItems.length >= limit) {
-      alert(`Лимит: ${limit} предметов.`);
+    const need = needCountByRarity(contractItems[0]?.rarity);
+
+    if (contractItems.length >= need) {
+      alert(`Лимит: ${need} предметов.`);
       return;
     }
 
