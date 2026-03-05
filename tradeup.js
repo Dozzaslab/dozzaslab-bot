@@ -293,12 +293,12 @@ function matchCollectionKey(input, index) {
 function buildPriceLinks(name, stashUrl) {
   const q = encodeURIComponent(name);
 
-  return {
-    stash: stashUrl || null,
-    csfloat: `https://csfloat.com/search?query=${q}`,
-    steam: `https://steamcommunity.com/market/search?q=${q}`,
-    clash: `https://stash.clash.gg/search?query=${q}`
-  };
+return {
+  stash: stashUrl || null,
+  csfloat: `https://csfloat.com/search?query=${q}`,
+  clash: `https://stash.clash.gg/search?query=${q}`,
+  steam: `https://steamcommunity.com/market/search?q=${q}`
+};
 }
 
 function numOrNull(v) {
