@@ -596,7 +596,22 @@ function renderContract() {
     <b>${i + 1}.</b> ${escapeHtml(s.name)} 
     <span class="hl-muted">(${escapeHtml(s.collection)})</span>
   </div>
-  <div class="hl-muted">float: <b>${Number(s.float).toFixed(4)}</b></div>
+ <div class="hl-muted">
+float:
+<input
+  type="number"
+  step="0.0000001"
+  min="${s.min}"
+  max="${s.max}"
+  value="${Number(s.float).toFixed(6)}"
+  class="hl-input floatInput"
+  data-i="${i}"
+  style="width:110px;"
+>
+<span style="opacity:.6;font-size:11px;">
+(${s.min.toFixed(2)} – ${s.max.toFixed(2)})
+</span>
+</div>
   <div style="margin-top:6px; display:flex; gap:6px; flex-wrap:wrap;">
     <button class="hl-btn dup" data-i="${i}">Duplicate</button>
     <button class="hl-btn rem" data-i="${i}">Remove</button>
@@ -646,17 +661,18 @@ document.addEventListener("click", (e) => {
       return;
     }
 
-   let float = s.min <= 0.01 ? 0.01 : s.min;
-float = Math.min(float, s.max);
+    // default float: 0.01 если min=0, иначе min
+    let float = s.min <= 0.01 ? 0.01 : s.min;
+    float = Math.min(float, s.max);
 
-contractItems.push({
-  name: s.name,
-  collection: s.collection,
-  rarity: s.rarity,
-  float: float,
-  min: s.min,
-  max: s.max
-});
+    contractItems.push({
+      name: s.name,
+      collection: s.collection,
+      rarity: s.rarity,
+      float,
+      min: s.min,
+      max: s.max,
+    });
 
     renderContract();
     return;
@@ -673,7 +689,14 @@ contractItems.push({
       return;
     }
 
-    contractItems.push({ ...it });
+    // гарантируем min/max
+    const min = Number.isFinite(it.min) ? it.min : 0;
+    const max = Number.isFinite(it.max) ? it.max : 1;
+    let float = Number.isFinite(it.float) ? it.float : (min <= 0.01 ? 0.01 : min);
+    if (float < min) float = min;
+    if (float > max) float = max;
+
+    contractItems.push({ ...it, min, max, float });
     renderContract();
     return;
   }
@@ -688,6 +711,44 @@ contractItems.push({
   }
 });
 
+/* --- float input (clamp to skin range) --- */
+function clamp(v, a, b) {
+  return Math.min(b, Math.max(a, v));
+}
+
+// обновляем значение без “прыжков” курсора: форматируем на blur/change
+document.addEventListener("input", (e) => {
+  const f = e.target.closest(".floatInput");
+  if (!f) return;
+
+  const i = Number(f.dataset.i);
+  const item = contractItems[i];
+  if (!item) return;
+
+  let val = Number(f.value);
+  if (!Number.isFinite(val)) return;
+
+  const min = Number.isFinite(item.min) ? item.min : 0;
+  const max = Number.isFinite(item.max) ? item.max : 1;
+
+  item.float = clamp(val, min, max);
+});
+
+document.addEventListener("change", (e) => {
+  const f = e.target.closest(".floatInput");
+  if (!f) return;
+
+  const i = Number(f.dataset.i);
+  const item = contractItems[i];
+  if (!item) return;
+
+  const min = Number.isFinite(item.min) ? item.min : 0;
+  const max = Number.isFinite(item.max) ? item.max : 1;
+
+  // приводим к диапазону и красиво форматируем
+  item.float = clamp(Number(item.float), min, max);
+  f.value = Number(item.float).toFixed(6);
+});
 /* --- calc/clear --- */
 document.getElementById("tradeupCalc")?.addEventListener("click", async () => {
   if (contractItems.length !== 10) {
