@@ -153,3 +153,9 @@ padding:8px;resize:vertical}
   min-height:auto !important;
   overflow:hidden !important;
 }
+.rarity-consumer{color:#b0b0b0}
+.rarity-industrial{color:#5e98d9}
+.rarity-milspec{color:#4b69ff}
+.rarity-restricted{color:#8847ff}
+.rarity-classified{color:#d32ce6}
+.rarity-covert{color:#eb4b4b}
