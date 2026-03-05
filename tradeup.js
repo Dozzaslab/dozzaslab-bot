@@ -50,10 +50,12 @@ export function getCollectionsList() {
 export function simulateTradeup(items) {
   if (!_index) return { error: "База ещё не загружена. Вызови ensureTradeupReady() перед расчетом." };
 
-if (!Array.isArray(items) || (items.length !== 10 && items.length !== 5)) {
-  return { error: "Нужно ровно 10 предметов (обычный контракт) или 5 предметов (Covert -> gold)." };
-}
-const N = items.length;
+  if (!Array.isArray(items) || (items.length !== 10 && items.length !== 5)) {
+    return { error: "Нужно ровно 10 предметов (обычный контракт) или 5 предметов (Covert -> gold)." };
+  }
+
+  const N = items.length;
+
   // Validate and normalize
   const rarities = new Set();
   const normalized = items.map((it, i) => {
@@ -73,19 +75,19 @@ const N = items.length;
     return { collection: matchedCollection, rarity, float: fl, _rawCollection: collection };
   });
 
- if (rarities.size !== 1) {
-  return { error: `Все предметы должны быть одной редкости.` };
-}
+  if (rarities.size !== 1) {
+    return { error: `Все предметы должны быть одной редкости.` };
+  }
 
-const inRarity = normalized[0].rarity;
+  const inRarity = normalized[0].rarity;
 
-// Правило количества:
-if (inRarity === "Covert" && N !== 5) {
-  return { error: "Для Covert контракта нужно ровно 5 предметов (Covert -> gold)." };
-}
-if (inRarity !== "Covert" && N !== 10) {
-  return { error: "Для этого контракта нужно ровно 10 предметов." };
-}
+  // Правило количества:
+  if (inRarity === "Covert" && N !== 5) {
+    return { error: "Для Covert контракта нужно ровно 5 предметов (Covert -> gold)." };
+  }
+  if (inRarity !== "Covert" && N !== 10) {
+    return { error: "Для этого контракта нужно ровно 10 предметов." };
+  }
 
   const outRarity = RARITY_UP[inRarity];
   if (!outRarity) return { error: `Нет апгрейда для rarity: ${inRarity}` };
@@ -290,15 +292,33 @@ function matchCollectionKey(input, index) {
   return best || input; // если не нашли — вернём как есть, дальше уйдёт в missing_collections
 }
 
+/**
+ * Генератор ссылок на цены.
+ * ВАЖНО:
+ * - https://stash.clash.gg/search сейчас ведёт на заглушку (under construction)
+ * - если у нас есть прямой stash_url со страницы skin (/skin/...), используем его
+ * - если stash_url нет — даём безопасный fallback через google site:stash.clash.gg/skin ...
+ */
 function buildPriceLinks(name, stashUrl) {
   const q = encodeURIComponent(name);
 
-return {
-  stash: stashUrl || null,
-  csfloat: `https://csfloat.com/search?query=${q}`,
-  clash: `https://stash.clash.gg/search?query=${q}`,
-  steam: `https://steamcommunity.com/market/search?q=${q}`
-};
+  const directClash =
+    (typeof stashUrl === "string" && stashUrl.includes("stash.clash.gg/skin/"))
+      ? stashUrl
+      : null;
+
+  const clashFallback =
+    `https://www.google.com/search?q=${encodeURIComponent(`site:stash.clash.gg/skin ${name}`)}`;
+
+  return {
+    // Clash: прямой /skin/... если есть, иначе поиск по сайту (не под заглушку)
+    clash: directClash || clashFallback,
+
+    // Остальные площадки
+    stash: stashUrl || null,
+    csfloat: `https://csfloat.com/search?query=${q}`,
+    steam: `https://steamcommunity.com/market/search?q=${q}`,
+  };
 }
 
 function numOrNull(v) {
