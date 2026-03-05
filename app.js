@@ -1,12 +1,12 @@
 import { ensureTradeupReady, simulateTradeup } from "./tradeup.js";
 
-const loading = document.getElementById('loading');
-const app = document.getElementById('app');
-const bar = document.getElementById('bar');
+const loading = document.getElementById("loading");
+const app = document.getElementById("app");
+const bar = document.getElementById("bar");
 
 /* ===== LINKS ===== */
 const CHANNEL_URL = "https://t.me/dozza_8";
-const CHAT_URL    = "https://t.me/+YmGqLAkSQU0yYmUy";
+const CHAT_URL = "https://t.me/+YmGqLAkSQU0yYmUy";
 
 function openTgLink(url) {
   if (!url) return;
@@ -27,27 +27,27 @@ if (window.Telegram?.WebApp) {
   Telegram.WebApp.expand();
 }
 
-const scrollBox = document.querySelector('#app .hl-body');
+const scrollBox = document.querySelector("#app .hl-body");
 function scrollToTop() {
   if (scrollBox) scrollBox.scrollTop = 0;
 }
 
 /* ===== Навигация по вкладкам ===== */
 function showPage(page) {
-  const root = document.querySelector('#app .hl-body');
+  const root = document.querySelector("#app .hl-body");
   if (!root) return;
 
-  root.querySelectorAll(':scope > .page').forEach(p => {
-    p.classList.toggle('hidden', p.dataset.page !== page);
+  root.querySelectorAll(":scope > .page").forEach((p) => {
+    p.classList.toggle("hidden", p.dataset.page !== page);
   });
 
-  document.querySelectorAll('.hl-tab').forEach(t => {
-    t.classList.toggle('active', t.dataset.page === page);
+  document.querySelectorAll(".hl-tab").forEach((t) => {
+    t.classList.toggle("active", t.dataset.page === page);
   });
 
   scrollToTop();
 
-  if (page === 'catalog' && window.__catalogShowHome) {
+  if (page === "catalog" && window.__catalogShowHome) {
     window.__catalogShowHome();
   }
 
@@ -56,22 +56,22 @@ function showPage(page) {
   }
 }
 
-document.addEventListener('click', (e) => {
-  const tab = e.target.closest('.hl-tab[data-page]');
+document.addEventListener("click", (e) => {
+  const tab = e.target.closest(".hl-tab[data-page]");
   if (!tab) return;
   showPage(tab.dataset.page);
 });
 
 /* ===== Делегирование кликов по data-open (работает и для новых кнопок) ===== */
-document.addEventListener('click', (e) => {
-  const btn = e.target.closest('[data-open]');
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest("[data-open]");
   if (!btn) return;
 
   const url = btn.dataset.open;
   if (!url) return;
 
   if (window.Telegram?.WebApp?.openLink) Telegram.WebApp.openLink(url);
-  else window.open(url, '_blank');
+  else window.open(url, "_blank");
 });
 
 function tgSend(payload) {
@@ -94,12 +94,14 @@ function initSubnav(pageName, initialScreenId) {
     const target = page.querySelector(`[data-screen="${screenId}"]`);
     if (!target) return;
 
-    const current = [...screens].find(s => !s.classList.contains("hidden"));
+    const current = [...screens].find((s) => !s.classList.contains("hidden"));
     const currentId = current?.dataset?.screen;
 
     if (push && currentId && currentId !== screenId) stack.push(currentId);
 
-    screens.forEach(s => s.classList.toggle("hidden", s.dataset.screen !== screenId));
+    screens.forEach((s) =>
+      s.classList.toggle("hidden", s.dataset.screen !== screenId)
+    );
     scrollToTop();
   }
 
@@ -129,45 +131,43 @@ function initSubnav(pageName, initialScreenId) {
 /* ===== Предложка: 2 шага ===== */
 let suggestTopic = null;
 
-const step1 = document.getElementById('suggestStep1');
-const step2 = document.getElementById('suggestStep2');
-const title = document.getElementById('suggestTitle');
+const step1 = document.getElementById("suggestStep1");
+const step2 = document.getElementById("suggestStep2");
+const title = document.getElementById("suggestTitle");
 
-const pickIdea = document.getElementById('pickIdea');
-const pickCollab = document.getElementById('pickCollab');
+const pickIdea = document.getElementById("pickIdea");
+const pickCollab = document.getElementById("pickCollab");
 
-const sendFinal = document.getElementById('sendSuggestFinal');
-const backBtn = document.getElementById('backSuggest');
-const clearBtn = document.getElementById('clearSuggest');
+const sendFinal = document.getElementById("sendSuggestFinal");
+const backBtn = document.getElementById("backSuggest");
+const clearBtn = document.getElementById("clearSuggest");
 
 function openSuggestStep2(topic) {
   suggestTopic = topic;
 
   if (title) {
     title.textContent =
-      topic === "collab"
-        ? "Тема: 🤝 Сотрудничество"
-        : "Тема: 💡 Идея / улучшение";
+      topic === "collab" ? "Тема: 🤝 Сотрудничество" : "Тема: 💡 Идея / улучшение";
   }
 
-  step1?.classList.add('hidden');
-  step2?.classList.remove('hidden');
-  document.getElementById('suggestText')?.focus();
+  step1?.classList.add("hidden");
+  step2?.classList.remove("hidden");
+  document.getElementById("suggestText")?.focus();
 }
 
 function openSuggestStep1() {
   suggestTopic = null;
-  step2?.classList.add('hidden');
-  step1?.classList.remove('hidden');
-  const ta = document.getElementById('suggestText');
+  step2?.classList.add("hidden");
+  step1?.classList.remove("hidden");
+  const ta = document.getElementById("suggestText");
   if (ta) ta.value = "";
 }
 
-pickIdea?.addEventListener('click', () => openSuggestStep2("idea"));
-pickCollab?.addEventListener('click', () => openSuggestStep2("collab"));
+pickIdea?.addEventListener("click", () => openSuggestStep2("idea"));
+pickCollab?.addEventListener("click", () => openSuggestStep2("collab"));
 
-sendFinal?.addEventListener('click', () => {
-  const ta = document.getElementById('suggestText');
+sendFinal?.addEventListener("click", () => {
+  const ta = document.getElementById("suggestText");
   const text = ta?.value.trim();
   if (!text || !suggestTopic) return;
 
@@ -177,12 +177,12 @@ sendFinal?.addEventListener('click', () => {
   alert("✅ Сообщение отправлено");
 });
 
-clearBtn?.addEventListener('click', () => {
-  const ta = document.getElementById('suggestText');
+clearBtn?.addEventListener("click", () => {
+  const ta = document.getElementById("suggestText");
   if (ta) ta.value = "";
 });
 
-backBtn?.addEventListener('click', () => openSuggestStep1());
+backBtn?.addEventListener("click", () => openSuggestStep1());
 
 /* ===== Кейсы/Капсулы: 2 уровня + поиск ===== */
 (function initCatalog() {
@@ -207,7 +207,7 @@ backBtn?.addEventListener('click', () => openSuggestStep1());
   function filterList(listEl, query) {
     if (!listEl) return;
     const q = (query || "").trim().toLowerCase();
-    listEl.querySelectorAll(".catalog-item").forEach(btn => {
+    listEl.querySelectorAll(".catalog-item").forEach((btn) => {
       const t = (btn.textContent || "").toLowerCase();
       btn.style.display = t.includes(q) ? "" : "none";
     });
@@ -298,67 +298,91 @@ const timer = setInterval(() => {
   if (p >= 100) {
     p = 100;
     clearInterval(timer);
-    loading?.classList.add('hidden');
-    app?.classList.remove('hidden');
+    loading?.classList.add("hidden");
+    app?.classList.remove("hidden");
 
-    app?.classList.remove('menu-mode');
+    app?.classList.remove("menu-mode");
 
-    showPage('welcome');
+    showPage("welcome");
     setTimeout(typeWelcomeText, 200);
 
     if (window.Telegram?.WebApp) Telegram.WebApp.expand();
   }
-  if (bar) bar.style.width = p + '%';
+  if (bar) bar.style.width = p + "%";
 }, 120);
 
 /* ===== закрытие окон ===== */
-const x1 = document.getElementById('x1');
-const x2 = document.getElementById('x2');
-const cancelLoad = document.getElementById('cancelLoad');
+const x1 = document.getElementById("x1");
+const x2 = document.getElementById("x2");
+const cancelLoad = document.getElementById("cancelLoad");
 
-x1 && (x1.onclick = () => loading?.classList.add('hidden'));
-x2 && (x2.onclick = () => app?.classList.add('hidden'));
-cancelLoad && (cancelLoad.onclick = () => loading?.classList.add('hidden'));
+x1 && (x1.onclick = () => loading?.classList.add("hidden"));
+x2 && (x2.onclick = () => app?.classList.add("hidden"));
+cancelLoad && (cancelLoad.onclick = () => loading?.classList.add("hidden"));
 
 /* ===== Welcome buttons ===== */
-document.getElementById("btnChannel")?.addEventListener("click", () => openTgLink(CHANNEL_URL));
-document.getElementById("btnChat")?.addEventListener("click", () => openTgLink(CHAT_URL));
+document
+  .getElementById("btnChannel")
+  ?.addEventListener("click", () => openTgLink(CHANNEL_URL));
+document
+  .getElementById("btnChat")
+  ?.addEventListener("click", () => openTgLink(CHAT_URL));
 document.getElementById("btnMenu")?.addEventListener("click", () => {
   app?.classList.add("menu-mode");
   showPage("tools");
 });
 
-/* ===== TRADE-UP UI ===== */
-
-function parseTradeupInput(text) {
-  const lines = (text || "").split("\n").map(l => l.trim()).filter(Boolean);
-  if (lines.length !== 10) return { error: `Нужно 10 строк. Сейчас: ${lines.length}` };
-
-  const items = [];
-  for (let i = 0; i < lines.length; i++) {
-    const parts = lines[i].split("|").map(s => s.trim());
-    if (parts.length !== 3) return { error: `Строка ${i + 1}: формат "Collection | Rarity | Float"` };
-
-    const [collection, rarity, floatStr] = parts;
-    const f = Number(floatStr);
-
-    if (!collection || !rarity || Number.isNaN(f) || f < 0 || f > 1) {
-      return { error: `Строка ${i + 1}: проверь collection/rarity/float (float 0..1)` };
-    }
-
-    items.push({ collection, rarity, float: f });
-  }
-  return { items };
-}
+/* ===========================================================
+   TRADE-UP (TABLE UI) — только новая версия
+   =========================================================== */
 
 function escapeHtml(s) {
-  return String(s || "").replace(/[&<>"']/g, c => ({
+  return String(s ?? "").replace(/[&<>"']/g, (c) => ({
     "&": "&amp;",
     "<": "&lt;",
     ">": "&gt;",
     '"': "&quot;",
     "'": "&#39;",
   }[c]));
+}
+
+function getRarityName(s) {
+  const r = s?.rarity;
+  if (!r) return "";
+  if (typeof r === "string") return r.trim();
+  if (typeof r === "object" && r.name) return String(r.name).trim();
+  return "";
+}
+
+function getCollectionName(s) {
+  const c = s?.collection;
+  if (!c) return "";
+  if (typeof c === "string") return c.trim();
+  if (typeof c === "object" && c.name) return String(c.name).trim();
+  return "";
+}
+
+function getMinFloat(s) {
+  const v = s?.min_float ?? s?.minFloat ?? s?.float_min ?? s?.floatMin;
+  const n = Number(v);
+  return Number.isFinite(n) ? n : 0;
+}
+
+function getMaxFloat(s) {
+  const v = s?.max_float ?? s?.maxFloat ?? s?.float_max ?? s?.floatMax;
+  const n = Number(v);
+  return Number.isFinite(n) ? n : 1;
+}
+
+function normalizeRarityUI(r) {
+  const x = String(r || "").trim().toLowerCase();
+  if (x.includes("consumer")) return "Consumer";
+  if (x.includes("industrial")) return "Industrial";
+  if (x.includes("mil-spec") || x.includes("milspec")) return "Mil-Spec";
+  if (x.includes("restricted")) return "Restricted";
+  if (x.includes("classified")) return "Classified";
+  if (x.includes("covert")) return "Covert";
+  return r || "";
 }
 
 function renderTradeupResult(result) {
@@ -373,7 +397,7 @@ function renderTradeupResult(result) {
   let html = "";
   html += `<div><b>Input rarity:</b> ${escapeHtml(result.input_rarity)}</div>`;
   html += `<div><b>Output rarity:</b> ${escapeHtml(result.output_rarity)}</div>`;
-  html += `<div><b>Avg float:</b> ${result.avg_float}</div>`;
+  html += `<div><b>Avg float:</b> ${escapeHtml(result.avg_float)}</div>`;
 
   if (typeof result.total_prob_covered === "number") {
     html += `<div><b>Covered prob:</b> ${(result.total_prob_covered * 100).toFixed(2)}%</div>`;
@@ -392,24 +416,24 @@ function renderTradeupResult(result) {
   }
 
   for (const o of result.outcomes.slice(0, 60)) {
-    const p = (o.prob * 100).toFixed(2);
+    const p = (Number(o.prob) * 100).toFixed(2);
 
     const stashBtn = o.links?.stash
-      ? `<button class="hl-btn" style="margin-right:6px;" data-open="${o.links.stash}">Stash</button>`
+      ? `<button class="hl-btn" style="margin-right:6px;" data-open="${escapeHtml(o.links.stash)}">Stash</button>`
       : "";
 
     const csfloatBtn = o.links?.csfloat
-      ? `<button class="hl-btn" style="margin-right:6px;" data-open="${o.links.csfloat}">CSFloat</button>`
+      ? `<button class="hl-btn" style="margin-right:6px;" data-open="${escapeHtml(o.links.csfloat)}">CSFloat</button>`
       : "";
 
     const steamBtn = o.links?.steam
-      ? `<button class="hl-btn" data-open="${o.links.steam}">Steam</button>`
+      ? `<button class="hl-btn" data-open="${escapeHtml(o.links.steam)}">Steam</button>`
       : "";
 
     html += `<div style="margin-top:10px;">
       • <b>${p}%</b> — ${escapeHtml(o.name)}
       <span class="hl-muted">(${escapeHtml(o.collection)})</span>
-      — float≈${o.float_out}
+      — float≈${escapeHtml(o.float_out)}
       <div style="margin-top:6px; display:flex; gap:6px; flex-wrap:wrap;">
         ${stashBtn}${csfloatBtn}${steamBtn}
       </div>
@@ -419,255 +443,276 @@ function renderTradeupResult(result) {
   out.innerHTML = html;
 }
 
-document.getElementById("tradeupCalc")?.addEventListener("click", async () => {
-  const ta = document.getElementById("tradeupInput");
-  const parsed = parseTradeupInput(ta?.value || "");
-  if (parsed.error) return renderTradeupResult({ error: parsed.error });
+/* ===== NEW TRADEUP UI (TABLE) ===== */
+let skinsDB = [];          // нормализованная база для UI
+let contractItems = [];    // [{name, collection, rarity, float}]
 
+async function loadTradeupSkins() {
+  // прогреваем индекс (tradeup.js) — нужен simulateTradeup
+  await ensureTradeupReady();
+
+  const res = await fetch("/data/skins.json", { cache: "force-cache" });
+  if (!res.ok) throw new Error(`Не удалось загрузить /data/skins.json (HTTP ${res.status})`);
+  const data = await res.json();
+
+  // Нормализуем, чтобы UI был стабильным
+  skinsDB = (Array.isArray(data) ? data : [])
+    .map((s, idx) => {
+      const name = (s?.name || s?.market_hash_name || s?.marketHashName || "").trim();
+      const collection = getCollectionName(s);
+      const rarity = normalizeRarityUI(getRarityName(s));
+      const min = getMinFloat(s);
+      const max = getMaxFloat(s);
+
+      if (!name || !collection || !rarity) return null;
+
+      // Если вдруг есть мусорные сущности — можешь расширить фильтр позже
+      if (s?.souvenir === true) return null;
+
+      return {
+        id: idx, // стабильный id
+        name,
+        nameLower: name.toLowerCase(),
+        collection,
+        rarity,
+        min,
+        max,
+      };
+    })
+    .filter(Boolean);
+
+  renderCollections();
+  renderSkinsTable();
+  renderContract();
+}
+
+function renderCollections() {
+  const select = document.getElementById("collectionFilter");
+  if (!select) return;
+
+  const current = select.value;
+
+  const set = new Set();
+  skinsDB.forEach((s) => {
+    if (s.collection) set.add(s.collection);
+  });
+
+  const arr = [...set].sort((a, b) => a.localeCompare(b));
+
+  select.innerHTML = `<option value="">Any Collection</option>`;
+  arr.forEach((c) => {
+    const opt = document.createElement("option");
+    opt.value = c;
+    opt.textContent = c;
+    select.appendChild(opt);
+  });
+
+  select.value = current || "";
+}
+
+function renderSkinsTable() {
+  const table = document.getElementById("skinsTable");
+  if (!table) return;
+
+  const searchEl = document.getElementById("skinSearch");
+  const rarityEl = document.getElementById("rarityFilter");
+  const collEl = document.getElementById("collectionFilter");
+
+  const search = (searchEl?.value || "").trim().toLowerCase();
+  const rarity = (rarityEl?.value || "").trim();
+  const collection = (collEl?.value || "").trim();
+
+  let list = skinsDB.filter((s) => {
+    if (search && !s.nameLower.includes(search)) return false;
+    if (rarity && s.rarity !== rarity) return false;
+    if (collection && s.collection !== collection) return false;
+    return true;
+  });
+
+  list = list.slice(0, 40);
+
+  if (!list.length) {
+    table.innerHTML = `<div class="hl-muted">Ничего не найдено</div>`;
+    return;
+  }
+
+  let html = `
+<table style="width:100%;font-size:12px;border-collapse:collapse">
+  <tr style="opacity:.9">
+    <th align="left" style="padding:6px 4px;">Skin</th>
+    <th align="left" style="padding:6px 4px;">Collection</th>
+    <th align="left" style="padding:6px 4px;">Rarity</th>
+    <th align="left" style="padding:6px 4px;">Float</th>
+    <th style="padding:6px 4px;"></th>
+  </tr>
+`;
+
+  list.forEach((s) => {
+    html += `
+  <tr>
+    <td style="padding:6px 4px;">${escapeHtml(s.name)}</td>
+    <td style="padding:6px 4px;opacity:.9;">${escapeHtml(s.collection)}</td>
+    <td style="padding:6px 4px;">${escapeHtml(s.rarity)}</td>
+    <td style="padding:6px 4px;opacity:.9;">${s.min.toFixed(2)}-${s.max.toFixed(2)}</td>
+    <td style="padding:6px 4px;text-align:right;">
+      <button class="hl-btn addSkin" data-id="${s.id}">+</button>
+    </td>
+  </tr>`;
+  });
+
+  html += `</table>`;
+  table.innerHTML = html;
+}
+
+function renderContract() {
+  const el = document.getElementById("contractList");
+  if (!el) return;
+
+  const rarity = contractItems[0]?.rarity || "";
+  const need = 10;
+
+  let html = `<div class="hl-muted">Нужно <b>${need}</b> строк. Сейчас: <b>${contractItems.length}</b>${rarity ? ` • Rarity: <b>${escapeHtml(rarity)}</b>` : ""}</div>`;
+
+  if (!contractItems.length) {
+    html += `<div class="hl-text" style="opacity:.9;">Добавь скины кнопкой “+” из списка выше.</div>`;
+    el.innerHTML = html;
+    return;
+  }
+
+  contractItems.forEach((s, i) => {
+    html += `
+<div style="margin-top:6px; padding:6px; border:1px solid rgba(0,0,0,.35); background:rgba(0,0,0,.10);">
+  <div>
+    <b>${i + 1}.</b> ${escapeHtml(s.name)} 
+    <span class="hl-muted">(${escapeHtml(s.collection)})</span>
+  </div>
+  <div class="hl-muted">float: <b>${Number(s.float).toFixed(4)}</b></div>
+  <div style="margin-top:6px; display:flex; gap:6px; flex-wrap:wrap;">
+    <button class="hl-btn dup" data-i="${i}">Duplicate</button>
+    <button class="hl-btn rem" data-i="${i}">Remove</button>
+  </div>
+</div>`;
+  });
+
+  el.innerHTML = html;
+}
+
+function clearTradeup() {
+  contractItems = [];
+  renderContract();
   const out = document.getElementById("tradeupResult");
-  if (out) out.innerHTML = "⏳ Загружаю базу скинов…";
+  if (out) out.innerHTML = "";
+}
+
+/* --- фильтры --- */
+document.addEventListener("input", (e) => {
+  if (!e.target) return;
+  if (
+    e.target.id === "skinSearch" ||
+    e.target.id === "rarityFilter" ||
+    e.target.id === "collectionFilter"
+  ) {
+    renderSkinsTable();
+  }
+});
+
+/* --- add/dup/rem --- */
+document.addEventListener("click", (e) => {
+  const add = e.target.closest(".addSkin");
+  if (add) {
+    const id = Number(add.dataset.id);
+    const s = skinsDB.find((x) => x.id === id);
+    if (!s) return;
+
+    // правило: один контракт = одна редкость
+    const currentRarity = contractItems[0]?.rarity;
+    if (currentRarity && s.rarity !== currentRarity) {
+      alert("Все предметы в контракте должны быть одной редкости.");
+      return;
+    }
+
+    if (contractItems.length >= 10) {
+      alert("Лимит: 10 предметов.");
+      return;
+    }
+
+    const float = (s.min + s.max) / 2;
+
+    contractItems.push({
+      name: s.name,
+      collection: s.collection,
+      rarity: s.rarity,
+      float: Math.min(1, Math.max(0, float)),
+    });
+
+    renderContract();
+    return;
+  }
+
+  const dup = e.target.closest(".dup");
+  if (dup) {
+    const i = Number(dup.dataset.i);
+    const it = contractItems[i];
+    if (!it) return;
+
+    if (contractItems.length >= 10) {
+      alert("Лимит: 10 предметов.");
+      return;
+    }
+
+    contractItems.push({ ...it });
+    renderContract();
+    return;
+  }
+
+  const rem = e.target.closest(".rem");
+  if (rem) {
+    const i = Number(rem.dataset.i);
+    if (!Number.isFinite(i)) return;
+    contractItems.splice(i, 1);
+    renderContract();
+    return;
+  }
+});
+
+/* --- calc/clear --- */
+document.getElementById("tradeupCalc")?.addEventListener("click", async () => {
+  if (contractItems.length !== 10) {
+    renderTradeupResult({ error: `Нужно ровно 10 предметов. Сейчас: ${contractItems.length}` });
+    return;
+  }
+
+  // правило: одна редкость
+  const r = contractItems[0]?.rarity;
+  if (!r || contractItems.some((x) => x.rarity !== r)) {
+    renderTradeupResult({ error: "Все 10 предметов должны быть одной редкости." });
+    return;
+  }
 
   try {
     await ensureTradeupReady();
   } catch (e) {
-    return renderTradeupResult({ error: String(e?.message || e) });
+    renderTradeupResult({ error: String(e?.message || e) });
+    return;
   }
 
-  const result = simulateTradeup(parsed.items);
+  const result = simulateTradeup(
+    contractItems.map((x) => ({
+      collection: x.collection,
+      rarity: x.rarity,
+      float: x.float,
+    }))
+  );
+
   renderTradeupResult(result);
 });
 
 document.getElementById("tradeupClear")?.addEventListener("click", () => {
-  const ta = document.getElementById("tradeupInput");
+  clearTradeup();
+});
+
+/* ===== старт загрузки таблицы trade-up ===== */
+loadTradeupSkins().catch((e) => {
   const out = document.getElementById("tradeupResult");
-  if (ta) ta.value = "";
-  if (out) out.innerHTML = "";
+  if (out) out.innerHTML = `❌ ${escapeHtml(String(e?.message || e))}`;
 });
-
-document.getElementById("tradeupFillDemo")?.addEventListener("click", () => {
-  const ta = document.getElementById("tradeupInput");
-  if (!ta) return;
-
-  ta.value = [
-    "Anubis | Mil-Spec | 0.12",
-    "Anubis | Mil-Spec | 0.11",
-    "Anubis | Mil-Spec | 0.13",
-    "Anubis | Mil-Spec | 0.10",
-    "Anubis | Mil-Spec | 0.09",
-    "Anubis | Mil-Spec | 0.15",
-    "Anubis | Mil-Spec | 0.08",
-    "Anubis | Mil-Spec | 0.14",
-    "Anubis | Mil-Spec | 0.07",
-    "Anubis | Mil-Spec | 0.12",
-  ].join("\n");
-});
-/* ===== NEW TRADEUP UI ===== */
-
-let skinsDB = []
-let contractItems = []
-
-async function loadTradeupSkins(){
-
- await ensureTradeupReady()
-
- const res = await fetch("/data/skins.json")
- const data = await res.json()
-
- skinsDB = data.filter(s =>
-  s.rarity &&
-  s.collection &&
-  !s.souvenir
- )
- 
- renderCollections()
- renderSkinsTable()
-}
-
-function renderCollections(){
-
- const select = document.getElementById("collectionFilter")
- if(!select) return
-
- const set = new Set()
-
- skinsDB.forEach(s=>{
-  const c = typeof s.collection === "string"
-   ? s.collection
-   : s.collection?.name
-
-  if(c) set.add(c)
- })
-
- const arr = [...set].sort()
-
- arr.forEach(c=>{
-  const opt = document.createElement("option")
-  opt.textContent = c
-  select.appendChild(opt)
- })
-}
-
-function renderSkinsTable(){
-
- const table = document.getElementById("skinsTable")
- if(!table) return
-
- const search = document.getElementById("skinSearch").value.toLowerCase()
- const rarity = document.getElementById("rarityFilter").value
- const collection = document.getElementById("collectionFilter").value
-
- let list = skinsDB.filter(s=>{
-
-  const name = (s.name||"").toLowerCase()
-
-  const coll = typeof s.collection==="string"
-   ? s.collection
-   : s.collection?.name
-
-  if(search && !name.includes(search)) return false
-  if(rarity && s.rarity.name !== rarity) return false
-  if(collection && coll !== collection) return false
-
-  return true
- })
-
- list = list.slice(0,40)
-
- let html = `
-<table style="width:100%;font-size:12px">
-<tr>
-<th align="left">Skin</th>
-<th>Collection</th>
-<th>Rarity</th>
-<th>Float</th>
-<th></th>
-</tr>
-`
-
- list.forEach((s,i)=>{
-
- const coll = typeof s.collection==="string"
-  ? s.collection
-  : s.collection?.name
-
- const r = s.rarity.name
-
- html += `
-<tr>
-<td>${escapeHtml(s.name)}</td>
-<td>${escapeHtml(coll)}</td>
-<td>${escapeHtml(r)}</td>
-<td>${s.min_float}-${s.max_float}</td>
-<td>
-<button class="hl-btn addSkin" data-id="${i}">+</button>
-</td>
-</tr>`
- })
-
- html += "</table>"
-
- table.innerHTML = html
-}
-
-document.addEventListener("input",(e)=>{
-
- if(
-  e.target.id==="skinSearch" ||
-  e.target.id==="rarityFilter" ||
-  e.target.id==="collectionFilter"
- ){
-  renderSkinsTable()
- }
-})
-
-document.addEventListener("click",(e)=>{
-
- const add = e.target.closest(".addSkin")
- if(add){
-
-  const id = add.dataset.id
-  const s = skinsDB[id]
-
-  const float = (s.min_float+s.max_float)/2
-
-  const coll = typeof s.collection==="string"
-   ? s.collection
-   : s.collection?.name
-
-  contractItems.push({
-   name:s.name,
-   collection:coll,
-   rarity:s.rarity.name,
-   float:float
-  })
-
-  renderContract()
- }
-
-})
-
-function renderContract(){
-
- const el = document.getElementById("contractList")
-
- if(!el) return
-
- let html = ""
-
- contractItems.forEach((s,i)=>{
-
- html += `
-<div style="margin-top:6px">
-${i+1}. ${escapeHtml(s.name)} 
-float ${s.float.toFixed(3)}
-
-<button class="hl-btn dup" data-i="${i}">Duplicate</button>
-<button class="hl-btn rem" data-i="${i}">Remove</button>
-</div>
-`
- })
-
- el.innerHTML = html
-}
-
-document.addEventListener("click",(e)=>{
-
- const dup = e.target.closest(".dup")
- if(dup){
-
-  const i = dup.dataset.i
-  contractItems.push({...contractItems[i]})
-  renderContract()
- }
-
- const rem = e.target.closest(".rem")
- if(rem){
-
-  const i = rem.dataset.i
-  contractItems.splice(i,1)
-  renderContract()
- }
-
-})
-
-document.getElementById("tradeupCalc")?.addEventListener("click",()=>{
-
- if(contractItems.length !== 10){
-
-  alert("Need 10 skins")
-  return
- }
-
- const result = simulateTradeup(contractItems)
- renderTradeupResult(result)
-
-})
-
-document.getElementById("tradeupClear")?.addEventListener("click",()=>{
-
- contractItems=[]
- renderContract()
-
-})
-
-loadTradeupSkins()
