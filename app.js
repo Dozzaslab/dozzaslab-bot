@@ -343,3 +343,17 @@ document.getElementById("btnMenu")?.addEventListener("click", () => {
   app?.classList.add("menu-mode");
   showPage("tools");
 });
+const testItems = [
+ {collection:"Anubis", float:0.12},
+ {collection:"Anubis", float:0.11},
+ {collection:"Anubis", float:0.13},
+ {collection:"Anubis", float:0.10},
+ {collection:"Anubis", float:0.09},
+ {collection:"Anubis", float:0.15},
+ {collection:"Anubis", float:0.08},
+ {collection:"Anubis", float:0.14},
+ {collection:"Anubis", float:0.07},
+ {collection:"Anubis", float:0.12}
+]
+
+console.log(simulateTradeup(testItems))
