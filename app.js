@@ -646,14 +646,17 @@ document.addEventListener("click", (e) => {
       return;
     }
 
-    const float = (s.min + s.max) / 2;
+   let float = s.min <= 0.01 ? 0.01 : s.min;
+float = Math.min(float, s.max);
 
-    contractItems.push({
-      name: s.name,
-      collection: s.collection,
-      rarity: s.rarity,
-      float: Math.min(1, Math.max(0, float)),
-    });
+contractItems.push({
+  name: s.name,
+  collection: s.collection,
+  rarity: s.rarity,
+  float: float,
+  min: s.min,
+  max: s.max
+});
 
     renderContract();
     return;
