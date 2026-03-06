@@ -736,6 +736,7 @@ backBtn?.addEventListener("click", () => openSuggestStep1());
 /* ===== Инициализация subnav ===== */
 initSubnav("invest", "investHome");
 initSubnav("tools", "toolsHome");
+initSubnav("faq", "faqHome");
 
 /* ===== Typewriter ===== */
 let welcomeTypingTimer = null;
