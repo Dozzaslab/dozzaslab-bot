@@ -162,10 +162,19 @@ function buildIndex(rawSkins) {
 
     if (!name || !collection || !rarity || !range) continue;
 
-    // Оставляем только “обычные” трейдап-редкости
-    if (!RARITY_UP[rarity] && rarity !== "Covert") {
-      // Consumer/Industrial/Mil-Spec/Restricted/Classified/Covert — ok
-      // Всё остальное (например ножи/перчатки/агенты/стикеры) — пропускаем
+     // Оставляем только редкости, которые участвуют в расчётах:
+    // обычные входные + gold outcomes для Covert
+    const allowedRarities = new Set([
+      "Consumer",
+      "Industrial",
+      "Mil-Spec",
+      "Restricted",
+      "Classified",
+      "Covert",
+      "Extraordinary",
+    ]);
+
+    if (!allowedRarities.has(rarity)) {
       continue;
     }
 
