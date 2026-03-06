@@ -1167,10 +1167,15 @@ let keychainsDB = [];
 
 let collectionsCatalog = [];
 
+let selectedContractCollection = "";
+let contractCollectionSearch = "";
+
 let collectionsState = {
   main: "weapons",
   sub: "all",
   search: "",
+  selectedCollection: "",
+  dropdownSearch: "",
 };
 async function loadTradeupSkins() {
   await ensureTradeupReady();
