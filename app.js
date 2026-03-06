@@ -1363,6 +1363,43 @@ document.addEventListener("input", (e) => {
 });
 
 document.addEventListener("click", (e) => {
+  const mainBtn = e.target.closest(".collections-main-filter");
+  if (mainBtn) {
+    const next = mainBtn.dataset.mainFilter;
+    if (!next) return;
+
+    collectionsState.main = next;
+    collectionsState.sub = "all";
+
+    document.querySelectorAll(".collections-main-filter").forEach((btn) => {
+      btn.classList.toggle("active", btn.dataset.mainFilter === next);
+    });
+
+    renderCollectionsSubfilters();
+    renderCollectionsCatalog();
+    return;
+  }
+
+  const subBtn = e.target.closest(".collections-sub-filter");
+  if (subBtn) {
+    const next = subBtn.dataset.subFilter;
+    if (!next) return;
+
+    collectionsState.sub = next;
+    renderCollectionsSubfilters();
+    renderCollectionsCatalog();
+    return;
+  }
+
+  const openBtn = e.target.closest(".collection-open-btn");
+  if (openBtn) {
+    const groupId = openBtn.dataset.collectionOpen;
+    if (!groupId) return;
+
+    renderCollectionsDetails(groupId);
+    return;
+  }
+
   const add = e.target.closest(".addSkin");
   if (add) {
     const id = Number(add.dataset.id);
@@ -1632,6 +1669,157 @@ function buildCollectionsCatalog() {
   });
 
   collectionsCatalog = catalog;
+}
+
+function getCollectionsSubfilters() {
+  if (collectionsState.main === "weapons") {
+    return [
+      { id: "all", label: "Все" },
+      { id: "rifles", label: "Винтовки" },
+      { id: "snipers", label: "Снайперки" },
+      { id: "smgs", label: "ПП" },
+      { id: "pistols", label: "Пистолеты" },
+      { id: "shotguns", label: "Дробовики" },
+    ];
+  }
+
+  if (collectionsState.main === "gold") {
+    return [
+      { id: "all", label: "Все" },
+      { id: "knives", label: "Ножи" },
+      { id: "gloves", label: "Перчатки" },
+    ];
+  }
+
+  return [];
+}
+
+function renderCollectionsSubfilters() {
+  const wrap = document.getElementById("collectionsSubfilters");
+  if (!wrap) return;
+
+  const subfilters = getCollectionsSubfilters();
+
+  if (!subfilters.length) {
+    wrap.innerHTML = "";
+    return;
+  }
+
+  wrap.innerHTML = subfilters.map((f) => `
+    <button
+      class="hl-btn collections-sub-filter ${collectionsState.sub === f.id ? "active" : ""}"
+      data-sub-filter="${escapeHtml(f.id)}"
+    >
+      ${escapeHtml(f.label)}
+    </button>
+  `).join("");
+}
+
+function getFilteredCollectionsCatalog() {
+  const q = collectionsState.search.trim().toLowerCase();
+
+  return collectionsCatalog.filter((group) => {
+    if (group.type !== collectionsState.main) return false;
+
+    if (collectionsState.main === "weapons" && collectionsState.sub !== "all") {
+      const hasMatchingWeapon = group.items.some((item) => item.subtype === collectionsState.sub);
+      if (!hasMatchingWeapon) return false;
+    }
+
+    if (collectionsState.main === "gold" && collectionsState.sub !== "all") {
+      if (group.subtype !== collectionsState.sub) return false;
+    }
+
+    if (q) {
+      const byCollection = group.name.toLowerCase().includes(q);
+      const byItem = group.items.some((item) =>
+        String(item.name || "").toLowerCase().includes(q)
+      );
+      if (!byCollection && !byItem) return false;
+    }
+
+    return true;
+  });
+}
+
+function renderCollectionsCatalog() {
+  const list = document.getElementById("collectionsList");
+  const details = document.getElementById("collectionsDetails");
+  if (!list) return;
+
+  const groups = getFilteredCollectionsCatalog();
+
+  if (details) details.innerHTML = "";
+
+  if (!groups.length) {
+    list.innerHTML = `<div class="hl-muted">Ничего не найдено</div>`;
+    return;
+  }
+
+  list.innerHTML = groups.map((group) => `
+    <button
+      class="hl-btn collection-open-btn"
+      data-collection-open="${escapeHtml(group.id)}"
+      style="display:block; width:100%; text-align:left; margin-bottom:8px;"
+    >
+      ${escapeHtml(group.name)}
+      <span class="hl-muted">(${group.items.length})</span>
+    </button>
+  `).join("");
+}
+
+function renderCollectionsDetails(groupId) {
+  const box = document.getElementById("collectionsDetails");
+  if (!box) return;
+
+  const group = collectionsCatalog.find((x) => x.id === groupId);
+  if (!group) {
+    box.innerHTML = `<div class="hl-muted">Раздел не найден</div>`;
+    return;
+  }
+
+  let items = [...group.items];
+
+  if (group.type === "weapons" && collectionsState.sub !== "all") {
+    items = items.filter((item) => item.subtype === collectionsState.sub);
+  }
+
+  const q = collectionsState.search.trim().toLowerCase();
+  if (q) {
+    items = items.filter((item) =>
+      String(item.name || "").toLowerCase().includes(q)
+    );
+  }
+
+  if (!items.length) {
+    box.innerHTML = `
+      <div style="margin-top:10px;">
+        <b>${escapeHtml(group.name)}</b>
+        <div class="hl-muted" style="margin-top:6px;">Внутри нет подходящих предметов</div>
+      </div>
+    `;
+    return;
+  }
+
+  let html = `
+    <div style="margin-top:10px;">
+      <b>${escapeHtml(group.name)}</b>
+      <div class="hl-muted" style="margin-top:6px;">Предметов: ${items.length}</div>
+    </div>
+    <div style="margin-top:10px;">
+  `;
+
+  items.forEach((item) => {
+    html += `
+      <div style="padding:8px; margin-bottom:6px; border:1px solid rgba(0,0,0,.35); background:rgba(0,0,0,.08);">
+        <div><b>${escapeHtml(item.name)}</b></div>
+        ${item.rarity ? `<div class="hl-muted" style="margin-top:4px;">${escapeHtml(item.rarity)}</div>` : ""}
+      </div>
+    `;
+  });
+
+  html += `</div>`;
+  box.innerHTML = html;
 }
 async function loadCollectionsPageData() {
   const [collectionsRes, agentsRes, keychainsRes] = await Promise.all([
