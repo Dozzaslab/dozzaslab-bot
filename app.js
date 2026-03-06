@@ -494,25 +494,22 @@ function showPage(page) {
   const root = document.querySelector("#app .hl-body");
   if (!root) return;
 
-  const pages = Array.from(root.children).filter((el) =>
-    el.classList && el.classList.contains("page")
-  );
-
+  const pages = root.querySelectorAll(".page[data-page]");
   pages.forEach((p) => {
     p.classList.toggle("hidden", p.dataset.page !== page);
   });
 
-  document.querySelectorAll(".hl-tab").forEach((tEl) => {
-    tEl.classList.toggle("active", tEl.dataset.page === page);
+  document.querySelectorAll(".hl-tab[data-page]").forEach((tab) => {
+    tab.classList.toggle("active", tab.dataset.page === page);
   });
 
   scrollToTop();
 
-  if (page === "catalog" && window.__catalogShowHome) {
+  if (page === "catalog" && typeof window.__catalogShowHome === "function") {
     window.__catalogShowHome();
   }
 
-  if (window.__resetSubnav?.[page]) {
+  if (window.__resetSubnav && typeof window.__resetSubnav[page] === "function") {
     window.__resetSubnav[page]();
   }
 
@@ -520,6 +517,18 @@ function showPage(page) {
     setTimeout(typeWelcomeText, 50);
   }
 }
+
+/* ===== Клики по вкладкам ===== */
+document.addEventListener("click", (e) => {
+  const tab = e.target.closest(".hl-tab[data-page]");
+  if (!tab) return;
+
+  e.preventDefault();
+  e.stopPropagation();
+
+  showPage(tab.dataset.page);
+});
+
 window.addEventListener("error", (e) => {
   console.error("APP ERROR:", e.error || e.message || e);
 });
