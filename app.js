@@ -42,7 +42,6 @@ const UI_RARITIES = [
   "Mil-Spec",
   "Restricted",
   "Classified",
-  "Covert",
 ];
 
 const translations = {
@@ -1383,6 +1382,7 @@ function renderSkinsTable() {
 
   let list = skinsDB.filter((s) => {
     if (isGoldInputItem(s)) return false;
+    if (s.rarity === "Covert") return false;
     if (search && !s.nameLower.includes(search)) return false;
     if (rarity && s.rarity !== rarity) return false;
     if (collection && s.collection !== collection) return false;
