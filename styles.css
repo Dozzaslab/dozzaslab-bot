@@ -1,82 +1,109 @@
 *{box-sizing:border-box;font-family:Tahoma,Arial,sans-serif}
 body{margin:0;height:100vh;overflow:hidden;background:#111}
+
 .bg{
   position:fixed;
   inset:0;
-
   background-image:
     linear-gradient(rgba(0,0,0,.55), rgba(0,0,0,.75)),
     url("assets/cs16-bg.jpg");
-
   background-size:cover;
   background-position:center;
   background-repeat:no-repeat;
-
   filter:grayscale(15%) contrast(115%);
 }
 
 .hl-window{
   position:fixed;
   left:50%;
-  top:12px;                 /* ✅ прибили к верху */
-  transform:translateX(-50%);/* ✅ только по X, без Y */
-
+  top:12px;
+  transform:translateX(-50%);
   width:min(760px,94vw);
-  height:calc(100vh - 24px); /* ✅ ровно по высоте экрана (без “длинного” 720) */
-
+  height:calc(100vh - 24px);
   display:flex;
   flex-direction:column;
-
   background:#4b5c3a;
   border:1px solid rgba(255,255,255,.25);
   box-shadow:0 12px 30px rgba(0,0,0,.55);
   overflow:hidden;
 }
 
-.hl-title{display:flex;align-items:center;gap:8px;padding:6px 8px;background:#3f4e31;
-border-bottom:1px solid rgba(0,0,0,.35);color:#e7f0d8;font-size:13px}
-.hl-icon{width:14px;height:14px;display:inline-block;background:rgba(255,255,255,.25);
-border:1px solid rgba(0,0,0,.35)}
-.hl-x{margin-left:auto;width:22px;height:18px;border:1px solid rgba(0,0,0,.4);
-background:#556846;color:#e7f0d8;cursor:pointer}
+.hl-title{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:6px 8px;
+  background:#3f4e31;
+  border-bottom:1px solid rgba(0,0,0,.35);
+  color:#e7f0d8;
+  font-size:13px
+}
 
-/* ===== TABS (HIDDEN ON WELCOME) ===== */
-/* По умолчанию вкладки НЕ видны */
+.hl-icon{
+  width:14px;
+  height:14px;
+  display:inline-block;
+  background:rgba(255,255,255,.25);
+  border:1px solid rgba(0,0,0,.35)
+}
+
+.hl-x{
+  margin-left:auto;
+  width:22px;
+  height:18px;
+  border:1px solid rgba(0,0,0,.4);
+  background:#556846;
+  color:#e7f0d8;
+  cursor:pointer
+}
+
 .hl-tabs{
   display:none;
   flex-wrap:wrap;
   gap:6px;
   padding:8px 8px 0 8px;
-  min-height:72px;   /* фиксируем минимальную высоту */
+  min-height:72px;
 }
-/* Когда вошли в меню: #app.menu-mode */
+
 #app.menu-mode .hl-tabs{
   display:flex;
 }
 
-.hl-tab{padding:4px 8px;border:1px solid rgba(0,0,0,.45);background:#556846;
-color:#e7f0d8;cursor:pointer;font-size:13px}
+.hl-tab{
+  padding:4px 8px;
+  border:1px solid rgba(0,0,0,.45);
+  background:#556846;
+  color:#e7f0d8;
+  cursor:pointer;
+  font-size:13px
+}
+
 .hl-tab.active{background:#6a7f54}
 
 .hl-body{
   padding:10px 10px 12px 10px;
   color:#e7f0d8;
-
   flex:1;
-  min-height:0;           /* ✅ ВОТ ЭТО НУЖНО */
+  min-height:0;
   overflow-y:auto;
   -webkit-overflow-scrolling:touch;
-  scrollbar-gutter: stable;
+  scrollbar-gutter:stable;
 }
+
 .hl-muted{opacity:.85;font-size:13px;margin-bottom:8px}
 .hl-text{margin:8px 0;font-size:13px;opacity:.95}
 
-.hl-progress{height:18px;border:1px solid rgba(0,0,0,.5);background:#3a482e;padding:2px;margin:8px 0 10px}
-/* ===== CS 1.6 segmented loading bar ===== */
+.hl-progress{
+  height:18px;
+  border:1px solid rgba(0,0,0,.5);
+  background:#3a482e;
+  padding:2px;
+  margin:8px 0 10px
+}
+
 #loading .hl-bar{
   height:100%;
   width:0%;
-
   background-image:
     repeating-linear-gradient(
       90deg,
@@ -85,11 +112,8 @@ color:#e7f0d8;cursor:pointer;font-size:13px}
       transparent 6px,
       transparent 10px
     );
-
   background-size:10px 100%;
-
-  /* лёгкое движение сегментов */
-  animation: csLoadMove .35s linear infinite;
+  animation:csLoadMove .35s linear infinite;
 }
 
 @keyframes csLoadMove{
@@ -97,18 +121,47 @@ color:#e7f0d8;cursor:pointer;font-size:13px}
   to   { background-position:10px 0; }
 }
 
-.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px}
-@media (max-width:620px){.grid2{grid-template-columns:1fr}}
+.grid2{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:8px;
+  margin-top:10px
+}
 
-.hl-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:10px}
-.hl-btn{padding:6px 10px;border:1px solid rgba(0,0,0,.5);background:#6a7f54;color:#e7f0d8;cursor:pointer;font-size:13px}
+@media (max-width:620px){
+  .grid2{grid-template-columns:1fr}
+}
+
+.hl-actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+  margin-top:10px
+}
+
+.hl-btn{
+  padding:6px 10px;
+  border:1px solid rgba(0,0,0,.5);
+  background:#6a7f54;
+  color:#e7f0d8;
+  cursor:pointer;
+  font-size:13px
+}
+
 .hl-btn.primary{background:#7f965f}
 
-.hl-input{width:100%;min-height:110px;background:#3a482e;color:#e7f0d8;border:1px solid rgba(0,0,0,.5);
-padding:8px;resize:vertical}
+.hl-input{
+  width:100%;
+  min-height:110px;
+  background:#3a482e;
+  color:#e7f0d8;
+  border:1px solid rgba(0,0,0,.5);
+  padding:8px;
+  resize:vertical
+}
+
 .hidden{display:none!important}
 
-/* 3) Поиск (в каталоге) — нужен инпут однострочный, а твой .hl-input сейчас textarea */
 .hl-search{
   width:100%;
   height:34px;
@@ -120,28 +173,28 @@ padding:8px;resize:vertical}
 }
 
 .page{
-  min-height:0;           /* ✅ чтобы страницы внутри не раздували контейнер */
+  min-height:0;
 }
 
-/* ===== WELCOME STYLES ===== */
 .grid1{
   display:grid;
   grid-template-columns:1fr;
   gap:8px;
   margin-top:12px;
 }
+
 .welcome-title{
   font-size:15px;
   font-weight:700;
   margin-bottom:10px;
 }
+
 .welcome-text{
   font-size:13px;
   line-height:1.45;
   opacity:.95;
 }
 
-/* ===== FIX LOADING SIZE ===== */
 #loading{
   height:auto !important;
   width:min(360px, calc(100vw - 24px)) !important;
@@ -153,6 +206,7 @@ padding:8px;resize:vertical}
   min-height:auto !important;
   overflow:hidden !important;
 }
+
 .rarity-consumer{color:#b0b0b0}
 .rarity-industrial{color:#5e98d9}
 .rarity-milspec{color:#4b69ff}
@@ -160,18 +214,27 @@ padding:8px;resize:vertical}
 .rarity-classified{color:#d32ce6}
 .rarity-covert{color:#eb4b4b}
 
-/* Trade-up float input: make it compact (override hl-input defaults) */
 .floatInputSmall{
-  width: 78px !important;
-  min-width: 78px !important;
-  max-width: 78px !important;
-
-  height: 24px !important;
-  padding: 2px 6px !important;
-
-  font-size: 12px !important;
-  line-height: 1 !important;
-
-  display: inline-block !important;
-  box-sizing: border-box !important;
+  width:78px !important;
+  min-width:78px !important;
+  max-width:78px !important;
+  height:24px !important;
+  padding:2px 6px !important;
+  font-size:12px !important;
+  line-height:1 !important;
+  display:inline-block !important;
+  box-sizing:border-box !important;
 }
+
+.lang-switch{
+  margin-left:auto;
+  min-width:52px;
+  text-align:center;
+}
+
+.rarity-option-consumer{color:#b0b0b0;}
+.rarity-option-industrial{color:#5e98d9;}
+.rarity-option-milspec{color:#4b69ff;}
+.rarity-option-restricted{color:#8847ff;}
+.rarity-option-classified{color:#d32ce6;}
+.rarity-option-covert{color:#eb4b4b;}
