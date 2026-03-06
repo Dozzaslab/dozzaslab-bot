@@ -418,7 +418,6 @@ function applyTranslations() {
   setText("priceCompareBtn", t("price_compare"));
 
   setText("faqTitle", t("faq_title"));
-  setHtml("faqText", t("faq_text"));
 
   setText("suggestPageTitle", t("suggest_title"));
   setText("suggestChooseType", t("suggest_choose_type"));
@@ -495,7 +494,11 @@ function showPage(page) {
   const root = document.querySelector("#app .hl-body");
   if (!root) return;
 
-  root.querySelectorAll(":scope > .page").forEach((p) => {
+  const pages = Array.from(root.children).filter((el) =>
+    el.classList && el.classList.contains("page")
+  );
+
+  pages.forEach((p) => {
     p.classList.toggle("hidden", p.dataset.page !== page);
   });
 
@@ -512,12 +515,17 @@ function showPage(page) {
   if (window.__resetSubnav?.[page]) {
     window.__resetSubnav[page]();
   }
-}
 
-document.addEventListener("click", (e) => {
-  const tab = e.target.closest(".hl-tab[data-page]");
-  if (!tab) return;
-  showPage(tab.dataset.page);
+  if (page === "welcome") {
+    setTimeout(typeWelcomeText, 50);
+  }
+}
+window.addEventListener("error", (e) => {
+  console.error("APP ERROR:", e.error || e.message || e);
+});
+
+window.addEventListener("unhandledrejection", (e) => {
+  console.error("PROMISE ERROR:", e.reason || e);
 });
 
 document.getElementById("langToggle")?.addEventListener("click", () => {
@@ -691,14 +699,18 @@ backBtn?.addEventListener("click", () => openSuggestStep1());
   const capsulesAutographList = document.getElementById("capsulesAutographList");
   const capsulesSpecialList = document.getElementById("capsulesSpecialList");
 
-  if (!home || !cases || !caps) return;
+  if (!home || !cases || !caps) {
+    console.warn("Catalog init skipped: required root elements not found");
+    return;
+  }
 
   function filterList(listEl, query) {
     if (!listEl) return;
-    const q = (query || "").trim().toLowerCase();
+    const q = String(query || "").trim().toLowerCase();
+
     listEl.querySelectorAll(".catalog-item").forEach((btn) => {
-      const t = (btn.textContent || "").toLowerCase();
-      btn.style.display = t.includes(q) ? "" : "none";
+      const text = (btn.textContent || "").toLowerCase();
+      btn.style.display = text.includes(q) ? "" : "none";
     });
   }
 
@@ -720,7 +732,6 @@ backBtn?.addEventListener("click", () => openSuggestStep1());
     if (casesSearch) casesSearch.value = "";
     filterList(casesList, "");
     resetCapsuleSearches();
-
     scrollToTop();
   }
 
@@ -728,8 +739,9 @@ backBtn?.addEventListener("click", () => openSuggestStep1());
     home.classList.add("hidden");
     cases.classList.remove("hidden");
     caps.classList.add("hidden");
+
     scrollToTop();
-    casesSearch?.focus();
+    if (casesSearch) casesSearch.focus();
   }
 
   function showCapsulesHome() {
@@ -737,40 +749,43 @@ backBtn?.addEventListener("click", () => openSuggestStep1());
     cases.classList.add("hidden");
     caps.classList.remove("hidden");
 
-    capsulesHome?.classList.remove("hidden");
-    capsulesMajor?.classList.add("hidden");
-    capsulesAutograph?.classList.add("hidden");
-    capsulesSpecial?.classList.add("hidden");
+    if (capsulesHome) capsulesHome.classList.remove("hidden");
+    if (capsulesMajor) capsulesMajor.classList.add("hidden");
+    if (capsulesAutograph) capsulesAutograph.classList.add("hidden");
+    if (capsulesSpecial) capsulesSpecial.classList.add("hidden");
 
     resetCapsuleSearches();
     scrollToTop();
   }
 
   function showMajorCapsules() {
-    capsulesHome?.classList.add("hidden");
-    capsulesMajor?.classList.remove("hidden");
-    capsulesAutograph?.classList.add("hidden");
-    capsulesSpecial?.classList.add("hidden");
+    if (capsulesHome) capsulesHome.classList.add("hidden");
+    if (capsulesMajor) capsulesMajor.classList.remove("hidden");
+    if (capsulesAutograph) capsulesAutograph.classList.add("hidden");
+    if (capsulesSpecial) capsulesSpecial.classList.add("hidden");
+
     scrollToTop();
-    capsulesMajorSearch?.focus();
+    if (capsulesMajorSearch) capsulesMajorSearch.focus();
   }
 
   function showAutographCapsules() {
-    capsulesHome?.classList.add("hidden");
-    capsulesMajor?.classList.add("hidden");
-    capsulesAutograph?.classList.remove("hidden");
-    capsulesSpecial?.classList.add("hidden");
+    if (capsulesHome) capsulesHome.classList.add("hidden");
+    if (capsulesMajor) capsulesMajor.classList.add("hidden");
+    if (capsulesAutograph) capsulesAutograph.classList.remove("hidden");
+    if (capsulesSpecial) capsulesSpecial.classList.add("hidden");
+
     scrollToTop();
-    capsulesAutographSearch?.focus();
+    if (capsulesAutographSearch) capsulesAutographSearch.focus();
   }
 
   function showSpecialCapsules() {
-    capsulesHome?.classList.add("hidden");
-    capsulesMajor?.classList.add("hidden");
-    capsulesAutograph?.classList.add("hidden");
-    capsulesSpecial?.classList.remove("hidden");
+    if (capsulesHome) capsulesHome.classList.add("hidden");
+    if (capsulesMajor) capsulesMajor.classList.add("hidden");
+    if (capsulesAutograph) capsulesAutograph.classList.add("hidden");
+    if (capsulesSpecial) capsulesSpecial.classList.remove("hidden");
+
     scrollToTop();
-    capsulesSpecialSearch?.focus();
+    if (capsulesSpecialSearch) capsulesSpecialSearch.focus();
   }
 
   openCases?.addEventListener("click", showCases);
