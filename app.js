@@ -1627,7 +1627,42 @@ function buildCollectionsCatalog() {
 
   collectionsCatalog = catalog;
 }
-loadTradeupSkins().catch((e) => {
-  const out = document.getElementById("tradeupResult");
-  if (out) out.innerHTML = `❌ ${escapeHtml(String(e?.message || e))}`;
-});
+async function loadCollectionsPageData() {
+  const [collectionsRes, agentsRes, keychainsRes] = await Promise.all([
+    fetch("/data/collections.json", { cache: "force-cache" }),
+    fetch("/data/agents.json", { cache: "force-cache" }),
+    fetch("/data/keychains.json", { cache: "force-cache" }),
+  ]);
+
+  if (!collectionsRes.ok) {
+    throw new Error(`Не удалось загрузить /data/collections.json (HTTP ${collectionsRes.status})`);
+  }
+
+  if (!agentsRes.ok) {
+    throw new Error(`Не удалось загрузить /data/agents.json (HTTP ${agentsRes.status})`);
+  }
+
+  if (!keychainsRes.ok) {
+    throw new Error(`Не удалось загрузить /data/keychains.json (HTTP ${keychainsRes.status})`);
+  }
+
+  collectionsRawDB = await collectionsRes.json();
+  agentsDB = await agentsRes.json();
+  keychainsDB = await keychainsRes.json();
+
+  buildCollectionsCatalog();
+  renderCollectionsSubfilters();
+  renderCollectionsCatalog();
+}
+
+loadTradeupSkins()
+  .then(() => loadCollectionsPageData())
+  .catch((e) => {
+    const msg = `❌ ${escapeHtml(String(e?.message || e))}`;
+
+    const out = document.getElementById("tradeupResult");
+    if (out) out.innerHTML = msg;
+
+    const collectionsList = document.getElementById("collectionsList");
+    if (collectionsList) collectionsList.innerHTML = msg;
+  });
