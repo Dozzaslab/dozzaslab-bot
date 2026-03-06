@@ -1322,7 +1322,7 @@ let contractCollectionSearch = "";
 
 let collectionsState = {
   main: "weapons",
-  sub: "all",
+  sub: null,
   search: "",
   selectedCollection: "",
   dropdownSearch: "",
@@ -1558,7 +1558,7 @@ document.addEventListener("click", (e) => {
     if (!next) return;
 
     collectionsState.main = next;
-collectionsState.sub = "all";
+collectionsState.sub = null;
 collectionsState.selectedCollection = "";
 collectionsState.dropdownSearch = "";
 
@@ -1882,6 +1882,18 @@ function getCollectionsSubfilters() {
     ];
   }
 
+  if (collectionsState.main === "keychains") {
+    return [
+      { id: "all", label: "Все" },
+    ];
+  }
+
+  if (collectionsState.main === "agents") {
+    return [
+      { id: "all", label: "Все" },
+    ];
+  }
+
   return [];
 }
 
@@ -1909,6 +1921,8 @@ function renderCollectionsSubfilters() {
 function getFilteredCollectionsCatalog() {
   const q = collectionsState.search.trim().toLowerCase();
   const selectedCollection = collectionsState.selectedCollection.trim();
+
+  if (!collectionsState.sub) return [];
 
   return collectionsCatalog.filter((group) => {
     if (group.type !== collectionsState.main) return false;
@@ -1940,15 +1954,10 @@ function renderCollectionsCatalog() {
   const details = document.getElementById("collectionsDetails");
   if (!details) return;
 
-  const q = collectionsState.search.trim().toLowerCase();
-  const selectedCollection = collectionsState.selectedCollection.trim();
-
-  // Ничего не показываем, пока пользователь не начал искать
-  // или не выбрал конкретную коллекцию
-  if (!q && !selectedCollection) {
-    details.innerHTML = "";
-    return;
-  }
+if (!collectionsState.sub) {
+  details.innerHTML = `<div class="hl-muted">Выбери подвкладку, чтобы показать список</div>`;
+  return;
+}
 
   const groups = getFilteredCollectionsCatalog();
 
@@ -1957,6 +1966,7 @@ function renderCollectionsCatalog() {
     return;
   }
 
+  const q = collectionsState.search.trim().toLowerCase();
   let html = "";
 
   groups.forEach((group) => {
@@ -1974,7 +1984,7 @@ function renderCollectionsCatalog() {
       });
     }
 
-    if (!items.length && q) return;
+    if (!items.length) return;
 
     html += `
       <div style="margin-top:10px;">
