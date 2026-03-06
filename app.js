@@ -1938,6 +1938,16 @@ function renderCollectionsCatalog() {
   const details = document.getElementById("collectionsDetails");
   if (!details) return;
 
+  const q = collectionsState.search.trim().toLowerCase();
+  const selectedCollection = collectionsState.selectedCollection.trim();
+
+  // Ничего не показываем, пока пользователь не начал искать
+  // или не выбрал конкретную коллекцию
+  if (!q && !selectedCollection) {
+    details.innerHTML = "";
+    return;
+  }
+
   const groups = getFilteredCollectionsCatalog();
 
   if (!groups.length) {
@@ -1954,7 +1964,6 @@ function renderCollectionsCatalog() {
       items = items.filter((item) => item.subtype === collectionsState.sub);
     }
 
-    const q = collectionsState.search.trim().toLowerCase();
     if (q) {
       items = items.filter((item) => {
         const itemName = String(item.name || "").toLowerCase();
@@ -1963,7 +1972,7 @@ function renderCollectionsCatalog() {
       });
     }
 
-    if (!items.length) return;
+    if (!items.length && q) return;
 
     html += `
       <div style="margin-top:10px;">
