@@ -253,14 +253,233 @@
         </div>
       </div>
 
-      <!-- FAQ -->
-      <div class="page hidden" data-page="faq">
-        <div class="hl-muted" id="faqTitle">🧠 FAQ</div>
-        <div class="hl-text" id="faqText">
-          • Контракт = 10 скинов одной редкости → 1 скин следующей редкости.<br/>
-          • Шансы зависят от доли коллекций среди 10 входных.
-        </div>
+     <!-- FAQ -->
+<div class="page hidden" data-page="faq">
+  <div class="hl-muted" id="faqTitle">🧠 FAQ</div>
+
+  <!-- FAQ HOME -->
+  <div data-screen="faqHome">
+    <div class="hl-text" id="faqIntro">
+      Выбери раздел, чтобы быстро найти нужный ответ.
+    </div>
+
+    <div class="grid2">
+      <button class="hl-btn primary" data-go="faqStart" id="faqStartBtn">🚀 С чего начать</button>
+      <button class="hl-btn" data-go="faqContracts" id="faqContractsBtn">🧪 Контракты</button>
+      <button class="hl-btn" data-go="faqCatalog" id="faqCatalogBtn">🎁 Кейсы и капсулы</button>
+      <button class="hl-btn" data-go="faqTools" id="faqToolsBtn">🌐 Сайты и инструменты</button>
+      <button class="hl-btn" data-go="faqSuggestions" id="faqSuggestionsBtn">📬 Предложка</button>
+      <button class="hl-btn" data-go="faqGeneral" id="faqGeneralBtn">❓ Общие вопросы</button>
+    </div>
+  </div>
+
+  <!-- START -->
+  <div class="hidden" data-screen="faqStart">
+    <div class="hl-actions" style="justify-content:flex-start;">
+      <button class="hl-btn" data-back id="faqBack1">⬅️ Назад</button>
+    </div>
+
+    <div class="hl-text"><b>🚀 С чего начать</b></div>
+
+    <div class="faq-card">
+      <div class="hl-text"><b>1. Зайди во вкладку “Сайты для торговли”</b></div>
+      <div class="hl-muted">Там собраны площадки и инструменты, которыми я сам пользуюсь.</div>
+    </div>
+
+    <div class="faq-card">
+      <div class="hl-text"><b>2. Открой “Контракты”</b></div>
+      <div class="hl-muted">Во вкладке контрактов можно искать скины, фильтровать их по редкости и коллекции и собирать trade-up прямо внутри бота.</div>
+    </div>
+
+    <div class="faq-card">
+      <div class="hl-text"><b>3. Добавь нужные предметы кнопкой “+”</b></div>
+      <div class="hl-muted">Все предметы в одном контракте должны быть одной редкости.</div>
+    </div>
+
+    <div class="faq-card">
+      <div class="hl-text"><b>4. Укажи float и нажми “Рассчитать”</b></div>
+      <div class="hl-muted">Бот покажет возможные outcomes, средний float и покрытие вероятности по найденным коллекциям.</div>
+    </div>
+  </div>
+
+  <!-- CONTRACTS -->
+  <div class="hidden" data-screen="faqContracts">
+    <div class="hl-actions" style="justify-content:flex-start;">
+      <button class="hl-btn" data-back id="faqBack2">⬅️ Назад</button>
+    </div>
+
+    <div class="hl-text"><b>🧪 Контракты</b></div>
+
+    <div class="faq-card">
+      <div class="hl-text"><b>Как работает контракт?</b></div>
+      <div class="hl-muted">
+        Контракт собирается из предметов одной редкости. Обычно нужно 10 предметов, но для Covert-контракта у тебя в логике используется 5 предметов.
       </div>
+    </div>
+
+    <div class="faq-card">
+      <div class="hl-text"><b>Почему я не могу добавить предмет другой редкости?</b></div>
+      <div class="hl-muted">
+        Потому что внутри одного контракта все входные предметы должны быть одной редкости. Это ограничение специально проверяется ботом.
+      </div>
+    </div>
+
+    <div class="faq-card">
+      <div class="hl-text"><b>Почему не даёт добавить больше предметов?</b></div>
+      <div class="hl-muted">
+        Бот ограничивает количество предметов по типу контракта: либо 10, либо 5 для Covert в твоей текущей логике.
+      </div>
+    </div>
+
+    <div class="faq-card">
+      <div class="hl-text"><b>Что означает Covered prob?</b></div>
+      <div class="hl-muted">
+        Это доля вероятности, которую бот смог покрыть на основе доступных данных по коллекциям. Если часть коллекций не найдена в базе outcomes, покрытие будет ниже 100%.
+      </div>
+    </div>
+
+    <div class="faq-card">
+      <div class="hl-text"><b>Почему выходит “Нет данных по коллекциям”?</b></div>
+      <div class="hl-muted">
+        Значит для части выбранных коллекций или редкости в базе outcomes нет нужных записей. Тогда расчёт может быть неполным.
+      </div>
+    </div>
+
+    <div class="faq-card">
+      <div class="hl-text"><b>Что означает Avg float?</b></div>
+      <div class="hl-muted">
+        Это средний float входных предметов, на основе которого рассчитывается предполагаемый float выхода.
+      </div>
+    </div>
+
+    <div class="faq-card">
+      <div class="hl-text"><b>Можно ли искать скины на русском?</b></div>
+      <div class="hl-muted">
+        Нет. Названия скинов и коллекций специально оставлены на английском, чтобы поиск совпадал с базой и был удобен для трейда и крафта.
+      </div>
+    </div>
+  </div>
+
+  <!-- CATALOG -->
+  <div class="hidden" data-screen="faqCatalog">
+    <div class="hl-actions" style="justify-content:flex-start;">
+      <button class="hl-btn" data-back id="faqBack3">⬅️ Назад</button>
+    </div>
+
+    <div class="hl-text"><b>🎁 Кейсы и капсулы</b></div>
+
+    <div class="faq-card">
+      <div class="hl-text"><b>Что находится во вкладке “Кейсы и капсулы”?</b></div>
+      <div class="hl-muted">
+        Там собран быстрый каталог кейсов и капсул с переходом на страницы предметов через внешние ссылки.
+      </div>
+    </div>
+
+    <div class="faq-card">
+      <div class="hl-text"><b>Почему названия кейсов и капсул не переводятся?</b></div>
+      <div class="hl-muted">
+        Они оставлены в оригинале, чтобы было проще сверять позиции с рынком, базами, Stash и торговыми площадками.
+      </div>
+    </div>
+
+    <div class="faq-card">
+      <div class="hl-text"><b>Поиск по кейсам и капсулам работает как?</b></div>
+      <div class="hl-muted">
+        Поиск идёт по названию кнопки. Достаточно ввести часть названия, и список автоматически отфильтруется.
+      </div>
+    </div>
+  </div>
+
+  <!-- TOOLS -->
+  <div class="hidden" data-screen="faqTools">
+    <div class="hl-actions" style="justify-content:flex-start;">
+      <button class="hl-btn" data-back id="faqBack4">⬅️ Назад</button>
+    </div>
+
+    <div class="hl-text"><b>🌐 Сайты и инструменты</b></div>
+
+    <div class="faq-card">
+      <div class="hl-text"><b>Какие сайты здесь есть?</b></div>
+      <div class="hl-muted">
+        Во вкладке есть маркетплейсы и аналитические инструменты: для просмотра рынка, цен, портфеля и истории по скинам.
+      </div>
+    </div>
+
+    <div class="faq-card">
+      <div class="hl-text"><b>Это реклама или личная подборка?</b></div>
+      <div class="hl-muted">
+        По текущему описанию в боте это личная подборка площадок и инструментов, которыми ты сам пользовался.
+      </div>
+    </div>
+
+    <div class="faq-card">
+      <div class="hl-text"><b>Где лучше проверять цену?</b></div>
+      <div class="hl-muted">
+        Лучше смотреть не одну площадку, а сравнивать несколько: маркет, внешний сайт с аналитикой и при необходимости историю продаж.
+      </div>
+    </div>
+  </div>
+
+  <!-- SUGGESTIONS -->
+  <div class="hidden" data-screen="faqSuggestions">
+    <div class="hl-actions" style="justify-content:flex-start;">
+      <button class="hl-btn" data-back id="faqBack5">⬅️ Назад</button>
+    </div>
+
+    <div class="hl-text"><b>📬 Предложка</b></div>
+
+    <div class="faq-card">
+      <div class="hl-text"><b>Что можно отправить через предложку?</b></div>
+      <div class="hl-muted">
+        Идею, улучшение, замечание по боту или запрос на сотрудничество.
+      </div>
+    </div>
+
+    <div class="faq-card">
+      <div class="hl-text"><b>Как отправить идею?</b></div>
+      <div class="hl-muted">
+        Открой вкладку “Предложка”, выбери тип, напиши сообщение и нажми “Отправить”.
+      </div>
+    </div>
+
+    <div class="faq-card">
+      <div class="hl-text"><b>Сообщение уходит куда?</b></div>
+      <div class="hl-muted">
+        Сообщение отправляется через Telegram WebApp API в твою backend-логику, если бот открыт внутри Telegram.
+      </div>
+    </div>
+  </div>
+
+  <!-- GENERAL -->
+  <div class="hidden" data-screen="faqGeneral">
+    <div class="hl-actions" style="justify-content:flex-start;">
+      <button class="hl-btn" data-back id="faqBack6">⬅️ Назад</button>
+    </div>
+
+    <div class="hl-text"><b>❓ Общие вопросы</b></div>
+
+    <div class="faq-card">
+      <div class="hl-text"><b>Почему бот лучше открывать внутри Telegram?</b></div>
+      <div class="hl-muted">
+        Потому что часть функций использует Telegram WebApp API: открытие tg-ссылок, отправка данных и корректная работа внутри мини-приложения.
+      </div>
+    </div>
+
+    <div class="faq-card">
+      <div class="hl-text"><b>Почему часть интерфейса на английском?</b></div>
+      <div class="hl-muted">
+        Это сделано специально там, где английский нужен для корректной торговли, поиска и сопоставления с внешними базами.
+      </div>
+    </div>
+
+    <div class="faq-card">
+      <div class="hl-text"><b>Что делать, если расчёт не совпал с ожиданием?</b></div>
+      <div class="hl-muted">
+        Проверь редкость, коллекции, количество предметов, float и наличие outcomes по этим коллекциям в базе.
+      </div>
+    </div>
+  </div>
+</div>
 
       <!-- SUGGEST -->
       <div class="page hidden" data-page="suggest">
