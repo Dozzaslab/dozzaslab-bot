@@ -331,11 +331,35 @@
 </div>
 </div>
 
-      <!-- COLLECTIONS -->
-      <div class="page hidden" data-page="collections">
-        <div class="hl-muted" id="collectionsTitle">📦 Коллекции</div>
-        <div class="hl-text" id="collectionsText">Здесь будет список коллекций.</div>
-      </div>
+     <div class="page hidden" data-page="collections">
+  <div class="hl-section-title" id="collectionsTitle">📦 Коллекции</div>
+
+  <div class="hl-text" style="margin-top:8px;">
+    Каталог коллекций и предметов.
+  </div>
+
+  <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:10px;">
+    <button class="hl-btn collections-main-filter active" data-main-filter="weapons">🔫 Оружие</button>
+    <button class="hl-btn collections-main-filter" data-main-filter="gold">✨ Золотые предметы</button>
+    <button class="hl-btn collections-main-filter" data-main-filter="keychains">🧿 Брелки</button>
+    <button class="hl-btn collections-main-filter" data-main-filter="agents">🕵️ Агенты</button>
+  </div>
+
+  <div id="collectionsSubfilters" style="display:flex; gap:8px; flex-wrap:wrap; margin-top:10px;"></div>
+
+  <div style="margin-top:10px;">
+    <input
+      id="collectionsSearch"
+      class="hl-input"
+      type="text"
+      placeholder="Поиск коллекции или предмета..."
+    />
+  </div>
+
+  <div id="collectionsList" style="margin-top:12px;"></div>
+
+  <div id="collectionsDetails" style="margin-top:12px;"></div>
+</div>
 
       <!-- TOOLS -->
       <div class="page hidden" data-page="tools">
