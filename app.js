@@ -1136,6 +1136,7 @@ function renderContractCollectionDropdown() {
 
   options.innerHTML = html;
   toggle.textContent = selectedContractCollection || t("any_collection");
+  toggle.classList.toggle("active-filter", Boolean(selectedContractCollection));
 }
 
 function openContractCollectionDropdown() {
@@ -1200,6 +1201,7 @@ function renderCollectionsPageDropdown() {
 
   options.innerHTML = html;
   toggle.textContent = collectionsState.selectedCollection || "Любая коллекция";
+  toggle.classList.toggle("active-filter", Boolean(collectionsState.selectedCollection));
 }
 
 function openCollectionsDropdown() {
