@@ -14,14 +14,14 @@
   <div id="loading" class="hl-window">
     <div class="hl-title">
       <span class="hl-icon"></span>
-      <span>Loading...</span>
+      <span data-i18n="loading_title">Loading...</span>
       <button class="hl-x" type="button" id="x1">✕</button>
     </div>
     <div class="hl-body">
-      <div class="hl-muted">Loading website resources...</div>
+      <div class="hl-muted" data-i18n="loading_text">Loading website resources...</div>
       <div class="hl-progress"><div id="bar" class="hl-bar"></div></div>
       <div class="hl-actions">
-        <button class="hl-btn" id="cancelLoad">Cancel</button>
+        <button class="hl-btn" id="cancelLoad" data-i18n="cancel">Cancel</button>
       </div>
     </div>
   </div>
@@ -34,87 +34,72 @@
       <button class="hl-x" type="button" id="x2">✕</button>
     </div>
 
-   <div class="hl-tabs">
-  <button class="hl-tab active" data-page="tools">🌐Сайты для торговли</button>
-  <button class="hl-tab" data-page="catalog">🎁 Кейсы и капсулы</button>
-  <button class="hl-tab" data-page="collections">📦Коллекции</button>
-  <button class="hl-tab" data-page="contracts">🧪Контракты</button>
-  <button class="hl-tab" data-page="invest">💼Другие проекты</button>
-  <button class="hl-tab" data-page="about">🧑‍💻 О себе</button>
-  <button class="hl-tab" data-page="faq">🧠FAQ</button>
-  <button class="hl-tab" data-page="suggest">📬Предложка</button>
-</div>
+    <div class="hl-tabs">
+      <button class="hl-tab active" data-page="tools" data-i18n="tab_tools">🌐 Сайты для торговли</button>
+      <button class="hl-tab" data-page="catalog" data-i18n="tab_catalog">🎁 Кейсы и капсулы</button>
+      <button class="hl-tab" data-page="collections" data-i18n="tab_collections">📦 Коллекции</button>
+      <button class="hl-tab" data-page="contracts" data-i18n="tab_contracts">🧪 Контракты</button>
+      <button class="hl-tab" data-page="invest" data-i18n="tab_invest">💼 Другие проекты</button>
+      <button class="hl-tab" data-page="about" data-i18n="tab_about">🧑‍💻 О себе</button>
+      <button class="hl-tab" data-page="faq" data-i18n="tab_faq">🧠 FAQ</button>
+      <button class="hl-tab" data-page="suggest" data-i18n="tab_suggest">📬 Предложка</button>
+
+      <button class="hl-btn lang-switch" id="langToggle" type="button">EN</button>
+    </div>
 
     <div class="hl-body">
-<!-- WELCOME -->
-<div class="page" data-page="welcome">
-  <div class="welcome-title">🧠 Рынок любит тех, кто думает.</div>
+      <!-- WELCOME -->
+      <div class="page" data-page="welcome">
+        <div class="welcome-title" id="welcomeTitle">🧠 Рынок любит тех, кто думает.</div>
 
-<div id="welcomeTyped" class="welcome-text"></div>
+        <div id="welcomeTyped" class="welcome-text"></div>
 
-<div class="hidden" id="welcomeSource">
-Я инвестирую в скины осознанно — анализирую рынок и выбираю сильные позиции.
-Делюсь инструментами и площадками для торговли, помогаю не действовать на эмоциях.
+        <div class="hidden" id="welcomeSource"></div>
 
-Системный подход. Реальные ориентиры.
-Иногда — розыгрыши для активных 🔥
-</div>
+        <div class="grid1" style="margin-top:12px;">
+          <button class="hl-btn primary" id="btnChannel">1️⃣ 🔔 Подписаться на канал</button>
+          <button class="hl-btn" id="btnChat">2️⃣ 💬 Перейти в чат</button>
+          <button class="hl-btn" id="btnMenu">3️⃣ 🚀 Войти в меню</button>
+        </div>
 
-  <div class="grid1" style="margin-top:12px;">
-    <button class="hl-btn primary" id="btnChannel">1️⃣ 🔔 Подписаться на канал</button>
-    <button class="hl-btn" id="btnChat">2️⃣ 💬 Перейти в чат</button>
-    <button class="hl-btn" id="btnMenu">3️⃣ 🚀 Войти в меню</button>
-  </div>
+        <div class="hl-muted" style="margin-top:10px;" id="welcomeTip">
+          Совет: подпишись, чтобы не пропускать колы 🔥.
+        </div>
+      </div>
 
-  <div class="hl-muted" style="margin-top:10px;">
-    Совет: подпишись, чтобы не пропускать колы 🔥.
-  </div>
-</div>
-     <div class="page hidden" data-page="contracts">
+      <!-- CONTRACTS -->
+      <div class="page hidden" data-page="contracts">
+        <div class="hl-muted" data-i18n="contracts_title">🧪 Контракты (Trade-Up)</div>
 
-<div class="hl-muted">🧪 Контракты (Trade-Up)</div>
+        <input id="skinSearch" class="hl-search" placeholder="🔎 Search skin..." data-i18n-placeholder="search_skin">
 
-<input id="skinSearch" class="hl-search" placeholder="🔎 Search skin...">
+        <div class="grid2" style="margin-top:6px;">
+          <select id="rarityFilter" class="hl-search"></select>
+          <select id="collectionFilter" class="hl-search"></select>
+        </div>
 
-<div class="grid2" style="margin-top:6px;">
-<select id="rarityFilter" class="hl-search">
-<option value="">Any Rarity</option>
-<option>Consumer</option>
-<option>Industrial</option>
-<option>Mil-Spec</option>
-<option>Restricted</option>
-<option>Classified</option>
-<option>Covert</option>
-</select>
+        <div id="skinsTable" style="margin-top:10px;"></div>
 
-<select id="collectionFilter" class="hl-search">
-<option value="">Any Collection</option>
-</select>
-</div>
+        <hr style="margin:10px 0;opacity:.2">
 
-<div id="skinsTable" style="margin-top:10px;"></div>
+        <div class="hl-text" data-i18n="contract_items">Contract Items</div>
+        <div id="contractList"></div>
 
-<hr style="margin:10px 0;opacity:.2">
+        <div class="hl-actions">
+          <button class="hl-btn primary" id="tradeupCalc" data-i18n="calculate">Calculate</button>
+          <button class="hl-btn" id="tradeupClear" data-i18n="clear">Clear</button>
+        </div>
 
-<div class="hl-text">Contract Items</div>
-<div id="contractList"></div>
-
-<div class="hl-actions">
-<button class="hl-btn primary" id="tradeupCalc">Calculate</button>
-<button class="hl-btn" id="tradeupClear">Clear</button>
-</div>
-
-<div id="tradeupResult" class="hl-text" style="margin-top:10px;"></div>
-
-</div>
+        <div id="tradeupResult" class="hl-text" style="margin-top:10px;"></div>
+      </div>
 
       <!-- CATALOG -->
       <div class="page hidden" data-page="catalog">
-        <div class="hl-muted">🎁 Кейсы и капсулы</div>
+        <div class="hl-muted" id="catalogTitle">🎁 Кейсы и капсулы</div>
 
         <!-- HOME -->
         <div id="catalogHome">
-          <div class="hl-text">Выбери раздел:</div>
+          <div class="hl-text" id="catalogChooseText">Выбери раздел:</div>
           <div class="grid2">
             <button class="hl-btn primary" id="openCases">📦 Кейсы</button>
             <button class="hl-btn" id="openCapsules">💊 Капсулы</button>
@@ -128,55 +113,55 @@
           </div>
 
           <input id="casesSearch" class="hl-search" placeholder="🔎 Поиск кейса..." />
+          <div class="hl-text" id="casesListTitle">📦 Список кейсов</div>
 
-          <div class="hl-text">📦 Список кейсов</div>
-         <div class="grid2" id="casesList">
-  <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/443/Sealed-Genesis-Terminal">📦 Sealed Genesis Terminal</button>
-  <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/422/Fever-Case">📦 Fever Case</button>
-  <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/412/Gallery-Case">📦 Gallery Case</button>
-  <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/393/Kilowatt-Case">📦 Kilowatt Case</button>
-  <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/378/Anubis-Collection-Package">📦 Anubis Collection Package</button>
-  <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/376/Revolution-Case">📦 Revolution Case</button>
-  <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/355/Recoil-Case">📦 Recoil Case</button>
-  <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/339/Dreams-%26-Nightmares-Case">📦 Dreams &amp; Nightmares Case</button>
-  <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/321/Operation-Riptide-Case">📦 Operation Riptide Case</button>
-  <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/315/Snakebite-Case">📦 Snakebite Case</button>
-  <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/308/Operation-Broken-Fang-Case">📦 Operation Broken Fang Case</button>
-  <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/307/Fracture-Case">📦 Fracture Case</button>
-  <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/303/Prisma-2-Case">📦 Prisma 2 Case</button>
-  <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/293/CS20-Case">📦 CS20 Case</button>
-  <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/292/X-Ray-P250-Package">📦 X-Ray P250 Package</button>
-  <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/277/Shattered-Web-Case">📦 Shattered Web Case</button>
-  <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/274/Prisma-Case">📦 Prisma Case</button>
-  <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/259/Danger-Zone-Case">📦 Danger Zone Case</button>
-  <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/244/Horizon-Case">📦 Horizon Case</button>
-  <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/238/Clutch-Case">📦 Clutch Case</button>
-  <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/220/Spectrum-2-Case">📦 Spectrum 2 Case</button>
-  <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/208/Operation-Hydra-Case">📦 Operation Hydra Case</button>
-  <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/207/Spectrum-Case">📦 Spectrum Case</button>
-  <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/179/Glove-Case">📦 Glove Case</button>
-  <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/172/Gamma-2-Case">📦 Gamma 2 Case</button>
-  <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/144/Gamma-Case">📦 Gamma Case</button>
-  <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/141/Chroma-3-Case">📦 Chroma 3 Case</button>
-  <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/112/Operation-Wildfire-Case">📦 Operation Wildfire Case</button>
-  <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/111/Revolver-Case">📦 Revolver Case</button>
-  <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/80/Shadow-Case">📦 Shadow Case</button>
-  <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/50/Falchion-Case">📦 Falchion Case</button>
-  <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/48/Chroma-2-Case">📦 Chroma 2 Case</button>
-  <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/38/Chroma-Case">📦 Chroma Case</button>
-  <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/29/Operation-Vanguard-Weapon-Case">📦 Operation Vanguard Weapon Case</button>
-  <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/19/eSports-2014-Summer-Case">📦 eSports 2014 Summer Case</button>
-  <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/18/Operation-Breakout-Weapon-Case">📦 Operation Breakout Weapon Case</button>
-  <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/17/Huntsman-Weapon-Case">📦 Huntsman Weapon Case</button>
-  <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/11/Operation-Phoenix-Weapon-Case">📦 Operation Phoenix Weapon Case</button>
-  <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/10/CS%3AGO-Weapon-Case-3">📦 CS:GO Weapon Case 3</button>
-  <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/7/Winter-Offensive-Weapon-Case">📦 Winter Offensive Weapon Case</button>
-  <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/5/eSports-2013-Winter-Case">📦 eSports 2013 Winter Case</button>
-  <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/4/CS%3AGO-Weapon-Case-2">📦 CS:GO Weapon Case 2</button>
-  <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/3/Operation-Bravo-Case">📦 Operation Bravo Case</button>
-  <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/2/eSports-2013-Case">📦 eSports 2013 Case</button>
-  <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/1/CS%3AGO-Weapon-Case">📦 CS:GO Weapon Case</button>
-</div>
+          <div class="grid2" id="casesList">
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/443/Sealed-Genesis-Terminal">📦 Sealed Genesis Terminal</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/422/Fever-Case">📦 Fever Case</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/412/Gallery-Case">📦 Gallery Case</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/393/Kilowatt-Case">📦 Kilowatt Case</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/378/Anubis-Collection-Package">📦 Anubis Collection Package</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/376/Revolution-Case">📦 Revolution Case</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/355/Recoil-Case">📦 Recoil Case</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/339/Dreams-%26-Nightmares-Case">📦 Dreams &amp; Nightmares Case</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/321/Operation-Riptide-Case">📦 Operation Riptide Case</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/315/Snakebite-Case">📦 Snakebite Case</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/308/Operation-Broken-Fang-Case">📦 Operation Broken Fang Case</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/307/Fracture-Case">📦 Fracture Case</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/303/Prisma-2-Case">📦 Prisma 2 Case</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/293/CS20-Case">📦 CS20 Case</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/292/X-Ray-P250-Package">📦 X-Ray P250 Package</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/277/Shattered-Web-Case">📦 Shattered Web Case</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/274/Prisma-Case">📦 Prisma Case</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/259/Danger-Zone-Case">📦 Danger Zone Case</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/244/Horizon-Case">📦 Horizon Case</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/238/Clutch-Case">📦 Clutch Case</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/220/Spectrum-2-Case">📦 Spectrum 2 Case</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/208/Operation-Hydra-Case">📦 Operation Hydra Case</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/207/Spectrum-Case">📦 Spectrum Case</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/179/Glove-Case">📦 Glove Case</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/172/Gamma-2-Case">📦 Gamma 2 Case</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/144/Gamma-Case">📦 Gamma Case</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/141/Chroma-3-Case">📦 Chroma 3 Case</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/112/Operation-Wildfire-Case">📦 Operation Wildfire Case</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/111/Revolver-Case">📦 Revolver Case</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/80/Shadow-Case">📦 Shadow Case</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/50/Falchion-Case">📦 Falchion Case</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/48/Chroma-2-Case">📦 Chroma 2 Case</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/38/Chroma-Case">📦 Chroma Case</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/29/Operation-Vanguard-Weapon-Case">📦 Operation Vanguard Weapon Case</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/19/eSports-2014-Summer-Case">📦 eSports 2014 Summer Case</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/18/Operation-Breakout-Weapon-Case">📦 Operation Breakout Weapon Case</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/17/Huntsman-Weapon-Case">📦 Huntsman Weapon Case</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/11/Operation-Phoenix-Weapon-Case">📦 Operation Phoenix Weapon Case</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/10/CS%3AGO-Weapon-Case-3">📦 CS:GO Weapon Case 3</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/7/Winter-Offensive-Weapon-Case">📦 Winter Offensive Weapon Case</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/5/eSports-2013-Winter-Case">📦 eSports 2013 Winter Case</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/4/CS%3AGO-Weapon-Case-2">📦 CS:GO Weapon Case 2</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/3/Operation-Bravo-Case">📦 Operation Bravo Case</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/2/eSports-2013-Case">📦 eSports 2013 Case</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/case/1/CS%3AGO-Weapon-Case">📦 CS:GO Weapon Case</button>
+          </div>
         </div>
 
         <!-- CAPSULES -->
@@ -186,317 +171,195 @@
           </div>
 
           <input id="capsulesSearch" class="hl-search" placeholder="🔎 Поиск капсулы..." />
+          <div class="hl-text" id="capsulesListTitle">💊 Список капсул</div>
 
-          <div class="hl-text">💊 Список капсул</div>
           <div class="grid2" id="capsulesList">
-    
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/10004/Shanghai-2024-Contenders-Sticker-Capsule">💊 Shanghai 2024 Contenders Sticker Capsule</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/10003/Shanghai-2024-Challengers-Sticker-Capsule">💊 Shanghai 2024 Challengers Sticker Capsule</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/10002/Shanghai-2024-Legends-Sticker-Capsule">💊 Shanghai 2024 Legends Sticker Capsule</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/450/Budapest-2025-Contenders-Sticker-Capsule">💊 Budapest 2025 Contenders Sticker Capsule</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/448/Budapest-2025-Challengers-Sticker-Capsule">💊 Budapest 2025 Challengers Sticker Capsule</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/445/Budapest-2025-Legends-Sticker-Capsule">💊 Budapest 2025 Legends Sticker Capsule</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/440/Austin-2025-Legends-Sticker-Capsule">💊 Austin 2025 Legends Sticker Capsule</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/429/Austin-2025-Contenders-Sticker-Capsule">💊 Austin 2025 Contenders Sticker Capsule</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/425/Austin-2025-Challengers-Sticker-Capsule">💊 Austin 2025 Challengers Sticker Capsule</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/423/Warhammer-40-000-Adeptus-Astartes-Sticker-Capsule">💊 Warhammer 40,000 Adeptus Astartes Sticker Capsule</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/433/Warhammer-40-000-Xenos-Sticker-Capsule">💊 Warhammer 40,000 Xenos Sticker Capsule</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/428/Warhammer-40-000-Imperium-Sticker-Capsule">💊 Warhammer 40,000 Imperium Sticker Capsule</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/427/Warhammer-40-000-Traitor-Astartes-Sticker-Capsule">💊 Warhammer 40,000 Traitor Astartes Sticker Capsule</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/306/Warhammer-40-000-Sticker-Capsule">💊 Warhammer 40,000 Sticker Capsule</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/400/Copenhagen-2024-Contenders-Sticker-Capsule">💊 Copenhagen 2024 Contenders Sticker Capsule</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/399/Copenhagen-2024-Challengers-Sticker-Capsule">💊 Copenhagen 2024 Challengers Sticker Capsule</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/398/Copenhagen-2024-Legends-Sticker-Capsule">💊 Copenhagen 2024 Legends Sticker Capsule</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/394/Ambush-Sticker-Capsule">💊 Ambush Sticker Capsule</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/381/Paris-2023-Contenders-Sticker-Capsule">💊 Paris 2023 Contenders Sticker Capsule</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/380/Paris-2023-Challengers-Sticker-Capsule">💊 Paris 2023 Challengers Sticker Capsule</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/379/Paris-2023-Legends-Sticker-Capsule">💊 Paris 2023 Legends Sticker Capsule</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/375/Espionage-Sticker-Capsule">💊 Espionage Sticker Capsule</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/361/Rio-2022-Contenders-Sticker-Capsule">💊 Rio 2022 Contenders Sticker Capsule</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/360/Rio-2022-Challengers-Sticker-Capsule">💊 Rio 2022 Challengers Sticker Capsule</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/359/Rio-2022-Legends-Sticker-Capsule">💊 Rio 2022 Legends Sticker Capsule</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/356/10-Year-Birthday-Sticker-Capsule">💊 10 Year Birthday Sticker Capsule</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/343/Antwerp-2022-Contenders-Sticker-Capsule">💊 Antwerp 2022 Contenders Sticker Capsule</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/342/Antwerp-2022-Challengers-Sticker-Capsule">💊 Antwerp 2022 Challengers Sticker Capsule</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/341/Antwerp-2022-Legends-Sticker-Capsule">💊 Antwerp 2022 Legends Sticker Capsule</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/340/The-Boardroom-Sticker-Capsule">💊 The Boardroom Sticker Capsule</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/326/Stockholm-2021-Contenders-Sticker-Capsule">💊 Stockholm 2021 Contenders Sticker Capsule</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/325/Stockholm-2021-Challengers-Sticker-Capsule">💊 Stockholm 2021 Challengers Sticker Capsule</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/324/Stockholm-2021-Legends-Sticker-Capsule">💊 Stockholm 2021 Legends Sticker Capsule</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/320/Battlefield-2042-Sticker-Capsule">💊 Battlefield 2042 Sticker Capsule</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/319/2021-Community-Sticker-Capsule">💊 2021 Community Sticker Capsule</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/314/Poorly-Drawn-Capsule">💊 Poorly Drawn Capsule</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/313/2020-RMR-Contenders">💊 2020 RMR Contenders</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/312/2020-RMR-Challengers">💊 2020 RMR Challengers</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/311/2020-RMR-Legends">💊 2020 RMR Legends</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/301/Half-Life%3A-Alyx-Sticker-Capsule">💊 Half-Life: Alyx Sticker Capsule</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/295/Halo-Capsule">💊 Halo Capsule</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/294/CS20-Sticker-Capsule">💊 CS20 Sticker Capsule</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/280/Berlin-2019-Minor-Challengers-Holo-Foil">💊 Berlin 2019 Minor Challengers (Holo/Foil)</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/279/Berlin-2019-Returning-Challengers-Holo-Foil">💊 Berlin 2019 Returning Challengers (Holo/Foil)</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/278/Berlin-2019-Legends-Holo-Foil">💊 Berlin 2019 Legends (Holo/Foil)</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/276/Chicken-Capsule">💊 Chicken Capsule</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/275/Feral-Predators-Capsule">💊 Feral Predators Capsule</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/262/Katowice-2019-Minor-Challengers-Holo-Foil">💊 Katowice 2019 Minor Challengers (Holo/Foil)</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/261/Katowice-2019-Returning-Challengers-Holo-Foil">💊 Katowice 2019 Returning Challengers (Holo/Foil)</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/260/Katowice-2019-Legends-Holo-Foil">💊 Katowice 2019 Legends (Holo/Foil)</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/258/Skill-Groups-Capsule">💊 Skill Groups Capsule</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/247/London-2018-Minor-Challengers-Holo-Foil">💊 London 2018 Minor Challengers (Holo/Foil)</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/246/London-2018-Returning-Challengers-Holo-Foil">💊 London 2018 Returning Challengers (Holo/Foil)</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/245/London-2018-Legends-Holo-Foil">💊 London 2018 Legends (Holo/Foil)</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/241/Boston-2018-Attending-Legends-Holo-Foil">💊 Boston 2018 Attending Legends (Holo/Foil)</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/239/Boston-2018-Minor-Challengers-with-Flash-Gaming-Holo-Foil">💊 Boston 2018 Minor Challengers with Flash Gaming (Holo/Foil)</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/237/Community-Capsule-2018">💊 Community Capsule 2018</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/226/Boston-2018-Minor-Challengers-Holo-Foil">💊 Boston 2018 Minor Challengers (Holo/Foil)</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/225/Boston-2018-Returning-Challengers-Holo-Foil">💊 Boston 2018 Returning Challengers (Holo/Foil)</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/224/Boston-2018-Legends-Holo-Foil">💊 Boston 2018 Legends (Holo/Foil)</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/222/Perfect-World-Sticker-Capsule-2">💊 Perfect World Sticker Capsule 2</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/221/Perfect-World-Sticker-Capsule-1">💊 Perfect World Sticker Capsule 1</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/210/Krakow-2017-Challengers-Holo-Foil">💊 Krakow 2017 Challengers (Holo/Foil)</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/209/Krakow-2017-Legends-Holo-Foil">💊 Krakow 2017 Legends (Holo/Foil)</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/181/Atlanta-2017-Challengers-Holo-Foil">💊 Atlanta 2017 Challengers (Holo/Foil)</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/180/Atlanta-2017-Legends-Holo-Foil">💊 Atlanta 2017 Legends (Holo/Foil)</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/174/Bestiary-Capsule">💊 Bestiary Capsule</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/173/Sugarface-Capsule">💊 Sugarface Capsule</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/146/Cologne-2016-Challengers-Holo-Foil">💊 Cologne 2016 Challengers (Holo/Foil)</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/145/Cologne-2016-Legends-Holo-Foil">💊 Cologne 2016 Legends (Holo/Foil)</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/114/MLG-Columbus-2016-Challengers-Holo-Foil">💊 MLG Columbus 2016 Challengers (Holo/Foil)</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/113/MLG-Columbus-2016-Legends-Holo-Foil">💊 MLG Columbus 2016 Legends (Holo/Foil)</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/110/Team-Roles-Capsule">💊 Team Roles Capsule</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/109/Slid3-Capsule">💊 Slid3 Capsule</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/108/Pinups-Capsule">💊 Pinups Capsule</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/82/DreamHack-Cluj-Napoca-2015-Challengers-Foil">💊 DreamHack Cluj-Napoca 2015 Challengers (Foil)</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/81/DreamHack-Cluj-Napoca-2015-Legends-Foil">💊 DreamHack Cluj-Napoca 2015 Legends (Foil)</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/52/ESL-One-Cologne-2015-Challengers-Foil">💊 ESL One Cologne 2015 Challengers (Foil)</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/51/ESL-One-Cologne-2015-Legends-Foil">💊 ESL One Cologne 2015 Legends (Foil)</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/49/Enfu-Sticker-Capsule">💊 Enfu Sticker Capsule</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/47/ESL-One-Katowice-2015-Challengers-Holo-Foil">💊 ESL One Katowice 2015 Challengers (Holo/Foil)</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/46/ESL-One-Katowice-2015-Legends-Holo-Foil">💊 ESL One Katowice 2015 Legends (Holo/Foil)</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/30/DreamHack-2014-Legends-Holo-Foil">💊 DreamHack 2014 Legends (Holo/Foil)</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/21/ESL-One-Cologne-2014-Challengers">💊 ESL One Cologne 2014 Challengers</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/20/ESL-One-Cologne-2014-Legends">💊 ESL One Cologne 2014 Legends</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/16/Community-Sticker-Capsule-1">💊 Community Sticker Capsule 1</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/15/EMS-Katowice-2014-Legends">💊 EMS Katowice 2014 Legends</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/14/EMS-Katowice-2014-Challengers">💊 EMS Katowice 2014 Challengers</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/12/Sticker-Capsule-2">💊 Sticker Capsule 2</button>
-    <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/9/Sticker-Capsule">💊 Sticker Capsule</button>
-  </div>
-</div>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/10004/Shanghai-2024-Contenders-Sticker-Capsule">💊 Shanghai 2024 Contenders Sticker Capsule</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/10003/Shanghai-2024-Challengers-Sticker-Capsule">💊 Shanghai 2024 Challengers Sticker Capsule</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/10002/Shanghai-2024-Legends-Sticker-Capsule">💊 Shanghai 2024 Legends Sticker Capsule</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/450/Budapest-2025-Contenders-Sticker-Capsule">💊 Budapest 2025 Contenders Sticker Capsule</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/448/Budapest-2025-Challengers-Sticker-Capsule">💊 Budapest 2025 Challengers Sticker Capsule</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/445/Budapest-2025-Legends-Sticker-Capsule">💊 Budapest 2025 Legends Sticker Capsule</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/440/Austin-2025-Legends-Sticker-Capsule">💊 Austin 2025 Legends Sticker Capsule</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/429/Austin-2025-Contenders-Sticker-Capsule">💊 Austin 2025 Contenders Sticker Capsule</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/425/Austin-2025-Challengers-Sticker-Capsule">💊 Austin 2025 Challengers Sticker Capsule</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/423/Warhammer-40-000-Adeptus-Astartes-Sticker-Capsule">💊 Warhammer 40,000 Adeptus Astartes Sticker Capsule</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/433/Warhammer-40-000-Xenos-Sticker-Capsule">💊 Warhammer 40,000 Xenos Sticker Capsule</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/428/Warhammer-40-000-Imperium-Sticker-Capsule">💊 Warhammer 40,000 Imperium Sticker Capsule</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/427/Warhammer-40-000-Traitor-Astartes-Sticker-Capsule">💊 Warhammer 40,000 Traitor Astartes Sticker Capsule</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/306/Warhammer-40-000-Sticker-Capsule">💊 Warhammer 40,000 Sticker Capsule</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/400/Copenhagen-2024-Contenders-Sticker-Capsule">💊 Copenhagen 2024 Contenders Sticker Capsule</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/399/Copenhagen-2024-Challengers-Sticker-Capsule">💊 Copenhagen 2024 Challengers Sticker Capsule</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/398/Copenhagen-2024-Legends-Sticker-Capsule">💊 Copenhagen 2024 Legends Sticker Capsule</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/394/Ambush-Sticker-Capsule">💊 Ambush Sticker Capsule</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/381/Paris-2023-Contenders-Sticker-Capsule">💊 Paris 2023 Contenders Sticker Capsule</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/380/Paris-2023-Challengers-Sticker-Capsule">💊 Paris 2023 Challengers Sticker Capsule</button>
+            <button class="hl-btn catalog-item" data-open="https://stash.clash.gg/stickers/capsule/379/Paris-2023-Legends-Sticker-Capsule">💊 Paris 2023 Legends Sticker Capsule</button>
+          </div>
+        </div>
       </div>
 
       <!-- COLLECTIONS -->
       <div class="page hidden" data-page="collections">
-        <div class="hl-muted">📦Коллекции</div>
-        <div class="hl-text">Здесь будет список коллекций.</div>
+        <div class="hl-muted" id="collectionsTitle">📦 Коллекции</div>
+        <div class="hl-text" id="collectionsText">Здесь будет список коллекций.</div>
       </div>
 
-    <!-- TOOLS -->
-<div class="page hidden" data-page="tools">
-  <div class="hl-muted">🌐 Сайты для торговли</div>
+      <!-- TOOLS -->
+      <div class="page hidden" data-page="tools">
+        <div class="hl-muted" id="toolsTitle">🌐 Сайты для торговли</div>
 
-  <!-- SCREEN: HOME -->
-  <div data-screen="toolsHome">
-    <div class="hl-text">Выбери раздел:</div>
-    <div class="grid2">
-      <button class="hl-btn primary" data-go="toolsMarket">🛒 Маркетплейсы</button>
-      <button class="hl-btn" data-go="toolsInstruments">🧰 Инструменты</button>
-    </div>
-  </div>
+        <div data-screen="toolsHome">
+          <div class="hl-text" id="toolsChooseText">Выбери раздел:</div>
+          <div class="grid2">
+            <button class="hl-btn primary" data-go="toolsMarket" id="toolsMarketBtn">🛒 Маркетплейсы</button>
+            <button class="hl-btn" data-go="toolsInstruments" id="toolsInstrumentsBtn">🧰 Инструменты</button>
+          </div>
+        </div>
 
-  <!-- SCREEN: MARKETPLACES -->
-  <div class="hidden" data-screen="toolsMarket">
-    <div class="hl-actions" style="justify-content:flex-start;">
-      <button class="hl-btn" data-back>⬅️ Назад</button>
-    </div>
+        <div class="hidden" data-screen="toolsMarket">
+          <div class="hl-actions" style="justify-content:flex-start;">
+            <button class="hl-btn" data-back id="toolsBack1">⬅️ Назад</button>
+          </div>
 
-    <div class="hl-text">🛒 Маркетплейсы</div>
-    <div class="hl-muted">🔒 Лично проверено — торговал на этих площадках</div>
+          <div class="hl-text" id="toolsMarketTitle">🛒 Маркетплейсы</div>
+          <div class="hl-muted" id="toolsMarketNote">🔒 Лично проверено — торговал на этих площадках</div>
 
-    <div class="grid2">
-      <button class="hl-btn" data-open="https://csfloat.com/">🟢 CSFloat ⭐ Рекомендовано</button>
-      <button class="hl-btn" data-open="https://cs.money/ru/market/buy/">🔵 CS.MONEY ⭐ Рекомендовано</button>
-      <button class="hl-btn" data-open="https://dmarket.com/">🟣 DMarket ⭐ Рекомендовано</button>
-      <button class="hl-btn" data-open="https://white.market/ru">⚪ White.Market ⭐ Рекомендовано</button>
-      <button class="hl-btn" data-open="https://buff.market/home">🟡 BUFF.Market ⭐ Рекомендовано</button>
-      <button class="hl-btn" data-open="https://buff.163.com/goods/33960">🟠 BUFF163 (China) ⭐ Рекомендовано</button>
-    </div>
-  </div>
+          <div class="grid2">
+            <button class="hl-btn" data-open="https://csfloat.com/">🟢 CSFloat ⭐ Рекомендовано</button>
+            <button class="hl-btn" data-open="https://cs.money/ru/market/buy/">🔵 CS.MONEY ⭐ Рекомендовано</button>
+            <button class="hl-btn" data-open="https://dmarket.com/">🟣 DMarket ⭐ Рекомендовано</button>
+            <button class="hl-btn" data-open="https://white.market/ru">⚪ White.Market ⭐ Рекомендовано</button>
+            <button class="hl-btn" data-open="https://buff.market/home">🟡 BUFF.Market ⭐ Рекомендовано</button>
+            <button class="hl-btn" data-open="https://buff.163.com/goods/33960">🟠 BUFF163 (China) ⭐ Рекомендовано</button>
+          </div>
+        </div>
 
-  <!-- SCREEN: INSTRUMENTS -->
-  <div class="hidden" data-screen="toolsInstruments">
-    <div class="hl-actions" style="justify-content:flex-start;">
-      <button class="hl-btn" data-back>⬅️ Назад</button>
-    </div>
+        <div class="hidden" data-screen="toolsInstruments">
+          <div class="hl-actions" style="justify-content:flex-start;">
+            <button class="hl-btn" data-back id="toolsBack2">⬅️ Назад</button>
+          </div>
 
-    <div class="hl-text">🧰 Инструменты</div>
-    <div class="grid2">
-      <button class="hl-btn" data-open="https://pricempire.com/">📊 PriceEmpire ⭐ Рекомендовано</button>
-      <button class="hl-btn" data-open="https://pricempire.com/app/portfolio">💼 Portfolio</button>
-      <button class="hl-btn" data-open="https://pricempire.com/app/comparison">⚖️ Сравнение цен</button>
-      <button class="hl-btn" data-open="https://steamdt.com/en">🚀 SteamDT ⭐ Рекомендовано</button>
-      <button class="hl-btn" data-open="https://www.steamanalyst.com/">📈 SteamAnalyst</button>
-      <button class="hl-btn" data-open="https://www.csgodatabase.com/">📚 CS:GO Database</button>
-      <button class="hl-btn" data-open="https://csgostash.com/">🎨 CSGOStash</button>
-    </div>
-  </div>
-</div>
+          <div class="hl-text" id="toolsInstrumentsTitle">🧰 Инструменты</div>
+          <div class="grid2">
+            <button class="hl-btn" data-open="https://pricempire.com/">📊 PriceEmpire ⭐ Рекомендовано</button>
+            <button class="hl-btn" data-open="https://pricempire.com/app/portfolio" id="portfolioBtn">💼 Portfolio</button>
+            <button class="hl-btn" data-open="https://pricempire.com/app/comparison" id="priceCompareBtn">⚖️ Сравнение цен</button>
+            <button class="hl-btn" data-open="https://steamdt.com/en">🚀 SteamDT ⭐ Рекомендовано</button>
+            <button class="hl-btn" data-open="https://www.steamanalyst.com/">📈 SteamAnalyst</button>
+            <button class="hl-btn" data-open="https://www.csgodatabase.com/">📚 CS:GO Database</button>
+            <button class="hl-btn" data-open="https://csgostash.com/">🎨 CSGOStash</button>
+          </div>
+        </div>
+      </div>
 
       <!-- FAQ -->
       <div class="page hidden" data-page="faq">
-        <div class="hl-muted">🧠FAQ</div>
-        <div class="hl-text">
+        <div class="hl-muted" id="faqTitle">🧠 FAQ</div>
+        <div class="hl-text" id="faqText">
           • Контракт = 10 скинов одной редкости → 1 скин следующей редкости.<br/>
           • Шансы зависят от доли коллекций среди 10 входных.
         </div>
       </div>
 
-     <!-- SUGGEST -->
-<div class="page hidden" data-page="suggest">
-  <div class="hl-muted">📬Предложка</div>
+      <!-- SUGGEST -->
+      <div class="page hidden" data-page="suggest">
+        <div class="hl-muted" id="suggestPageTitle">📬 Предложка</div>
 
-  <div id="suggestStep1">
-    <div class="hl-text">Выбери тип:</div>
-    <div class="grid2">
-      <button class="hl-btn primary" id="pickIdea">💡 Идея / улучшение</button>
-      <button class="hl-btn" id="pickCollab">🤝 Сотрудничество</button>
+        <div id="suggestStep1">
+          <div class="hl-text" id="suggestChooseType">Выбери тип:</div>
+          <div class="grid2">
+            <button class="hl-btn primary" id="pickIdea">💡 Идея / улучшение</button>
+            <button class="hl-btn" id="pickCollab">🤝 Сотрудничество</button>
+          </div>
+        </div>
+
+        <div id="suggestStep2" class="hidden">
+          <div class="hl-text" id="suggestTitle">Тема: —</div>
+          <textarea id="suggestText" class="hl-input" placeholder="Напиши сообщение..."></textarea>
+
+          <div class="hl-actions">
+            <button class="hl-btn primary" id="sendSuggestFinal">Отправить</button>
+            <button class="hl-btn" id="clearSuggest">Очистить</button>
+            <button class="hl-btn" id="backSuggest">Назад</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ABOUT -->
+      <div class="page hidden" data-page="about">
+        <div class="hl-muted" id="aboutTitle">🧑‍💻 О себе</div>
+        <div class="hl-text" id="aboutContent"></div>
+        <div class="hl-muted" style="margin-top:12px;" id="aboutClosing">Рынок любит тех, кто думает.</div>
+      </div>
+
+      <!-- INVEST -->
+      <div class="page hidden" data-page="invest">
+        <div class="hl-muted" id="investTitle">💼 Другие проекты инвестирования</div>
+
+        <div data-screen="investHome">
+          <div class="hl-text" id="investChooseText">Выбери проект:</div>
+          <div class="grid2">
+            <button class="hl-btn primary" data-go="deadlock">🕳️ Deadlock</button>
+            <button class="hl-btn" data-go="sbox">🧱 S&amp;box</button>
+          </div>
+        </div>
+
+        <div class="hidden" data-screen="deadlock">
+          <div class="hl-actions" style="justify-content:flex-start;">
+            <button class="hl-btn" data-back id="investBack1">⬅️ Назад</button>
+          </div>
+
+          <div class="hl-text" id="deadlockText">
+            Тут будут новости после официальных стартов продаж скинов и запуска маркета.
+          </div>
+        </div>
+
+        <div class="hidden" data-screen="sbox">
+          <div class="hl-actions" style="justify-content:flex-start;">
+            <button class="hl-btn" data-back id="investBack2">⬅️ Назад</button>
+          </div>
+
+          <div class="hl-text" id="sboxQuestion">Что тебя интересует?</div>
+          <div class="grid2">
+            <button class="hl-btn primary" data-go="sboxGet" id="sboxGetBtn">🎮 Как получить игру</button>
+            <button class="hl-btn" data-go="sboxMarket" id="sboxMarketBtn">🛒 Маркет скинов</button>
+            <button class="hl-btn" data-go="sboxTracker" id="sboxTrackerBtn">📊 Трекинг портфелей</button>
+          </div>
+        </div>
+
+        <div class="hidden" data-screen="sboxGet">
+          <div class="hl-actions" style="justify-content:flex-start;">
+            <button class="hl-btn" data-back id="investBack3">⬅️ Назад</button>
+          </div>
+          <div class="hl-text" id="sboxGetText">Официальный сайт игры.</div>
+          <div class="grid2" style="margin-top:10px;">
+            <button class="hl-btn primary" data-open="https://sbox.game/" id="sboxOpenBtn">🌐 Открыть s&amp;box</button>
+          </div>
+        </div>
+
+        <div class="hidden" data-screen="sboxMarket">
+          <div class="hl-actions" style="justify-content:flex-start;">
+            <button class="hl-btn" data-back id="investBack4">⬅️ Назад</button>
+          </div>
+          <div class="hl-text" id="sboxMarketText">Официальный item store.</div>
+          <div class="grid2" style="margin-top:10px;">
+            <button class="hl-btn primary" data-open="https://sbox.game/itemstore" id="sboxMarketOpenBtn">🛍️ Открыть маркет</button>
+          </div>
+        </div>
+
+        <div class="hidden" data-screen="sboxTracker">
+          <div class="hl-actions" style="justify-content:flex-start;">
+            <button class="hl-btn" data-back id="investBack5">⬅️ Назад</button>
+          </div>
+          <div class="hl-text" id="sboxTrackerText">Просмотр инвентаря и трекинг.</div>
+          <div class="grid2" style="margin-top:10px;">
+            <button class="hl-btn primary" data-open="https://sbox.scmm.app/inventory" id="sboxTrackerOpenBtn">📈 Открыть трекер</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-
-  <div id="suggestStep2" class="hidden">
-    <div class="hl-text" id="suggestTitle">Тема: —</div>
-    <textarea id="suggestText" class="hl-input" placeholder="Напиши сообщение..."></textarea>
-
-    <div class="hl-actions">
-      <button class="hl-btn primary" id="sendSuggestFinal">Отправить</button>
-      <button class="hl-btn" id="clearSuggest">Очистить</button>
-      <button class="hl-btn" id="backSuggest">Назад</button>
-    </div>
-  </div>
-</div>
-
-<!-- ABOUT -->
-<div class="page hidden" data-page="about">
-  <div class="hl-muted">🧑‍💻 О себе</div>
-
-  <div class="hl-text">
-    👋 Привет. Я — аналитик и коллекционер цифровых активов в CS.
-  </div>
-
-  <div class="hl-text">
-    🎯 Начал инвестировать системно с выходом CS2.  
-    До этого, как и многие, покупал скины хаотично — без стратегии и понимания рынка.
-  </div>
-
-  <div class="hl-text">
-    📦 Первый капитал сделал на перепродаже кейсов.  
-    Изучал циклы спроса, поведение старых коллекций и влияние дефицита.
-  </div>
-
-  <div class="hl-text">
-    💎 Затем перешёл в нишу редких скинов с наклейками —  
-    там, где важны детали: паттерн, флоат, история коллекции и редкость комбинации.
-  </div>
-
-  <div class="hl-text">
-    📊 Сейчас основа стратегии — анализ поведения старых коллекций,  
-    которые уже доказали свою доходность во времени.
-  </div>
-
-  <div class="hl-text">
-    🧠 Я не гадаю — я анализирую.  
-    Работаю от данных, логики рынка и психологии спроса.
-  </div>
-
-  <div class="hl-text">
-    🤝 Помогаю новичкам освоиться:  
-    • понять, где ликвидность  
-    • не терять деньги на эмоциях  
-    • выбрать первые позиции осознанно  
-  </div>
-
-  <div class="hl-text">
-    🔥 Здесь ты найдёшь системный подход, реальные ориентиры и разборы без воды.
-  </div>
-
-  <div class="hl-muted" style="margin-top:12px;">
-    Рынок любит тех, кто думает.
-  </div>
-</div>
-
-<!-- INVEST -->
-<div class="page hidden" data-page="invest">
-  <div class="hl-muted">💼 Другие проекты инвестирования</div>
-
-  <!-- SCREEN: ROOT -->
-  <div data-screen="investHome">
-    <div class="hl-text">Выбери проект:</div>
-    <div class="grid2">
-      <button class="hl-btn primary" data-go="deadlock">🕳️ Deadlock</button>
-      <button class="hl-btn" data-go="sbox">🧱 S&amp;box</button>
-    </div>
-  </div>
-
-  <!-- SCREEN: DEADLOCK -->
-  <div class="hidden" data-screen="deadlock">
-    <div class="hl-actions" style="justify-content:flex-start;">
-      <button class="hl-btn" data-back>⬅️ Назад</button>
-    </div>
-
-    <div class="hl-text">
-      Тут будут новости после официальных стартов продаж скинов и запуска маркета.
-    </div>
-  </div>
-
-  <!-- SCREEN: SBOX -->
-  <div class="hidden" data-screen="sbox">
-    <div class="hl-actions" style="justify-content:flex-start;">
-      <button class="hl-btn" data-back>⬅️ Назад</button>
-    </div>
-
-    <div class="hl-text">Что тебя интересует?</div>
-    <div class="grid2">
-      <button class="hl-btn primary" data-go="sboxGet">🎮 Как получить игру</button>
-      <button class="hl-btn" data-go="sboxMarket">🛒 Маркет скинов</button>
-      <button class="hl-btn" data-go="sboxTracker">📊 Трекинг портфелей</button>
-    </div>
-  </div>
-
-  <!-- SCREEN: SBOX GET -->
-  <div class="hidden" data-screen="sboxGet">
-    <div class="hl-actions" style="justify-content:flex-start;">
-      <button class="hl-btn" data-back>⬅️ Назад</button>
-    </div>
-    <div class="hl-text">Официальный сайт игры.</div>
-    <div class="grid2" style="margin-top:10px;">
-      <button class="hl-btn primary" data-open="https://sbox.game/">🌐 Открыть s&amp;box</button>
-    </div>
-  </div>
-
-  <!-- SCREEN: SBOX MARKET -->
-  <div class="hidden" data-screen="sboxMarket">
-    <div class="hl-actions" style="justify-content:flex-start;">
-      <button class="hl-btn" data-back>⬅️ Назад</button>
-    </div>
-    <div class="hl-text">Официальный item store.</div>
-    <div class="grid2" style="margin-top:10px;">
-      <button class="hl-btn primary" data-open="https://sbox.game/itemstore">🛍️ Открыть маркет</button>
-    </div>
-  </div>
-
-  <!-- SCREEN: SBOX TRACKER -->
-  <div class="hidden" data-screen="sboxTracker">
-    <div class="hl-actions" style="justify-content:flex-start;">
-      <button class="hl-btn" data-back>⬅️ Назад</button>
-    </div>
-    <div class="hl-text">Просмотр инвентаря и трекинг.</div>
-    <div class="grid2" style="margin-top:10px;">
-      <button class="hl-btn primary" data-open="https://sbox.scmm.app/inventory">📈 Открыть трекер</button>
-    </div>
-  </div>
-</div>
-
-    </div> <!-- /.hl-body -->
-  </div>   <!-- /#app -->
 
   <script type="module" src="/app.js"></script>
 </body>
