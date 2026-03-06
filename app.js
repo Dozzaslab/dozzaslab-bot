@@ -1005,7 +1005,74 @@ function normalizeRarityUI(r) {
   if (x.includes("covert")) return "Covert";
   return r || "";
 }
+function getWeaponName(s) {
+  if (typeof s?.weapon === "string") return s.weapon.trim();
+  if (typeof s?.weapon === "object" && s.weapon?.name) return String(s.weapon.name).trim();
+  return "";
+}
 
+function getCategoryName(s) {
+  if (typeof s?.category === "string") return s.category.trim();
+  if (typeof s?.category === "object" && s.category?.name) return String(s.category.name).trim();
+  return "";
+}
+
+function detectSkinSubtype(s) {
+  const weapon = getWeaponName(s).toLowerCase();
+  const category = getCategoryName(s).toLowerCase();
+  const name = String(s?.name || "").toLowerCase();
+
+  if (
+    weapon.includes("knife") ||
+    category.includes("knife") ||
+    name.includes("bayonet") ||
+    name.includes("karambit") ||
+    name.includes("flip knife") ||
+    name.includes("butterfly knife") ||
+    name.includes("m9 bayonet") ||
+    name.includes("talon knife") ||
+    name.includes("stiletto") ||
+    name.includes("ursus knife") ||
+    name.includes("navaja knife") ||
+    name.includes("falchion knife") ||
+    name.includes("bowie knife") ||
+    name.includes("daggers")
+  ) {
+    return "knives";
+  }
+
+  if (
+    weapon.includes("gloves") ||
+    weapon.includes("wraps") ||
+    category.includes("gloves") ||
+    name.includes("gloves") ||
+    name.includes("hand wraps") ||
+    name.includes("sport gloves") ||
+    name.includes("moto gloves") ||
+    name.includes("specialist gloves") ||
+    name.includes("hydra gloves") ||
+    name.includes("driver gloves") ||
+    name.includes("bloodhound gloves")
+  ) {
+    return "gloves";
+  }
+
+  const rifles = [
+    "ak-47", "m4a4", "m4a1-s", "m4a1", "famas", "galil", "galil ar", "sg 553", "aug"
+  ];
+  const snipers = ["awp", "ssg 08", "scar-20", "g3sg1"];
+  const smgs = ["mac-10", "mp9", "mp7", "ump-45", "pp-bizon", "p90", "mp5-sd"];
+  const pistols = ["glock-18", "usp-s", "usp", "p2000", "dual berettas", "five-seven", "cz75-auto", "desert eagle", "tec-9", "p250", "r8 revolver"];
+  const shotguns = ["nova", "xm1014", "mag-7", "sawed-off"];
+
+  if (rifles.some((x) => weapon.includes(x))) return "rifles";
+  if (snipers.some((x) => weapon.includes(x))) return "snipers";
+  if (smgs.some((x) => weapon.includes(x))) return "smgs";
+  if (pistols.some((x) => weapon.includes(x))) return "pistols";
+  if (shotguns.some((x) => weapon.includes(x))) return "shotguns";
+
+  return "other";
+}
 function renderRarityFilter() {
   const select = document.getElementById("rarityFilter");
   if (!select) return;
@@ -1094,7 +1161,17 @@ function renderTradeupResult(result) {
 
 let skinsDB = [];
 let contractItems = [];
+let collectionsRawDB = [];
+let agentsDB = [];
+let keychainsDB = [];
 
+let collectionsCatalog = [];
+
+let collectionsState = {
+  main: "weapons",
+  sub: "all",
+  search: "",
+};
 async function loadTradeupSkins() {
   await ensureTradeupReady();
 
