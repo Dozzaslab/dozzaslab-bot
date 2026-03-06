@@ -1189,10 +1189,11 @@ async function loadTradeupSkins() {
       const min = getMinFloat(s);
       const max = getMaxFloat(s);
 
-      if (!name || !collection || !rarity) return null;
+      if (!name || !rarity) return null;
       if (s?.souvenir === true) return null;
 
       return {
+        ...s,
         id: idx,
         name,
         nameLower: name.toLowerCase(),
@@ -1503,7 +1504,129 @@ document.getElementById("tradeupCalc")?.addEventListener("click", async () => {
 document.getElementById("tradeupClear")?.addEventListener("click", () => {
   clearTradeup();
 });
+function buildCollectionsCatalog() {
+  const catalog = [];
 
+  const skinsMap = new Map();
+  skinsDB.forEach((skin) => {
+    skinsMap.set(String(skin.name || "").trim().toLowerCase(), skin);
+  });
+
+  (Array.isArray(collectionsRawDB) ? collectionsRawDB : []).forEach((col, idx) => {
+    const items = Array.isArray(col.contains) ? col.contains : [];
+
+    const normalizedItems = items.map((item) => {
+      const linkedSkin = skinsMap.get(String(item?.name || "").trim().toLowerCase());
+      const subtype = linkedSkin ? detectSkinSubtype(linkedSkin) : "other";
+
+      return {
+        id: item?.id || "",
+        name: item?.name || "Unknown item",
+        image: item?.image || "",
+        rarity: item?.rarity?.name || item?.rarity || "",
+        subtype,
+      };
+    });
+
+    catalog.push({
+      id: col?.id || `weapon-collection-${idx}`,
+      name: col?.name || "Unknown Collection",
+      type: "weapons",
+      items: normalizedItems,
+    });
+  });
+
+  const goldGroups = {
+    knives: [],
+    gloves: [],
+  };
+
+  skinsDB.forEach((skin) => {
+    const subtype = detectSkinSubtype(skin);
+
+    if (subtype === "knives" || subtype === "gloves") {
+      goldGroups[subtype].push({
+        id: skin?.id || "",
+        name: skin?.name || "Unknown item",
+        image: skin?.image || "",
+        rarity: getRarityName(skin),
+        subtype,
+      });
+    }
+  });
+
+  catalog.push({
+    id: "gold-knives",
+    name: "Ножи",
+    type: "gold",
+    subtype: "knives",
+    items: goldGroups.knives,
+  });
+
+  catalog.push({
+    id: "gold-gloves",
+    name: "Перчатки",
+    type: "gold",
+    subtype: "gloves",
+    items: goldGroups.gloves,
+  });
+
+  const keychainGroups = new Map();
+
+  (Array.isArray(keychainsDB) ? keychainsDB : []).forEach((item) => {
+    const collectionName = item?.collections?.[0]?.name || "Other Keychains";
+
+    if (!keychainGroups.has(collectionName)) {
+      keychainGroups.set(collectionName, []);
+    }
+
+    keychainGroups.get(collectionName).push({
+      id: item?.id || "",
+      name: item?.name || "Unknown keychain",
+      image: item?.image || "",
+      rarity: item?.rarity?.name || item?.rarity || "",
+      subtype: "keychain",
+    });
+  });
+
+  [...keychainGroups.entries()].forEach(([name, items], idx) => {
+    catalog.push({
+      id: `keychains-${idx}`,
+      name,
+      type: "keychains",
+      items,
+    });
+  });
+
+  const agentGroups = new Map();
+
+  (Array.isArray(agentsDB) ? agentsDB : []).forEach((item) => {
+    const collectionName = item?.collections?.[0]?.name || "Other Agents";
+
+    if (!agentGroups.has(collectionName)) {
+      agentGroups.set(collectionName, []);
+    }
+
+    agentGroups.get(collectionName).push({
+      id: item?.id || "",
+      name: item?.name || "Unknown agent",
+      image: item?.image || "",
+      rarity: item?.rarity?.name || item?.rarity || "",
+      subtype: "agent",
+    });
+  });
+
+  [...agentGroups.entries()].forEach(([name, items], idx) => {
+    catalog.push({
+      id: `agents-${idx}`,
+      name,
+      type: "agents",
+      items,
+    });
+  });
+
+  collectionsCatalog = catalog;
+}
 loadTradeupSkins().catch((e) => {
   const out = document.getElementById("tradeupResult");
   if (out) out.innerHTML = `❌ ${escapeHtml(String(e?.message || e))}`;
