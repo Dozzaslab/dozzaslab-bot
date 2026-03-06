@@ -1347,12 +1347,18 @@ function clearTradeup() {
 
 document.addEventListener("input", (e) => {
   if (!e.target) return;
+
   if (
     e.target.id === "skinSearch" ||
     e.target.id === "rarityFilter" ||
     e.target.id === "collectionFilter"
   ) {
     renderSkinsTable();
+  }
+
+  if (e.target.id === "collectionsSearch") {
+    collectionsState.search = e.target.value || "";
+    renderCollectionsCatalog();
   }
 });
 
