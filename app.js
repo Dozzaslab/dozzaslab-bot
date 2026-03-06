@@ -668,10 +668,28 @@ backBtn?.addEventListener("click", () => openSuggestStep1());
   const back2 = document.getElementById("backToCatalogHome2");
 
   const casesSearch = document.getElementById("casesSearch");
-  const capsSearch = document.getElementById("capsulesSearch");
-
   const casesList = document.getElementById("casesList");
-  const capsList = document.getElementById("capsulesList");
+
+  const capsulesHome = document.getElementById("capsulesHome");
+  const capsulesMajor = document.getElementById("capsulesMajor");
+  const capsulesAutograph = document.getElementById("capsulesAutograph");
+  const capsulesSpecial = document.getElementById("capsulesSpecial");
+
+  const openMajorCapsules = document.getElementById("openMajorCapsules");
+  const openAutographCapsules = document.getElementById("openAutographCapsules");
+  const openSpecialCapsules = document.getElementById("openSpecialCapsules");
+
+  const backToCapsulesHome1 = document.getElementById("backToCapsulesHome1");
+  const backToCapsulesHome2 = document.getElementById("backToCapsulesHome2");
+  const backToCapsulesHome3 = document.getElementById("backToCapsulesHome3");
+
+  const capsulesMajorSearch = document.getElementById("capsulesMajorSearch");
+  const capsulesAutographSearch = document.getElementById("capsulesAutographSearch");
+  const capsulesSpecialSearch = document.getElementById("capsulesSpecialSearch");
+
+  const capsulesMajorList = document.getElementById("capsulesMajorList");
+  const capsulesAutographList = document.getElementById("capsulesAutographList");
+  const capsulesSpecialList = document.getElementById("capsulesSpecialList");
 
   if (!home || !cases || !caps) return;
 
@@ -684,16 +702,24 @@ backBtn?.addEventListener("click", () => openSuggestStep1());
     });
   }
 
+  function resetCapsuleSearches() {
+    if (capsulesMajorSearch) capsulesMajorSearch.value = "";
+    if (capsulesAutographSearch) capsulesAutographSearch.value = "";
+    if (capsulesSpecialSearch) capsulesSpecialSearch.value = "";
+
+    filterList(capsulesMajorList, "");
+    filterList(capsulesAutographList, "");
+    filterList(capsulesSpecialList, "");
+  }
+
   function showHome() {
     home.classList.remove("hidden");
     cases.classList.add("hidden");
     caps.classList.add("hidden");
 
     if (casesSearch) casesSearch.value = "";
-    if (capsSearch) capsSearch.value = "";
-
     filterList(casesList, "");
-    filterList(capsList, "");
+    resetCapsuleSearches();
 
     scrollToTop();
   }
@@ -706,26 +732,78 @@ backBtn?.addEventListener("click", () => openSuggestStep1());
     casesSearch?.focus();
   }
 
-  function showCaps() {
+  function showCapsulesHome() {
     home.classList.add("hidden");
     cases.classList.add("hidden");
     caps.classList.remove("hidden");
+
+    capsulesHome?.classList.remove("hidden");
+    capsulesMajor?.classList.add("hidden");
+    capsulesAutograph?.classList.add("hidden");
+    capsulesSpecial?.classList.add("hidden");
+
+    resetCapsuleSearches();
     scrollToTop();
-    capsSearch?.focus();
+  }
+
+  function showMajorCapsules() {
+    capsulesHome?.classList.add("hidden");
+    capsulesMajor?.classList.remove("hidden");
+    capsulesAutograph?.classList.add("hidden");
+    capsulesSpecial?.classList.add("hidden");
+    scrollToTop();
+    capsulesMajorSearch?.focus();
+  }
+
+  function showAutographCapsules() {
+    capsulesHome?.classList.add("hidden");
+    capsulesMajor?.classList.add("hidden");
+    capsulesAutograph?.classList.remove("hidden");
+    capsulesSpecial?.classList.add("hidden");
+    scrollToTop();
+    capsulesAutographSearch?.focus();
+  }
+
+  function showSpecialCapsules() {
+    capsulesHome?.classList.add("hidden");
+    capsulesMajor?.classList.add("hidden");
+    capsulesAutograph?.classList.add("hidden");
+    capsulesSpecial?.classList.remove("hidden");
+    scrollToTop();
+    capsulesSpecialSearch?.focus();
   }
 
   openCases?.addEventListener("click", showCases);
-  openCaps?.addEventListener("click", showCaps);
+  openCaps?.addEventListener("click", showCapsulesHome);
+
   back1?.addEventListener("click", showHome);
   back2?.addEventListener("click", showHome);
+
+  openMajorCapsules?.addEventListener("click", showMajorCapsules);
+  openAutographCapsules?.addEventListener("click", showAutographCapsules);
+  openSpecialCapsules?.addEventListener("click", showSpecialCapsules);
+
+  backToCapsulesHome1?.addEventListener("click", showCapsulesHome);
+  backToCapsulesHome2?.addEventListener("click", showCapsulesHome);
+  backToCapsulesHome3?.addEventListener("click", showCapsulesHome);
 
   casesSearch?.addEventListener("input", (e) => {
     filterList(casesList, e.target.value);
     scrollToTop();
   });
 
-  capsSearch?.addEventListener("input", (e) => {
-    filterList(capsList, e.target.value);
+  capsulesMajorSearch?.addEventListener("input", (e) => {
+    filterList(capsulesMajorList, e.target.value);
+    scrollToTop();
+  });
+
+  capsulesAutographSearch?.addEventListener("input", (e) => {
+    filterList(capsulesAutographList, e.target.value);
+    scrollToTop();
+  });
+
+  capsulesSpecialSearch?.addEventListener("input", (e) => {
+    filterList(capsulesSpecialList, e.target.value);
     scrollToTop();
   });
 
