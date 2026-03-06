@@ -238,3 +238,10 @@ body{margin:0;height:100vh;overflow:hidden;background:#111}
 .rarity-option-restricted{color:#8847ff;}
 .rarity-option-classified{color:#d32ce6;}
 .rarity-option-covert{color:#eb4b4b;}
+
+.faq-card{
+  margin-top:8px;
+  padding:8px 10px;
+  border:1px solid rgba(0,0,0,.35);
+  background:rgba(0,0,0,.10);
+}
