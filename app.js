@@ -1360,9 +1360,12 @@ function renderTradeupResult(result) {
       ? `<button class="hl-btn" style="margin-right:6px;" data-open="${escapeHtml(o.links.csfloat)}">CSFloat</button>`
       : "";
 
-    const clashBtn = o.links?.clash
-      ? `<button class="hl-btn" style="margin-right:6px;" data-open="${escapeHtml(o.links.clash)}">Clash</button>`
-      : "";
+   const clashQuery = encodeURIComponent(`${o.name} ${o.collection} clash.gg`);
+const clashGoogleUrl = `https://www.google.com/search?q=${clashQuery}`;
+
+const clashBtn = `
+  <button class="hl-btn" style="margin-right:6px;" data-open="${escapeHtml(clashGoogleUrl)}">Clash</button>
+`;
 
     const steamBtn = o.links?.steam
       ? `<button class="hl-btn" data-open="${escapeHtml(o.links.steam)}">Steam</button>`
@@ -1398,7 +1401,7 @@ html += `
   </div>
 
   <div style="margin-top:6px; display:flex; gap:6px; flex-wrap:wrap;">
-    ${csfloatBtn}${steamBtn}
+    ${csfloatBtn}${clashBtn}${steamBtn}
   </div>
 </div>`;
   }
