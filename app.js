@@ -2042,12 +2042,12 @@ function renderCollectionsCatalog() {
   const details = document.getElementById("collectionsDetails");
   if (!details) return;
 
-const q = collectionsState.search.trim();
+  const q = collectionsState.search.trim().toLowerCase();
 
-if (!collectionsState.sub && !q) {
-  details.innerHTML = `<div class="hl-muted">Выбери подвкладку или начни вводить название предмета</div>`;
-  return;
-}
+  if (!collectionsState.sub && !q) {
+    details.innerHTML = `<div class="hl-muted">Выбери подвкладку или начни вводить название предмета</div>`;
+    return;
+  }
 
   const groups = getFilteredCollectionsCatalog();
 
@@ -2056,19 +2056,18 @@ if (!collectionsState.sub && !q) {
     return;
   }
 
-  const q = collectionsState.search.trim().toLowerCase();
   let html = "";
 
   groups.forEach((group) => {
     let items = [...group.items];
 
-   if (
-  group.type === "weapons" &&
-  collectionsState.sub &&
-  collectionsState.sub !== "all"
-) {
-  items = items.filter((item) => item.subtype === collectionsState.sub);
-}
+    if (
+      group.type === "weapons" &&
+      collectionsState.sub &&
+      collectionsState.sub !== "all"
+    ) {
+      items = items.filter((item) => item.subtype === collectionsState.sub);
+    }
 
     if (q) {
       items = items.filter((item) => {
@@ -2102,7 +2101,6 @@ if (!collectionsState.sub && !q) {
 
   details.innerHTML = html || `<div class="hl-muted">Ничего не найдено</div>`;
 }
-
 function renderCollectionsDetails(groupId) {
   const box = document.getElementById("collectionsDetails");
   if (!box) return;
