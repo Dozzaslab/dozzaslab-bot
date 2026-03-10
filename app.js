@@ -961,10 +961,10 @@ function rarityDot(rarity) {
     margin-right:6px;
     vertical-align:middle;
     background:${c};
-    box-shadow:
-      inset 0 1px 1px rgba(255,255,255,.05),
-      inset 0 -1px 1px rgba(0,0,0,.35),
-      0 0 4px rgba(255,255,255,.05);
+ box-shadow:
+  inset 0 1px 1px rgba(255,255,255,.15),
+  inset 0 -1px 1px rgba(0,0,0,.45),
+  0 0 6px ${c}66;
   "></span>`;
 }
 
