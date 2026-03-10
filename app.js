@@ -1969,6 +1969,29 @@ document.getElementById("tradeupCalc")?.addEventListener("click", async () => {
 document.getElementById("tradeupClear")?.addEventListener("click", () => {
   clearTradeup();
 });
+
+document.getElementById("tradeupFill")?.addEventListener("click", () => {
+  if (!contractItems.length) {
+    alert("Сначала добавь хотя бы 1 скин в контракт.");
+    return;
+  }
+
+  const first = contractItems[0];
+  const need = needCountByRarity(first.rarity);
+
+  while (contractItems.length < need) {
+    contractItems.push({
+      name: first.name,
+      collection: first.collection,
+      rarity: first.rarity,
+      float: Number(first.float),
+      min: Number(first.min),
+      max: Number(first.max),
+    });
+  }
+
+  renderContract();
+});
 function buildCollectionsCatalog() {
   const catalog = [];
 
