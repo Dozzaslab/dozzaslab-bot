@@ -2267,6 +2267,8 @@ function renderCollectionItemCard() {
   const min = Number.isFinite(linkedSkin?.min) ? linkedSkin.min : null;
   const max = Number.isFinite(linkedSkin?.max) ? linkedSkin.max : null;
   const links = buildSkinLinks(item.name);
+  const clashQuery = encodeURIComponent(`CS2 ${item.name} ${collection} site:clash.gg`);
+  const clashGoogleUrl = `https://www.google.com/search?q=${clashQuery}`;
 
   const imageHtml = item.image
     ? `
@@ -2322,11 +2324,15 @@ function renderCollectionItemCard() {
       ${floatHtml}
     </div>
 
-    <div style="margin-top:12px; display:flex; gap:6px; flex-wrap:wrap;">
-      <button class="hl-btn" data-open="${escapeHtml(links.csfloat)}">CSFloat</button>
-      <button class="hl-btn" data-open="${escapeHtml(links.steam)}">Steam</button>
-      ${addBtnHtml}
-    </div>
+  <div style="margin-top:12px; display:flex; gap:6px; flex-wrap:wrap;">
+  <button class="hl-btn" data-open="${escapeHtml(links.csfloat)}">CSFloat</button>
+
+  <button class="hl-btn" data-open="${escapeHtml(clashGoogleUrl)}">Clash</button>
+
+  <button class="hl-btn" data-open="${escapeHtml(links.steam)}">Steam</button>
+
+  ${addBtnHtml}
+</div>
   `;
 }
 function renderCollectionsDetails(groupId) {
