@@ -1519,30 +1519,33 @@ function renderContract() {
     return;
   }
 
-  contractItems.forEach((s, i) => {
-    html += `
+contractItems.forEach((s, i) => {
+  const skinData = findSkinInDBByName(s.name);
+  const skinImage = skinData?.image || "";
+
+  html += `
 <div style="margin-top:6px; padding:6px; border:1px solid rgba(0,0,0,.35); background:rgba(0,0,0,.10);">
   <div style="display:flex; gap:8px; align-items:center;">
-  ${
-    skinImage
-      ? `
-        <img
-          src="${escapeHtml(skinImage)}"
-          class="contract-skin-img"
-          data-img="${escapeHtml(skinImage)}"
-          alt="${escapeHtml(s.name)}"
-        />
-      `
-      : ""
-  }
+    ${
+      skinImage
+        ? `
+          <img
+            src="${escapeHtml(skinImage)}"
+            class="contract-skin-img"
+            data-img="${escapeHtml(skinImage)}"
+            alt="${escapeHtml(s.name)}"
+          />
+        `
+        : ""
+    }
 
-  <div>
     <div>
-      <b>${i + 1}.</b> ${rarityDot(s.rarity)}${escapeHtml(s.name)}
+      <div>
+        <b>${i + 1}.</b> ${rarityDot(s.rarity)}${escapeHtml(s.name)}
+      </div>
+      <div class="hl-muted">(${escapeHtml(s.collection)})</div>
     </div>
-    <div class="hl-muted">(${escapeHtml(s.collection)})</div>
   </div>
-</div>
 
   <div class="hl-muted" style="margin-top:6px; display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
     <span>${escapeHtml(t("float"))}:</span>
@@ -1566,7 +1569,7 @@ function renderContract() {
     <button class="hl-btn rem" data-i="${i}">${escapeHtml(t("remove"))}</button>
   </div>
 </div>`;
-  });
+});
 
   el.innerHTML = html;
 }
