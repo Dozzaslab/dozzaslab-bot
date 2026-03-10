@@ -1016,7 +1016,41 @@ function getMaxFloat(s) {
   const n = Number(v);
   return Number.isFinite(n) ? n : 1;
 }
+function clamp01(v) {
+  if (!Number.isFinite(v)) return 0;
+  return Math.min(1, Math.max(0, v));
+}
 
+function formatFloatShort(v) {
+  const n = Number(v);
+  if (!Number.isFinite(n)) return "0.00";
+  return n.toFixed(2);
+}
+
+function buildFloatRangeBar(min, max) {
+  const safeMin = clamp01(Number(min));
+  const safeMax = clamp01(Number(max));
+
+  const minPct = safeMin * 100;
+  const maxPct = safeMax * 100;
+
+  return `
+    <div class="float-range-wrap">
+      <div class="float-range-bar">
+        <span class="float-range-segment fn"></span>
+        <span class="float-range-segment mw"></span>
+        <span class="float-range-segment ft"></span>
+        <span class="float-range-segment ww"></span>
+        <span class="float-range-segment bs"></span>
+
+        <span class="float-range-marker" style="left:${minPct}%;"></span>
+        <span class="float-range-marker" style="left:${maxPct}%;"></span>
+      </div>
+
+      <div class="float-range-text">${formatFloatShort(safeMin)}-${formatFloatShort(safeMax)}</div>
+    </div>
+  `;
+}
 function normalizeRarityUI(r) {
   const x = String(r || "").trim().toLowerCase();
   if (x.includes("consumer")) return "Consumer";
@@ -1537,7 +1571,6 @@ let html = `
     <th align="left" style="padding:6px 4px;">Img</th>
     <th align="left" style="padding:6px 4px;">${escapeHtml(t("skin"))}</th>
     <th align="left" style="padding:6px 4px;">${escapeHtml(t("collection"))}</th>
-    <th align="left" style="padding:6px 4px;">${escapeHtml(t("rarity"))}</th>
     <th align="left" style="padding:6px 4px;">${escapeHtml(t("float"))}</th>
     <th style="padding:6px 4px;"></th>
   </tr>
@@ -1562,14 +1595,12 @@ html += `
     </td>
     <td style="padding:6px 4px;">${rarityDot(s.rarity)}${escapeHtml(s.name)}</td>
     <td style="padding:6px 4px;opacity:.9;">${escapeHtml(s.collection)}</td>
-    <td style="padding:6px 4px;">${escapeHtml(getLocalizedRarityLabel(s.rarity))}</td>
-    <td style="padding:6px 4px;opacity:.9;">${s.min.toFixed(2)}-${s.max.toFixed(2)}</td>
+    <td style="padding:6px 4px;opacity:.9;">${buildFloatRangeBar(s.min, s.max)}</td>
     <td style="padding:6px 4px;text-align:right;">
       <button class="hl-btn addSkin" data-id="${s.id}">+</button>
     </td>
   </tr>`;
   });
-
   html += `</table>`;
   table.innerHTML = html;
 }
