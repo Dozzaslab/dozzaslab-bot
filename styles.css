@@ -738,3 +738,19 @@ body{margin:0;height:100vh;overflow:hidden;background:#111}
 .lang-switch{
   margin-left:12px;
 }
+.hl-btn:hover{
+  box-shadow:0 0 8px rgba(255,255,255,.2);
+}
+body::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  background:repeating-linear-gradient(
+    to bottom,
+    rgba(0,0,0,.05),
+    rgba(0,0,0,.05) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+}
