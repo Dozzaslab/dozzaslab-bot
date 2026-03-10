@@ -347,8 +347,11 @@ body{margin:0;height:100vh;overflow:hidden;background:#111}
     inset 0 -1px 0 rgba(255,255,255,.05);
 }
 .contract-skin-img{
-  width:60px;
-  height:auto;
+  width:56px;
+  height:42px;
+  object-fit:contain;
   border:1px solid rgba(0,0,0,.4);
+  background:rgba(0,0,0,.08);
   cursor:zoom-in;
+  flex:0 0 auto;
 }
