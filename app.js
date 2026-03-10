@@ -2000,20 +2000,29 @@ function getFilteredCollectionsCatalog() {
   const q = collectionsState.search.trim().toLowerCase();
   const selectedCollection = collectionsState.selectedCollection.trim();
 
-  if (!collectionsState.sub) return [];
+  const hasSubfilter = Boolean(collectionsState.sub);
+  const hasSearch = Boolean(q);
+
+  if (!hasSubfilter && !hasSearch) return [];
 
   return collectionsCatalog.filter((group) => {
     if (group.type !== collectionsState.main) return false;
 
     if (selectedCollection && group.name !== selectedCollection) return false;
 
-    if (collectionsState.main === "weapons" && collectionsState.sub !== "all") {
-      const hasMatchingWeapon = group.items.some((item) => item.subtype === collectionsState.sub);
-      if (!hasMatchingWeapon) return false;
+    if (collectionsState.main === "weapons") {
+      if (hasSubfilter && collectionsState.sub !== "all") {
+        const hasMatchingWeapon = group.items.some(
+          (item) => item.subtype === collectionsState.sub
+        );
+        if (!hasMatchingWeapon) return false;
+      }
     }
 
-    if (collectionsState.main === "gold" && collectionsState.sub !== "all") {
-      if (group.subtype !== collectionsState.sub) return false;
+    if (collectionsState.main === "gold") {
+      if (hasSubfilter && collectionsState.sub !== "all") {
+        if (group.subtype !== collectionsState.sub) return false;
+      }
     }
 
     if (q) {
@@ -2021,6 +2030,7 @@ function getFilteredCollectionsCatalog() {
       const byItem = group.items.some((item) =>
         String(item.name || "").toLowerCase().includes(q)
       );
+
       if (!byCollection && !byItem) return false;
     }
 
@@ -2032,8 +2042,10 @@ function renderCollectionsCatalog() {
   const details = document.getElementById("collectionsDetails");
   if (!details) return;
 
-if (!collectionsState.sub) {
-  details.innerHTML = `<div class="hl-muted">Выбери подвкладку, чтобы показать список</div>`;
+const q = collectionsState.search.trim();
+
+if (!collectionsState.sub && !q) {
+  details.innerHTML = `<div class="hl-muted">Выбери подвкладку или начни вводить название предмета</div>`;
   return;
 }
 
@@ -2050,9 +2062,13 @@ if (!collectionsState.sub) {
   groups.forEach((group) => {
     let items = [...group.items];
 
-    if (group.type === "weapons" && collectionsState.sub !== "all") {
-      items = items.filter((item) => item.subtype === collectionsState.sub);
-    }
+   if (
+  group.type === "weapons" &&
+  collectionsState.sub &&
+  collectionsState.sub !== "all"
+) {
+  items = items.filter((item) => item.subtype === collectionsState.sub);
+}
 
     if (q) {
       items = items.filter((item) => {
