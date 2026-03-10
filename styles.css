@@ -775,17 +775,11 @@ body::after{
 .float-range-bar{
   position:relative;
   width:105px;
-
-  /* высота контейнера НЕ увеличивается */
   height:10px;
-
   border-radius:3px;
   overflow:hidden;
   border:1px solid rgba(0,0,0,.55);
-  background:#1f2819;
-
-  display:flex;
-  align-items:center;
+  background:transparent;
 }
 
 .float-range-segment{
@@ -848,3 +842,9 @@ body::after{
 .float-range-segment.ft{ background:#ffd84a; }
 .float-range-segment.ww{ background:#ff9d3a; }
 .float-range-segment.bs{ background:#ff4b4b; }
+
+.float-range-segment{
+  position:absolute;
+  top:0;
+  bottom:0;
+}
