@@ -1033,6 +1033,7 @@ function buildFloatRangeBar(min, max) {
 
   const minPct = safeMin * 100;
   const maxPct = safeMax * 100;
+  const activeWidth = Math.max(2, maxPct - minPct);
 
   return `
     <div class="float-range-wrap">
@@ -1043,8 +1044,9 @@ function buildFloatRangeBar(min, max) {
         <span class="float-range-segment ww"></span>
         <span class="float-range-segment bs"></span>
 
-        <span class="float-range-marker" style="left:${minPct}%;"></span>
-        <span class="float-range-marker" style="left:${maxPct}%;"></span>
+        <span class="float-range-active" style="left:${minPct}%; width:${activeWidth}%;"></span>
+        <span class="float-range-edge" style="left:${minPct}%;"></span>
+        <span class="float-range-edge" style="left:${maxPct}%;"></span>
       </div>
 
       <div class="float-range-text">${formatFloatShort(safeMin)}-${formatFloatShort(safeMax)}</div>
