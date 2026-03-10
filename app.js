@@ -1368,14 +1368,39 @@ function renderTradeupResult(result) {
       ? `<button class="hl-btn" data-open="${escapeHtml(o.links.steam)}">Steam</button>`
       : "";
 
-    html += `<div style="margin-top:10px;">
-      • <b>${p}%</b> — ${rarityDot(result.output_rarity)}${escapeHtml(o.name)}
-      <span class="hl-muted">(${escapeHtml(o.collection)})</span>
-      — float≈${escapeHtml(o.float_out)}
-      <div style="margin-top:6px; display:flex; gap:6px; flex-wrap:wrap;">
-        ${csfloatBtn}${steamBtn}
+  const outcomeSkin = findSkinInDBByName(o.name);
+const outcomeImage = outcomeSkin?.image || "";
+
+html += `
+<div style="margin-top:10px; padding:8px; border:1px solid rgba(0,0,0,.35); background:rgba(0,0,0,.08);">
+  <div style="display:flex; gap:8px; align-items:center;">
+    ${
+      outcomeImage
+        ? `
+          <img
+            src="${escapeHtml(outcomeImage)}"
+            class="outcome-skin-img"
+            data-img="${escapeHtml(outcomeImage)}"
+            alt="${escapeHtml(o.name)}"
+          />
+        `
+        : ""
+    }
+
+    <div>
+      <div>
+        <b>${p}%</b> — ${rarityDot(result.output_rarity)}${escapeHtml(o.name)}
       </div>
-    </div>`;
+      <div class="hl-muted">
+        (${escapeHtml(o.collection)}) — float≈${escapeHtml(o.float_out)}
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:6px; display:flex; gap:6px; flex-wrap:wrap;">
+    ${csfloatBtn}${steamBtn}
+  </div>
+</div>`;
   }
 
   out.innerHTML = html;
@@ -1476,9 +1501,10 @@ function renderSkinsTable() {
     return;
   }
 
-  let html = `
+let html = `
 <table style="width:100%;font-size:12px;border-collapse:collapse">
   <tr style="opacity:.9">
+    <th align="left" style="padding:6px 4px;">Img</th>
     <th align="left" style="padding:6px 4px;">${escapeHtml(t("skin"))}</th>
     <th align="left" style="padding:6px 4px;">${escapeHtml(t("collection"))}</th>
     <th align="left" style="padding:6px 4px;">${escapeHtml(t("rarity"))}</th>
@@ -1488,8 +1514,22 @@ function renderSkinsTable() {
 `;
 
   list.forEach((s) => {
-    html += `
+html += `
   <tr>
+    <td style="padding:6px 4px; width:58px;">
+      ${
+        s.image
+          ? `
+            <img
+              src="${escapeHtml(s.image)}"
+              class="table-skin-img"
+              data-img="${escapeHtml(s.image)}"
+              alt="${escapeHtml(s.name)}"
+            />
+          `
+          : ""
+      }
+    </td>
     <td style="padding:6px 4px;">${rarityDot(s.rarity)}${escapeHtml(s.name)}</td>
     <td style="padding:6px 4px;opacity:.9;">${escapeHtml(s.collection)}</td>
     <td style="padding:6px 4px;">${escapeHtml(getLocalizedRarityLabel(s.rarity))}</td>
@@ -2389,7 +2429,7 @@ loadTradeupSkins()
     if (collectionsList) collectionsList.innerHTML = msg;
   });
 document.addEventListener("click", (e) => {
-  const img = e.target.closest(".contract-skin-img");
+  const img = e.target.closest(".contract-skin-img, .table-skin-img, .outcome-skin-img");
   if (!img) return;
 
   const src = img.dataset.img;
