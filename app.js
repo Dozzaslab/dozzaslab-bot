@@ -958,7 +958,15 @@ function escapeHtml(s) {
     "'": "&#39;",
   }[c]));
 }
+function buildSkinLinks(name) {
+  const encoded = encodeURIComponent(String(name || "").trim());
 
+  return {
+    csfloat: `https://csfloat.com/search?name=${encoded}`,
+    stash: `https://csgostash.com/search/${encoded}`,
+    steam: `https://steamcommunity.com/market/search?q=${encoded}`,
+  };
+}
 function getRarityName(s) {
   const r = s?.rarity;
   if (!r) return "";
@@ -1395,6 +1403,8 @@ let collectionsState = {
   search: "",
   selectedCollection: "",
   dropdownSearch: "",
+  openedGroupId: null,
+  openedItemName: null,
 };
 async function loadTradeupSkins() {
   await ensureTradeupReady();
@@ -1438,7 +1448,12 @@ function renderCollections() {
   renderContractCollectionDropdown();
   renderCollectionsPageDropdown();
 }
+function findSkinInDBByName(name) {
+  const needle = String(name || "").trim().toLowerCase();
+  if (!needle) return null;
 
+  return skinsDB.find((skin) => String(skin.name || "").trim().toLowerCase() === needle) || null;
+}
 function renderSkinsTable() {
   const table = document.getElementById("skinsTable");
   if (!table) return;
@@ -1566,11 +1581,12 @@ document.addEventListener("input", (e) => {
     renderContractCollectionDropdown();
   }
 
-  if (e.target.id === "collectionsSearch") {
+   if (e.target.id === "collectionsSearch") {
     collectionsState.search = e.target.value || "";
+    collectionsState.openedGroupId = null;
+    collectionsState.openedItemName = null;
     renderCollectionsCatalog();
   }
-
   if (e.target.id === "collectionsFilterSearch") {
     collectionsState.dropdownSearch = e.target.value || "";
     renderCollectionsPageDropdown();
@@ -1628,9 +1644,11 @@ document.addEventListener("click", (e) => {
     if (!next) return;
 
     collectionsState.main = next;
-collectionsState.sub = null;
-collectionsState.selectedCollection = "";
-collectionsState.dropdownSearch = "";
+    collectionsState.sub = null;
+    collectionsState.selectedCollection = "";
+    collectionsState.dropdownSearch = "";
+    collectionsState.openedGroupId = null;
+    collectionsState.openedItemName = null;
 
     document.querySelectorAll(".collections-main-filter").forEach((btn) => {
       btn.classList.toggle("active", btn.dataset.mainFilter === next);
@@ -1647,6 +1665,9 @@ collectionsState.dropdownSearch = "";
     if (!next) return;
 
     collectionsState.sub = next;
+    collectionsState.openedGroupId = null;
+    collectionsState.openedItemName = null;
+
     renderCollectionsSubfilters();
     renderCollectionsCatalog();
     return;
@@ -1660,7 +1681,58 @@ collectionsState.dropdownSearch = "";
     renderCollectionsDetails(groupId);
     return;
   }
+  const openItemBtn = e.target.closest("[data-open-collection-item]");
+  if (openItemBtn) {
+    const groupId = openItemBtn.dataset.openCollectionItem;
+    const itemName = openItemBtn.dataset.openCollectionItemName;
 
+    if (!groupId || !itemName) return;
+
+    openCollectionItemCard(groupId, itemName);
+    return;
+  }
+
+  const backToCollectionsListBtn = e.target.closest("#backToCollectionsList");
+  if (backToCollectionsListBtn) {
+    closeCollectionItemCard();
+    return;
+  }
+
+  const addFromCardBtn = e.target.closest("[data-add-from-card]");
+  if (addFromCardBtn) {
+    const itemName = addFromCardBtn.dataset.addFromCard;
+    const s = findSkinInDBByName(itemName);
+    if (!s) return;
+
+    const currentRarity = contractItems[0]?.rarity;
+    if (currentRarity && s.rarity !== currentRarity) {
+      alert(t("same_rarity_only"));
+      return;
+    }
+
+    const contractRarity = currentRarity || s.rarity;
+    const need = needCountByRarity(contractRarity);
+
+    if (contractItems.length >= need) {
+      alert(t("limit_items", { count: need }));
+      return;
+    }
+
+    let float = s.min <= 0.01 ? 0.01 : s.min;
+    float = Math.min(float, s.max);
+
+    contractItems.push({
+      name: s.name,
+      collection: s.collection,
+      rarity: s.rarity,
+      float,
+      min: s.min,
+      max: s.max,
+    });
+
+    renderContract();
+    return;
+  }
   const add = e.target.closest(".addSkin");
   if (add) {
     const id = Number(add.dataset.id);
@@ -2101,6 +2173,107 @@ function renderCollectionsCatalog() {
 
   details.innerHTML = html || `<div class="hl-muted">Ничего не найдено</div>`;
 }
+function openCollectionItemCard(groupId, itemName) {
+  collectionsState.openedGroupId = groupId;
+  collectionsState.openedItemName = itemName;
+
+  renderCollectionItemCard();
+}
+
+function closeCollectionItemCard() {
+  collectionsState.openedGroupId = null;
+  collectionsState.openedItemName = null;
+  renderCollectionsCatalog();
+}
+
+function renderCollectionItemCard() {
+  const box = document.getElementById("collectionsDetails");
+  if (!box) return;
+
+  const group = collectionsCatalog.find((x) => x.id === collectionsState.openedGroupId);
+  if (!group) {
+    box.innerHTML = `<div class="hl-muted">Предмет не найден</div>`;
+    return;
+  }
+
+  const item = group.items.find(
+    (x) => String(x.name || "").trim().toLowerCase() === String(collectionsState.openedItemName || "").trim().toLowerCase()
+  );
+
+  if (!item) {
+    box.innerHTML = `<div class="hl-muted">Предмет не найден</div>`;
+    return;
+  }
+
+  const linkedSkin = findSkinInDBByName(item.name);
+  const rarity = linkedSkin?.rarity || normalizeRarityUI(item.rarity || "");
+  const collection = linkedSkin?.collection || group.name || "";
+  const min = Number.isFinite(linkedSkin?.min) ? linkedSkin.min : null;
+  const max = Number.isFinite(linkedSkin?.max) ? linkedSkin.max : null;
+  const links = buildSkinLinks(item.name);
+
+  const imageHtml = item.image
+    ? `
+      <div style="margin-top:10px;">
+        <img
+          src="${escapeHtml(item.image)}"
+          alt="${escapeHtml(item.name)}"
+          style="width:100%; max-width:320px; display:block; border:1px solid rgba(0,0,0,.35); background:rgba(0,0,0,.12);"
+        />
+      </div>
+    `
+    : "";
+
+  const floatHtml =
+    min !== null && max !== null
+      ? `
+        <div style="margin-top:8px;">
+          <b>${escapeHtml(t("float"))}:</b>
+          ${escapeHtml(min.toFixed(2))} – ${escapeHtml(max.toFixed(2))}
+        </div>
+      `
+      : "";
+
+  const addBtnHtml =
+    linkedSkin && !isGoldInputItem(linkedSkin) && linkedSkin.rarity !== "Covert"
+      ? `
+        <button class="hl-btn" data-add-from-card="${escapeHtml(item.name)}">
+          Добавить в контракт
+        </button>
+      `
+      : "";
+
+  box.innerHTML = `
+    <div style="margin-top:10px;">
+      <button class="hl-btn" id="backToCollectionsList">⬅️ Назад к списку</button>
+    </div>
+
+    ${imageHtml}
+
+    <div style="margin-top:12px;">
+      <div style="font-size:18px; font-weight:700;">
+        ${rarityDot(rarity)}${escapeHtml(item.name)}
+      </div>
+
+      <div class="hl-muted" style="margin-top:6px;">
+        ${item.rarity ? escapeHtml(item.rarity) : ""}
+      </div>
+
+      <div style="margin-top:8px;">
+        <b>${escapeHtml(t("collection"))}:</b> ${escapeHtml(collection)}
+      </div>
+
+      ${floatHtml}
+    </div>
+
+    <div style="margin-top:12px; display:flex; gap:6px; flex-wrap:wrap;">
+      <button class="hl-btn" data-open="${escapeHtml(links.csfloat)}">CSFloat</button>
+      <button class="hl-btn" data-open="${escapeHtml(links.stash)}">Stash</button>
+      <button class="hl-btn" data-open="${escapeHtml(links.steam)}">Steam</button>
+      ${addBtnHtml}
+    </div>
+  `;
+}
 function renderCollectionsDetails(groupId) {
   const box = document.getElementById("collectionsDetails");
   if (!box) return;
@@ -2143,13 +2316,19 @@ function renderCollectionsDetails(groupId) {
   `;
 
   items.forEach((item) => {
-    html += `
-      <div style="padding:8px; margin-bottom:6px; border:1px solid rgba(0,0,0,.35); background:rgba(0,0,0,.08);">
-        <div><b>${escapeHtml(item.name)}</b></div>
-        ${item.rarity ? `<div class="hl-muted" style="margin-top:4px;">${escapeHtml(item.rarity)}</div>` : ""}
-      </div>
-    `;
-  });
+  html += `
+    <button
+      type="button"
+      class="collection-detail-card collection-item-open"
+      data-open-collection-item="${escapeHtml(group.id)}"
+      data-open-collection-item-name="${escapeHtml(item.name)}"
+      style="width:100%; text-align:left; cursor:pointer;"
+    >
+      <div><b>${escapeHtml(item.name)}</b></div>
+      ${item.rarity ? `<div class="hl-muted" style="margin-top:4px;">${escapeHtml(item.rarity)}</div>` : ""}
+    </button>
+  `;
+});
 
   html += `</div>`;
   box.innerHTML = html;
