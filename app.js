@@ -1057,18 +1057,88 @@ function detectSkinSubtype(s) {
   }
 
   const rifles = [
-    "ak-47", "m4a4", "m4a1-s", "m4a1", "famas", "galil", "galil ar", "sg 553", "aug"
+    "ak-47",
+    "m4a4",
+    "m4a1-s",
+    "m4a1",
+    "famas",
+    "galil",
+    "galil ar",
+    "sg 553",
+    "aug"
   ];
-  const snipers = ["awp", "ssg 08", "scar-20", "g3sg1"];
-  const smgs = ["mac-10", "mp9", "mp7", "ump-45", "pp-bizon", "p90", "mp5-sd"];
-  const pistols = ["glock-18", "usp-s", "usp", "p2000", "dual berettas", "five-seven", "cz75-auto", "desert eagle", "tec-9", "p250", "r8 revolver"];
-  const shotguns = ["nova", "xm1014", "mag-7", "sawed-off"];
 
-  if (rifles.some((x) => weapon.includes(x))) return "rifles";
-  if (snipers.some((x) => weapon.includes(x))) return "snipers";
-  if (smgs.some((x) => weapon.includes(x))) return "smgs";
-  if (pistols.some((x) => weapon.includes(x))) return "pistols";
-  if (shotguns.some((x) => weapon.includes(x))) return "shotguns";
+  const snipers = [
+    "awp",
+    "ssg 08",
+    "scar-20",
+    "g3sg1"
+  ];
+
+  const smgs = [
+    "mac-10",
+    "mp9",
+    "mp7",
+    "ump-45",
+    "pp-bizon",
+    "p90",
+    "mp5-sd"
+  ];
+
+  const pistols = [
+    "glock-18",
+    "usp-s",
+    "usp",
+    "p2000",
+    "dual berettas",
+    "five-seven",
+    "cz75-auto",
+    "desert eagle",
+    "tec-9",
+    "p250",
+    "r8 revolver"
+  ];
+
+  const shotguns = [
+    "nova",
+    "xm1014",
+    "mag-7",
+    "sawed-off"
+  ];
+
+  const heavy = [
+    "negev",
+    "m249"
+  ];
+
+  if (
+    category.includes("machinegun") ||
+    category.includes("machine gun") ||
+    heavy.some((x) => weapon.includes(x)) ||
+    heavy.some((x) => name.includes(x))
+  ) {
+    return "heavy";
+  }
+
+  if (rifles.some((x) => weapon.includes(x)) || rifles.some((x) => name.includes(x))) {
+    return "rifles";
+  }
+
+  if (snipers.some((x) => weapon.includes(x)) || snipers.some((x) => name.includes(x))) {
+    return "snipers";
+  }
+
+  if (smgs.some((x) => weapon.includes(x)) || smgs.some((x) => name.includes(x))) {
+    return "smgs";
+  }
+
+  if (pistols.some((x) => weapon.includes(x)) || pistols.some((x) => name.includes(x))) {
+    return "pistols";
+  }
+
+  if (shotguns.some((x) => weapon.includes(x)) || shotguns.some((x) => name.includes(x))) {
+    return "shotguns";
+  }
 
   return "other";
 }
@@ -1749,18 +1819,25 @@ function buildCollectionsCatalog() {
   (Array.isArray(collectionsRawDB) ? collectionsRawDB : []).forEach((col, idx) => {
     const items = Array.isArray(col.contains) ? col.contains : [];
 
-    const normalizedItems = items.map((item) => {
-      const linkedSkin = skinsMap.get(String(item?.name || "").trim().toLowerCase());
-      const subtype = linkedSkin ? detectSkinSubtype(linkedSkin) : "other";
+   const normalizedItems = items.map((item) => {
+  const linkedSkin = skinsMap.get(String(item?.name || "").trim().toLowerCase());
 
-      return {
-        id: item?.id || "",
-        name: item?.name || "Unknown item",
-        image: item?.image || "",
-        rarity: item?.rarity?.name || item?.rarity || "",
-        subtype,
-      };
-    });
+  const subtype = linkedSkin
+    ? detectSkinSubtype(linkedSkin)
+    : detectSkinSubtype({
+        name: item?.name || "",
+        weapon: item?.name || "",
+        category: "",
+      });
+
+  return {
+    id: item?.id || "",
+    name: item?.name || "Unknown item",
+    image: item?.image || "",
+    rarity: item?.rarity?.name || item?.rarity || "",
+    subtype,
+  };
+});
 
     catalog.push({
       id: col?.id || `weapon-collection-${idx}`,
@@ -1864,13 +1941,14 @@ function buildCollectionsCatalog() {
 
 function getCollectionsSubfilters() {
   if (collectionsState.main === "weapons") {
-    return [
+       return [
       { id: "all", label: "Все" },
       { id: "rifles", label: "Винтовки" },
       { id: "snipers", label: "Снайперки" },
       { id: "smgs", label: "ПП" },
       { id: "pistols", label: "Пистолеты" },
       { id: "shotguns", label: "Дробовики" },
+      { id: "heavy", label: "Тяжёлое" },
     ];
   }
 
