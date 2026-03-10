@@ -1524,12 +1524,12 @@ function renderContract() {
 <div style="margin-top:6px; padding:6px; border:1px solid rgba(0,0,0,.35); background:rgba(0,0,0,.10);">
   <div style="display:flex; gap:8px; align-items:center;">
   ${
-    findSkinInDBByName(s.name)?.image
+    skinImage
       ? `
         <img
-          src="${escapeHtml(findSkinInDBByName(s.name).image)}"
+          src="${escapeHtml(skinImage)}"
           class="contract-skin-img"
-          data-img="${escapeHtml(findSkinInDBByName(s.name).image)}"
+          data-img="${escapeHtml(skinImage)}"
           alt="${escapeHtml(s.name)}"
         />
       `
