@@ -346,3 +346,9 @@ body{margin:0;height:100vh;overflow:hidden;background:#111}
     inset 0 2px 4px rgba(0,0,0,.45),
     inset 0 -1px 0 rgba(255,255,255,.05);
 }
+.contract-skin-img{
+  width:60px;
+  height:auto;
+  border:1px solid rgba(0,0,0,.4);
+  cursor:zoom-in;
+}
