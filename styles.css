@@ -833,7 +833,8 @@ body::after{
   top:1px;
   bottom:1px;
   border-radius:2px;
-  background:rgba(255,255,255,.08);
+  background:transparent;
+  box-shadow:none;
 }
 
 .float-range-text{
