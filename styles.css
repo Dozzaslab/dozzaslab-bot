@@ -692,64 +692,41 @@ body{margin:0;height:100vh;overflow:hidden;background:#111}
     max-width:none;
   }
 }
-.hl-tab .btn-emoji,
-.hl-btn .btn-emoji,
-.welcome-title .btn-emoji,
-.hl-muted .btn-emoji,
-.hl-text .btn-emoji{
-  display:inline-block;
-  transform-origin:center center;
-  will-change:transform;
-}
-
-.icon-emoji{
+.icon-emoji,
+.btn-emoji{
   display:inline-block;
   margin-right:6px;
   transform-origin:center center;
+  transform-style:preserve-3d;
+  backface-visibility:visible;
   will-change:transform;
+  animation:emojiPlanetSpin 3.6s ease-in-out infinite;
 }
 
-/* прыжок */
-.hl-tab:hover .icon-emoji,
-.hl-btn:hover .icon-emoji{
-  animation:emojiJump .35s cubic-bezier(.3,1.6,.3,1);
+/* если эмодзи стоит в конце/одиноко, правый отступ не ломает текст */
+.icon-emoji:only-child,
+.btn-emoji:only-child{
+  margin-right:0;
 }
 
-/* активная вкладка */
-.hl-tab.active .icon-emoji{
-  animation:emojiSpin 2.5s linear infinite;
-}
-
-/* подпрыгивание */
-@keyframes emojiJump{
-
+@keyframes emojiPlanetSpin{
   0%{
-    transform:translateY(0) scale(1);
+    transform:perspective(700px) rotateY(0deg);
   }
 
-  40%{
-    transform:translateY(-6px) scale(1.18);
+  25%{
+    transform:perspective(700px) rotateY(90deg);
   }
 
-  70%{
-    transform:translateY(1px) scale(.94);
+  50%{
+    transform:perspective(700px) rotateY(180deg);
+  }
+
+  75%{
+    transform:perspective(700px) rotateY(270deg);
   }
 
   100%{
-    transform:translateY(0) scale(1);
+    transform:perspective(700px) rotateY(360deg);
   }
-
-}
-
-/* плавное вращение */
-@keyframes emojiSpin{
-
-  0%{
-    transform:rotate(0deg);
-  }
-
-  100%{
-    transform:rotate(360deg);
-  }
-
 }
