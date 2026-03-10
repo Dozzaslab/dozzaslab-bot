@@ -192,7 +192,7 @@ tab_suggest: "📨 Предложка",
     loading_text: "Loading website resources...",
     cancel: "Cancel",
 
-    tab_tools: "💰 Trading websites",
+    tab_tools: "🌐 Trading websites",
 tab_catalog: "📦 Cases and capsules",
 tab_collections: "🗂️ Collections",
 tab_contracts: "🧪 Contracts",
@@ -496,7 +496,12 @@ function setMultilineText(id, value) {
     .map((line) => escapeHtml(line))
     .join("<br/>");
 }
+/* ===== Emoji animation: wrap all emojis with one template ===== */
+const EMOJI_REGEX =
+  /(\p{Extended_Pictographic}(?:\uFE0F|\u200D\p{Extended_Pictographic})*|[0-9#*]\uFE0F?\u20E3)/gu;
 
+let emojiWrapQueued = false;
+let emojiObserverStarted
 /* ===== Навигация по вкладкам ===== */
 function showPage(page) {
   const root = document.querySelector("#app .hl-body");
