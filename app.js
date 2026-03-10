@@ -50,7 +50,7 @@ const translations = {
     loading_text: "Loading website resources...",
     cancel: "Отмена",
 
-   tab_tools: "💰 Сайты для торговли",
+   tab_tools: "🌐 Сайты для торговли",
 tab_catalog: "📦 Кейсы и капсулы",
 tab_collections: "🗂️ Коллекции",
 tab_contracts: "🧪 Контракты",
