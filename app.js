@@ -1896,8 +1896,6 @@ function getFloatQualityClass(value, min, max) {
 }
 
 document.addEventListener("input", (e) => {
-
-document.addEventListener("input", (e) => {
   const f = e.target.closest(".floatInput");
   if (!f) return;
 
