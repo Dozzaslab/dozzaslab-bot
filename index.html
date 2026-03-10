@@ -10,9 +10,25 @@
 <body>
   <div class="bg"></div>
 
+  
   <!-- LOADING WINDOW -->
-  <div id="loading" class="hl-window">
-    <div class="hl-title">
+<div id="loading" class="hl-window">
+  <div class="hl-title">
+    <span class="hl-icon"></span>
+    <span data-i18n="loading_title">Loading...</span>
+    <button class="hl-x" type="button" id="x1">✕</button>
+  </div>
+  <div class="hl-body">
+    <div class="hl-muted" data-i18n="loading_text">Loading website resources...</div>
+    <div class="hl-progress"><div id="bar" class="hl-bar"></div></div>
+    <div class="hl-actions">
+      <button class="hl-btn" id="cancelLoad" data-i18n="cancel">Cancel</button>
+    </div>
+  </div>
+</div>
+ 
+  <!-- APP WINDOW -->
+<div class="hl-title">
   <span class="hl-icon"></span>
   <span class="title-brand">DozzasLab</span>
 
@@ -50,22 +66,6 @@
 
   <button class="hl-x" type="button" id="x2">✕</button>
 </div>
-    <div class="hl-body">
-      <div class="hl-muted" data-i18n="loading_text">Loading website resources...</div>
-      <div class="hl-progress"><div id="bar" class="hl-bar"></div></div>
-      <div class="hl-actions">
-        <button class="hl-btn" id="cancelLoad" data-i18n="cancel">Cancel</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- APP WINDOW -->
-  <div id="app" class="hl-window hidden">
-    <div class="hl-title">
-      <span class="hl-icon"></span>
-      <span>DozzasLab</span>
-      <button class="hl-x" type="button" id="x2">✕</button>
-    </div>
 
     <div class="hl-tabs">
       <button class="hl-tab active" data-page="tools" data-i18n="tab_tools">🌐 Сайты для торговли</button>
