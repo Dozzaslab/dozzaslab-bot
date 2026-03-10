@@ -19,7 +19,9 @@ body{margin:0;height:100vh;overflow:hidden;background:#111}
   top:12px;
   transform:translateX(-50%);
   width:min(760px,94vw);
+  max-width:760px;
   height:calc(100vh - 24px);
+  max-height:calc(100vh - 24px);
   display:flex;
   flex-direction:column;
   background:#4b5c3a;
@@ -670,4 +672,23 @@ body{margin:0;height:100vh;overflow:hidden;background:#111}
   display:flex;
   align-items:center;
   gap:8px;
+}
+#app{
+  width:min(760px,94vw);
+  max-width:760px;
+}
+
+@media (max-width:620px){
+  .hl-window{
+    top:8px;
+    width:calc(100vw - 12px);
+    height:calc(100vh - 16px);
+    max-width:none;
+    max-height:none;
+  }
+
+  #app{
+    width:calc(100vw - 12px);
+    max-width:none;
+  }
 }
