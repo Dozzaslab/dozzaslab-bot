@@ -699,36 +699,57 @@ body{margin:0;height:100vh;overflow:hidden;background:#111}
 .hl-text .btn-emoji{
   display:inline-block;
   transform-origin:center center;
-  will-change:transform, filter;
+  will-change:transform;
 }
 
 .icon-emoji{
   display:inline-block;
   margin-right:6px;
   transform-origin:center center;
-  will-change:transform, filter;
+  will-change:transform;
 }
 
+/* прыжок */
 .hl-tab:hover .icon-emoji,
 .hl-btn:hover .icon-emoji{
-  animation:emojiJump .45s ease;
+  animation:emojiJump .35s cubic-bezier(.3,1.6,.3,1);
 }
 
+/* активная вкладка */
 .hl-tab.active .icon-emoji{
-  animation:emojiAlive 1s ease-in-out infinite;
+  animation:emojiSpin 2.5s linear infinite;
 }
 
+/* подпрыгивание */
 @keyframes emojiJump{
-  0%   { transform:translateY(0) scale(1); }
-  25%  { transform:translateY(-3px) scale(1.12) rotate(-6deg); }
-  55%  { transform:translateY(0) scale(.96) rotate(4deg); }
-  100% { transform:translateY(0) scale(1) rotate(0); }
+
+  0%{
+    transform:translateY(0) scale(1);
+  }
+
+  40%{
+    transform:translateY(-6px) scale(1.18);
+  }
+
+  70%{
+    transform:translateY(1px) scale(.94);
+  }
+
+  100%{
+    transform:translateY(0) scale(1);
+  }
+
 }
 
-@keyframes emojiAlive{
-  0%   { transform:translateY(0) scale(1); }
-  25%  { transform:translateY(-1px) scale(1.08); }
-  50%  { transform:translateY(0) scale(1); }
-  75%  { transform:translateY(-1px) scale(1.06); }
-  100% { transform:translateY(0) scale(1); }
+/* плавное вращение */
+@keyframes emojiSpin{
+
+  0%{
+    transform:rotate(0deg);
+  }
+
+  100%{
+    transform:rotate(360deg);
+  }
+
 }
