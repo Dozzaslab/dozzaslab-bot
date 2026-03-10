@@ -961,11 +961,10 @@ function escapeHtml(s) {
 function buildSkinLinks(name) {
   const encoded = encodeURIComponent(String(name || "").trim());
 
-  return {
-    csfloat: `https://csfloat.com/search?name=${encoded}`,
-    stash: `https://csgostash.com/search/${encoded}`,
-    steam: `https://steamcommunity.com/market/search?q=${encoded}`,
-  };
+return {
+  csfloat: `https://csfloat.com/search?name=${encoded}`,
+  steam: `https://steamcommunity.com/market/search?q=${encoded}`,
+};
 }
 function getRarityName(s) {
   const r = s?.rarity;
@@ -1527,8 +1526,12 @@ function renderContract() {
   contractItems.forEach((s, i) => {
     html += `
 <div style="margin-top:6px; padding:6px; border:1px solid rgba(0,0,0,.35); background:rgba(0,0,0,.10);">
-  <div>
-    <b>${i + 1}.</b> ${rarityDot(s.rarity)}${escapeHtml(s.name)}
+  <div style="display:flex; gap:8px; align-items:center;">
+  <img 
+  src="${escapeHtml(findSkinInDBByName(s.name)?.image || "")}" 
+  class="contract-skin-img"
+  data-img="${escapeHtml(findSkinInDBByName(s.name)?.image || "")}"
+/>
     <span class="hl-muted">(${escapeHtml(s.collection)})</span>
   </div>
 
@@ -2266,7 +2269,6 @@ function renderCollectionItemCard() {
 
     <div style="margin-top:12px; display:flex; gap:6px; flex-wrap:wrap;">
       <button class="hl-btn" data-open="${escapeHtml(links.csfloat)}">CSFloat</button>
-      <button class="hl-btn" data-open="${escapeHtml(links.stash)}">Stash</button>
       <button class="hl-btn" data-open="${escapeHtml(links.steam)}">Steam</button>
       ${addBtnHtml}
     </div>
@@ -2374,3 +2376,30 @@ loadTradeupSkins()
     const collectionsList = document.getElementById("collectionsList");
     if (collectionsList) collectionsList.innerHTML = msg;
   });
+document.addEventListener("click", (e) => {
+  const img = e.target.closest(".contract-skin-img");
+  if (!img) return;
+
+  const src = img.dataset.img;
+  if (!src) return;
+
+  const modal = document.createElement("div");
+  modal.style = `
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.85);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:9999;
+    cursor:zoom-out;
+  `;
+
+  modal.innerHTML = `
+    <img src="${src}" style="max-width:90%; max-height:90%;">
+  `;
+
+  modal.onclick = () => modal.remove();
+
+  document.body.appendChild(modal);
+});
