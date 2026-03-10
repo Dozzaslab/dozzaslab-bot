@@ -496,12 +496,14 @@ function setMultilineText(id, value) {
     .map((line) => escapeHtml(line))
     .join("<br/>");
 }
-/* ===== Emoji animation: wrap all emojis with one template ===== */
+/* ===== Emoji animation ===== */
 const EMOJI_REGEX =
   /(\p{Extended_Pictographic}(?:\uFE0F|\u200D\p{Extended_Pictographic})*|[0-9#*]\uFE0F?\u20E3)/gu;
 
 let emojiWrapQueued = false;
-let emojiObserverStarted
+let emojiObserverStarted = false;
+
+/* ===== Навигация по вкладкам ===== */
 /* ===== Навигация по вкладкам ===== */
 function showPage(page) {
   const root = document.querySelector("#app .hl-body");
@@ -1910,7 +1912,12 @@ document.addEventListener("input", (e) => {
   const max = Number.isFinite(item.max) ? item.max : 1;
 
   item.float = clamp(val, min, max);
-  renderContract();
+
+  f.classList.remove("float-good", "float-mid", "float-bad");
+  const qualityClass = getFloatQualityClass(item.float, min, max);
+  if (qualityClass) {
+    f.classList.add(qualityClass);
+  }
 });
 
 document.addEventListener("change", (e) => {
