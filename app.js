@@ -1356,10 +1356,6 @@ function renderTradeupResult(result) {
   for (const o of result.outcomes.slice(0, 60)) {
     const p = (Number(o.prob) * 100).toFixed(2);
 
-    const stashBtn = o.links?.stash
-      ? `<button class="hl-btn" style="margin-right:6px;" data-open="${escapeHtml(o.links.stash)}">Stash</button>`
-      : "";
-
     const csfloatBtn = o.links?.csfloat
       ? `<button class="hl-btn" style="margin-right:6px;" data-open="${escapeHtml(o.links.csfloat)}">CSFloat</button>`
       : "";
@@ -1377,7 +1373,7 @@ function renderTradeupResult(result) {
       <span class="hl-muted">(${escapeHtml(o.collection)})</span>
       — float≈${escapeHtml(o.float_out)}
       <div style="margin-top:6px; display:flex; gap:6px; flex-wrap:wrap;">
-        ${stashBtn}${csfloatBtn}${clashBtn}${steamBtn}
+        ${csfloatBtn}${steamBtn}
       </div>
     </div>`;
   }
@@ -1527,13 +1523,26 @@ function renderContract() {
     html += `
 <div style="margin-top:6px; padding:6px; border:1px solid rgba(0,0,0,.35); background:rgba(0,0,0,.10);">
   <div style="display:flex; gap:8px; align-items:center;">
-  <img 
-  src="${escapeHtml(findSkinInDBByName(s.name)?.image || "")}" 
-  class="contract-skin-img"
-  data-img="${escapeHtml(findSkinInDBByName(s.name)?.image || "")}"
-/>
-    <span class="hl-muted">(${escapeHtml(s.collection)})</span>
+  ${
+    findSkinInDBByName(s.name)?.image
+      ? `
+        <img
+          src="${escapeHtml(findSkinInDBByName(s.name).image)}"
+          class="contract-skin-img"
+          data-img="${escapeHtml(findSkinInDBByName(s.name).image)}"
+          alt="${escapeHtml(s.name)}"
+        />
+      `
+      : ""
+  }
+
+  <div>
+    <div>
+      <b>${i + 1}.</b> ${rarityDot(s.rarity)}${escapeHtml(s.name)}
+    </div>
+    <div class="hl-muted">(${escapeHtml(s.collection)})</div>
   </div>
+</div>
 
   <div class="hl-muted" style="margin-top:6px; display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
     <span>${escapeHtml(t("float"))}:</span>
