@@ -1673,14 +1673,6 @@ document.addEventListener("click", (e) => {
     return;
   }
 
-  const openBtn = e.target.closest(".collection-open-btn");
-  if (openBtn) {
-    const groupId = openBtn.dataset.collectionOpen;
-    if (!groupId) return;
-
-    renderCollectionsDetails(groupId);
-    return;
-  }
   const openItemBtn = e.target.closest("[data-open-collection-item]");
   if (openItemBtn) {
     const groupId = openItemBtn.dataset.openCollectionItem;
@@ -2159,14 +2151,20 @@ function renderCollectionsCatalog() {
       <div style="margin-top:10px;">
     `;
 
-    items.forEach((item) => {
-      html += `
-        <div class="collection-detail-card">
-          <div><b>${escapeHtml(item.name)}</b></div>
-          ${item.rarity ? `<div class="hl-muted" style="margin-top:4px;">${escapeHtml(item.rarity)}</div>` : ""}
-        </div>
-      `;
-    });
+   items.forEach((item) => {
+  html += `
+    <button
+      type="button"
+      class="collection-detail-card collection-item-open"
+      data-open-collection-item="${escapeHtml(group.id)}"
+      data-open-collection-item-name="${escapeHtml(item.name)}"
+      style="width:100%; text-align:left; cursor:pointer; display:block; border:1px solid rgba(0,0,0,.35); background:rgba(0,0,0,.08); padding:8px; margin-bottom:6px;"
+    >
+      <div><b>${escapeHtml(item.name)}</b></div>
+      ${item.rarity ? `<div class="hl-muted" style="margin-top:4px;">${escapeHtml(item.rarity)}</div>` : ""}
+    </button>
+  `;
+});
 
     html += `</div>`;
   });
@@ -2286,9 +2284,13 @@ function renderCollectionsDetails(groupId) {
 
   let items = [...group.items];
 
-  if (group.type === "weapons" && collectionsState.sub !== "all") {
-    items = items.filter((item) => item.subtype === collectionsState.sub);
-  }
+if (
+  group.type === "weapons" &&
+  collectionsState.sub &&
+  collectionsState.sub !== "all"
+) {
+  items = items.filter((item) => item.subtype === collectionsState.sub);
+}
 
   const q = collectionsState.search.trim().toLowerCase();
   if (q) {
