@@ -25,18 +25,14 @@ function wrapLeadingEmoji(root = document) {
 
     const frag = document.createDocumentFragment();
 
-    if (leadingSpace) {
-      frag.appendChild(document.createTextNode(leadingSpace));
-    }
+    if (leadingSpace) frag.appendChild(document.createTextNode(leadingSpace));
 
     const span = document.createElement("span");
     span.className = "btn-emoji";
     span.textContent = emoji;
     frag.appendChild(span);
 
-    if (rest) {
-      frag.appendChild(document.createTextNode(rest));
-    }
+    if (rest) frag.appendChild(document.createTextNode(rest));
 
     node.replaceChild(frag, first);
     node.dataset.emojiWrapped = "1";
