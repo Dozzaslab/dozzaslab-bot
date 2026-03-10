@@ -1038,10 +1038,6 @@ function buildFloatRangeBar(min, max) {
   const safeMin = clamp01(Number(min));
   const safeMax = clamp01(Number(max));
 
-  const minPct = safeMin * 100;
-  const maxPct = safeMax * 100;
-  const activeWidth = Math.max(2, maxPct - minPct);
-
   return `
     <div class="float-range-wrap">
       <div class="float-range-bar">
@@ -1050,13 +1046,38 @@ function buildFloatRangeBar(min, max) {
         <span class="float-range-segment ft"></span>
         <span class="float-range-segment ww"></span>
         <span class="float-range-segment bs"></span>
-
-        <span class="float-range-active" style="left:${minPct}%; width:${activeWidth}%;"></span>
-        <span class="float-range-edge" style="left:${minPct}%;"></span>
-        <span class="float-range-edge" style="left:${maxPct}%;"></span>
       </div>
 
       <div class="float-range-text">${formatFloatShort(safeMin)}-${formatFloatShort(safeMax)}</div>
+    </div>
+  `;
+}
+function buildOutcomeFloatBar(floatValue) {
+  const safeFloat = clamp01(Number(floatValue));
+  const markerPct = safeFloat * 100;
+
+  return `
+    <div class="float-range-wrap" style="margin-top:4px;">
+      <div class="float-range-bar">
+        <span class="float-range-segment fn"></span>
+        <span class="float-range-segment mw"></span>
+        <span class="float-range-segment ft"></span>
+        <span class="float-range-segment ww"></span>
+        <span class="float-range-segment bs"></span>
+
+        <span style="
+          position:absolute;
+          left:${markerPct}%;
+          top:0;
+          bottom:0;
+          width:2px;
+          background:#e7f0d8;
+          box-shadow:0 0 0 1px rgba(0,0,0,.35);
+          transform:translateX(-50%);
+        "></span>
+      </div>
+
+      <div class="float-range-text">float≈${formatFloatShort(safeFloat)}</div>
     </div>
   `;
 }
@@ -1464,9 +1485,10 @@ html += `
       <div>
         <b>${p}%</b> — ${rarityDot(result.output_rarity)}${escapeHtml(o.name)}
       </div>
-      <div class="hl-muted">
-        (${escapeHtml(o.collection)}) — float≈${escapeHtml(o.float_out)}
+         <div class="hl-muted">
+        (${escapeHtml(o.collection)})
       </div>
+      ${buildOutcomeFloatBar(o.float_out)}
     </div>
   </div>
 
