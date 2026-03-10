@@ -955,8 +955,8 @@ function rarityDot(rarity) {
   const c = RARITY_COLOR[rarity] || "#888";
   return `<span style="
     display:inline-block;
-    width:10px;
-    height:10px;
+    width:12px;
+    height:12px;
     border-radius:999px;
     margin-right:6px;
     vertical-align:middle;
