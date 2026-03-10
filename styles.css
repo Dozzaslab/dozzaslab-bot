@@ -722,3 +722,33 @@ body{margin:0;height:100vh;overflow:hidden;background:#111}
   0%,100% { transform:scale(1); }
   50%     { transform:scale(1.08); }
 }
+.hl-tab .btn-emoji,
+.hl-btn .btn-emoji,
+.welcome-title .btn-emoji,
+.hl-muted .btn-emoji,
+.hl-text .btn-emoji{
+  display:inline-block;
+  transform-origin:center center;
+  will-change:transform, filter;
+}
+
+.hl-tab:hover .btn-emoji,
+.hl-btn:hover .btn-emoji{
+  animation:emojiBounce .55s ease;
+}
+
+.hl-tab.active .btn-emoji{
+  animation:emojiPulse 1.4s ease-in-out infinite;
+}
+
+@keyframes emojiBounce{
+  0%   { transform:translateY(0) scale(1); }
+  30%  { transform:translateY(-2px) scale(1.08); }
+  60%  { transform:translateY(0) scale(.98); }
+  100% { transform:translateY(0) scale(1); }
+}
+
+@keyframes emojiPulse{
+  0%,100% { transform:scale(1); }
+  50%     { transform:scale(1.08); }
+}
