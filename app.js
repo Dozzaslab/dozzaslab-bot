@@ -3,41 +3,7 @@ import { ensureTradeupReady, simulateTradeup } from "./tradeup.js";
 const loading = document.getElementById("loading");
 const app = document.getElementById("app");
 const bar = document.getElementById("bar");
-function wrapLeadingEmoji(root = document) {
-  const selector = ".hl-tab, .hl-btn, .welcome-title, .hl-muted, .hl-text";
-  const nodes = root.querySelectorAll(selector);
 
-  const emojiRegex = /^(\s*)([\p{Emoji_Presentation}\p{Extended_Pictographic}]+)/u;
-
-  nodes.forEach((node) => {
-    if (node.dataset.emojiWrapped === "1") return;
-    if (!node.childNodes.length) return;
-
-    const first = node.childNodes[0];
-    if (!first || first.nodeType !== Node.TEXT_NODE) return;
-
-    const text = first.textContent || "";
-    const match = text.match(emojiRegex);
-    if (!match) return;
-
-    const [, leadingSpace, emoji] = match;
-    const rest = text.slice(match[0].length);
-
-    const frag = document.createDocumentFragment();
-
-    if (leadingSpace) frag.appendChild(document.createTextNode(leadingSpace));
-
-    const span = document.createElement("span");
-    span.className = "btn-emoji";
-    span.textContent = emoji;
-    frag.appendChild(span);
-
-    if (rest) frag.appendChild(document.createTextNode(rest));
-
-    node.replaceChild(frag, first);
-    node.dataset.emojiWrapped = "1";
-  });
-}
 /* ===== LINKS ===== */
 const CHANNEL_URL = "https://t.me/dozza_8";
 const CHAT_URL = "https://t.me/+YmGqLAkSQU0yYmUy";
@@ -404,10 +370,19 @@ function getRarityOptionClass(rarity) {
 function applyTranslations() {
   document.documentElement.lang = currentLang;
 
-  document.querySelectorAll("[data-i18n]").forEach((el) => {
-    const key = el.dataset.i18n;
-    el.textContent = t(key);
-  });
+ document.querySelectorAll("[data-i18n]").forEach((el) => {
+  const key = el.dataset.i18n;
+  const text = t(key);
+
+  const icon = el.querySelector(".icon-emoji");
+  if (icon) {
+    const iconHtml = icon.outerHTML;
+    const cleanText = String(text).replace(/^[^\p{L}\p{N}]+/u, "").trim();
+    el.innerHTML = `${iconHtml}${cleanText}`;
+  } else {
+    el.textContent = text;
+  }
+});
 
   document.querySelectorAll("[data-i18n-placeholder]").forEach((el) => {
     const key = el.dataset.i18nPlaceholder;
@@ -490,8 +465,6 @@ function applyTranslations() {
   renderSkinsTable();
   renderContract();
   rerunWelcomeTyping();
-
-  wrapLeadingEmoji();
 }
 
 function setLang(lang) {
@@ -2500,6 +2473,4 @@ document.addEventListener("click", (e) => {
 
   document.body.appendChild(modal);
 });
-document.addEventListener("DOMContentLoaded", () => {
-  wrapLeadingEmoji();
-});
+
