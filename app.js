@@ -1181,10 +1181,21 @@ function isGoldInputItem(s) {
 function getAllWeaponCollections() {
   const set = new Set();
 
-  collectionsCatalog.forEach((group) => {
-    if (group.type === "weapons" && group.name) {
-      set.add(group.name);
-    }
+  skinsDB.forEach((skin) => {
+    if (!skin) return;
+
+    const collection = String(skin.collection || "").trim();
+    if (!collection) return;
+
+    /* в контракт нельзя:
+       - золотые предметы
+       - брелки / агенты / ножи / перчатки
+       - covert как входной предмет
+    */
+    if (isGoldInputItem(skin)) return;
+    if (normalizeRarityUI(skin.rarity) === "Covert") return;
+
+    set.add(collection);
   });
 
   return [...set].sort((a, b) => a.localeCompare(b));
