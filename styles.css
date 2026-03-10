@@ -730,3 +730,11 @@ body{margin:0;height:100vh;overflow:hidden;background:#111}
     transform:perspective(700px) rotateY(360deg);
   }
 }
+
+.page[data-page="about"] .hl-text{
+  max-width:560px;
+  line-height:1.5;
+}
+.lang-switch{
+  margin-left:12px;
+}
