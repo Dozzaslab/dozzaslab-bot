@@ -3,7 +3,45 @@ import { ensureTradeupReady, simulateTradeup } from "./tradeup.js";
 const loading = document.getElementById("loading");
 const app = document.getElementById("app");
 const bar = document.getElementById("bar");
+function wrapLeadingEmoji(root = document) {
+  const selector = ".hl-tab, .hl-btn, .welcome-title, .hl-muted, .hl-text";
+  const nodes = root.querySelectorAll(selector);
 
+  const emojiRegex = /^(\s*)([\p{Emoji_Presentation}\p{Extended_Pictographic}]+)/u;
+
+  nodes.forEach((node) => {
+    if (node.dataset.emojiWrapped === "1") return;
+    if (!node.childNodes.length) return;
+
+    const first = node.childNodes[0];
+    if (!first || first.nodeType !== Node.TEXT_NODE) return;
+
+    const text = first.textContent || "";
+    const match = text.match(emojiRegex);
+    if (!match) return;
+
+    const [, leadingSpace, emoji] = match;
+    const rest = text.slice(match[0].length);
+
+    const frag = document.createDocumentFragment();
+
+    if (leadingSpace) {
+      frag.appendChild(document.createTextNode(leadingSpace));
+    }
+
+    const span = document.createElement("span");
+    span.className = "btn-emoji";
+    span.textContent = emoji;
+    frag.appendChild(span);
+
+    if (rest) {
+      frag.appendChild(document.createTextNode(rest));
+    }
+
+    node.replaceChild(frag, first);
+    node.dataset.emojiWrapped = "1";
+  });
+}
 /* ===== LINKS ===== */
 const CHANNEL_URL = "https://t.me/dozza_8";
 const CHAT_URL = "https://t.me/+YmGqLAkSQU0yYmUy";
@@ -2463,4 +2501,7 @@ document.addEventListener("click", (e) => {
   modal.onclick = () => modal.remove();
 
   document.body.appendChild(modal);
+});
+document.addEventListener("DOMContentLoaded", () => {
+  wrapLeadingEmoji();
 });
