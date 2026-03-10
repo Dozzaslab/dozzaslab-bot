@@ -1624,7 +1624,7 @@ contractItems.forEach((s, i) => {
       min="${Number(s.min)}"
       max="${Number(s.max)}"
       value="${Number(s.float).toFixed(6)}"
-      class="floatInputSmall floatInput"
+      class="floatInputSmall floatInput ${getFloatQualityClass(Number(s.float), Number(s.min), Number(s.max))}"
       data-i="${i}"
     />
     <span style="opacity:.6;font-size:11px;">
@@ -1882,6 +1882,21 @@ function clamp(v, a, b) {
   return Math.min(b, Math.max(a, v));
 }
 
+function getFloatQualityClass(value, min, max) {
+  const span = max - min;
+  if (!Number.isFinite(value) || !Number.isFinite(min) || !Number.isFinite(max) || span <= 0) {
+    return "";
+  }
+
+  const ratio = (value - min) / span;
+
+  if (ratio <= 0.2) return "float-good";
+  if (ratio <= 0.55) return "float-mid";
+  return "float-bad";
+}
+
+document.addEventListener("input", (e) => {
+
 document.addEventListener("input", (e) => {
   const f = e.target.closest(".floatInput");
   if (!f) return;
@@ -1897,6 +1912,7 @@ document.addEventListener("input", (e) => {
   const max = Number.isFinite(item.max) ? item.max : 1;
 
   item.float = clamp(val, min, max);
+  renderContract();
 });
 
 document.addEventListener("change", (e) => {
@@ -1911,7 +1927,7 @@ document.addEventListener("change", (e) => {
   const max = Number.isFinite(item.max) ? item.max : 1;
 
   item.float = clamp(Number(item.float), min, max);
-  f.value = Number(item.float).toFixed(6);
+  renderContract();
 });
 
 document.getElementById("tradeupCalc")?.addEventListener("click", async () => {
