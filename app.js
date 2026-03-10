@@ -84,14 +84,14 @@ const translations = {
     loading_text: "Loading website resources...",
     cancel: "Отмена",
 
-    tab_tools: "🌐 Сайты для торговли",
-    tab_catalog: "🎁 Кейсы и капсулы",
-    tab_collections: "📦 Коллекции",
-    tab_contracts: "🧪 Контракты",
-    tab_invest: "💼 Другие проекты",
-    tab_about: "🧑‍💻 О себе",
-    tab_faq: "🧠 FAQ",
-    tab_suggest: "📬 Предложка",
+   tab_tools: "💰 Сайты для торговли",
+tab_catalog: "📦 Кейсы и капсулы",
+tab_collections: "🗂️ Коллекции",
+tab_contracts: "🧪 Контракты",
+tab_invest: "📁 Другие проекты",
+tab_about: "😎 О себе",
+tab_faq: "🧠 FAQ",
+tab_suggest: "📨 Предложка",
 
     contracts_title: "🧪 Контракты (Trade-Up)",
     search_skin: "🔎 Search skin...",
@@ -226,14 +226,14 @@ const translations = {
     loading_text: "Loading website resources...",
     cancel: "Cancel",
 
-    tab_tools: "🌐 Trading websites",
-    tab_catalog: "🎁 Cases and capsules",
-    tab_collections: "📦 Collections",
-    tab_contracts: "🧪 Contracts",
-    tab_invest: "💼 Other projects",
-    tab_about: "🧑‍💻 About me",
-    tab_faq: "🧠 FAQ",
-    tab_suggest: "📬 Suggestions",
+    tab_tools: "💰 Trading websites",
+tab_catalog: "📦 Cases and capsules",
+tab_collections: "🗂️ Collections",
+tab_contracts: "🧪 Contracts",
+tab_invest: "📁 Other projects",
+tab_about: "😎 About me",
+tab_faq: "🧠 FAQ",
+tab_suggest: "📨 Suggestions",
 
     contracts_title: "🧪 Contracts (Trade-Up)",
     search_skin: "🔎 Search skin...",
@@ -490,6 +490,8 @@ function applyTranslations() {
   renderSkinsTable();
   renderContract();
   rerunWelcomeTyping();
+
+  wrapLeadingEmoji();
 }
 
 function setLang(lang) {
