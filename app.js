@@ -1981,42 +1981,49 @@ if (typeof currentStatTrak === "boolean" && currentStatTrak !== Boolean(s.isStat
     renderContract();
     return;
   }
-  const add = e.target.closest(".addSkin");
-  if (add) {
-    const id = Number(add.dataset.id);
-    const s = skinsDB.find((x) => x.id === id);
-    if (!s) return;
+const add = e.target.closest(".addSkin");
+if (add) {
+  const id = Number(add.dataset.id);
+  const s = skinsDB.find((x) => x.id === id);
+  if (!s) return;
 
-    const currentRarity = contractItems[0]?.rarity;
-    if (currentRarity && s.rarity !== currentRarity) {
-      alert(t("same_rarity_only"));
-      return;
-    }
+  const currentRarity = contractItems[0]?.rarity;
+  const currentStatTrak = contractItems[0]?.isStatTrak;
 
-    const contractRarity = currentRarity || s.rarity;
-    const need = needCountByRarity(contractRarity);
-
-    if (contractItems.length >= need) {
-      alert(t("limit_items", { count: need }));
-      return;
-    }
-
-    let float = s.min <= 0.01 ? 0.01 : s.min;
-    float = Math.min(float, s.max);
-
-   contractItems.push({
-  name: s.name,
-  collection: s.collection,
-  rarity: s.rarity,
-  float,
-  min: s.min,
-  max: s.max,
-  isStatTrak: Boolean(s.isStatTrak),
-});
-
-    renderContract();
+  if (currentRarity && s.rarity !== currentRarity) {
+    alert(t("same_rarity_only"));
     return;
   }
+
+  if (typeof currentStatTrak === "boolean" && currentStatTrak !== Boolean(s.isStatTrak)) {
+    alert("Нельзя смешивать StatTrak™ и обычные предметы.");
+    return;
+  }
+
+  const contractRarity = currentRarity || s.rarity;
+  const need = needCountByRarity(contractRarity);
+
+  if (contractItems.length >= need) {
+    alert(t("limit_items", { count: need }));
+    return;
+  }
+
+  let float = s.min <= 0.01 ? 0.01 : s.min;
+  float = Math.min(float, s.max);
+
+  contractItems.push({
+    name: s.name,
+    collection: s.collection,
+    rarity: s.rarity,
+    float,
+    min: s.min,
+    max: s.max,
+    isStatTrak: Boolean(s.isStatTrak),
+  });
+
+  renderContract();
+  return;
+}
 
   const dup = e.target.closest(".dup");
   if (dup) {
@@ -2164,15 +2171,15 @@ document.getElementById("tradeupFill")?.addEventListener("click", () => {
   const need = needCountByRarity(first.rarity);
 
   while (contractItems.length < need) {
-   contractItems.push({
-  name: s.name,
-  collection: s.collection,
-  rarity: s.rarity,
-  float,
-  min: s.min,
-  max: s.max,
-  isStatTrak: Boolean(s.isStatTrak),
-});
+    contractItems.push({
+      name: first.name,
+      collection: first.collection,
+      rarity: first.rarity,
+      float: Number(first.float),
+      min: Number(first.min),
+      max: Number(first.max),
+      isStatTrak: Boolean(first.isStatTrak),
+    });
   }
 
   renderContract();
@@ -2556,9 +2563,11 @@ function renderCollectionItemCard() {
     ${imageHtml}
 
     <div style="margin-top:12px;">
-      <div style="font-size:18px; font-weight:700;">
-        ${rarityDot(rarity)}${escapeHtml(item.name)}
-      </div>
+     <div style="font-size:18px; font-weight:700;">
+  ${rarityDot(rarity)}
+  ${linkedSkin?.isStatTrak ? '<span style="color:#ffb347;">StatTrak™ </span>' : ''}
+  ${escapeHtml(item.name)}
+</div>
 
       <div class="hl-muted" style="margin-top:6px;">
         ${item.rarity ? escapeHtml(item.rarity) : ""}
