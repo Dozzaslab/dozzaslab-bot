@@ -58,7 +58,9 @@ export function simulateTradeup(items) {
 
   // Validate and normalize
   const rarities = new Set();
-  const normalized = items.map((it, i) => {
+const statTrakModes = new Set();
+
+const normalized = items.map((it, i) => {
     const collection = (it?.collection || "").trim();
     const rarity = normalizeRarity(it?.rarity);
     const fl = Number(it?.float);
@@ -68,19 +70,28 @@ export function simulateTradeup(items) {
     if (Number.isNaN(fl) || fl < 0 || fl > 1) throw new Error(`Предмет ${i + 1}: float должен быть 0..1`);
 
     rarities.add(rarity);
-
+const isStatTrak = Boolean(it?.isStatTrak);
+statTrakModes.add(isStatTrak);
     // Попробуем сопоставить collection с тем, что есть в базе (мягко)
     const matchedCollection = matchCollectionKey(collection, _index);
 
-    return { collection: matchedCollection, rarity, float: fl, _rawCollection: collection };
+    return {
+  collection: matchedCollection,
+  rarity,
+  float: fl,
+  isStatTrak: Boolean(it?.isStatTrak),
+  _rawCollection: collection
+};
   });
 
   if (rarities.size !== 1) {
     return { error: `Все предметы должны быть одной редкости.` };
   }
-
+if (statTrakModes.size !== 1) {
+  return { error: "Нельзя смешивать StatTrak™ и обычные предметы." };
+}
   const inRarity = normalized[0].rarity;
-
+const inStatTrak = Boolean(normalized[0].isStatTrak);
   // Правило количества:
   if (inRarity === "Covert" && N !== 5) {
     return { error: "Для Covert контракта нужно ровно 5 предметов (Covert -> gold)." };
@@ -104,11 +115,15 @@ export function simulateTradeup(items) {
   let coveredProb = 0;
 
   for (const [collectionKey, n] of Object.entries(counts)) {
-    const pool = _index?.[collectionKey]?.[outRarity];
-    if (!pool || !pool.length) {
-      missingCollections.push(collectionKey);
-      continue;
-    }
+   const poolRaw = _index?.[collectionKey]?.[outRarity];
+const pool = Array.isArray(poolRaw)
+  ? poolRaw.filter((x) => Boolean(x.isStatTrak) === inStatTrak)
+  : null;
+
+if (!pool || !pool.length) {
+  missingCollections.push(collectionKey);
+  continue;
+}
 
     const weightCol = n / N;
     const k = pool.length;
@@ -117,12 +132,13 @@ export function simulateTradeup(items) {
     for (const o of pool) {
       const fOut = o.float_min + avgFloat * (o.float_max - o.float_min);
       outcomes.push({
-        collection: collectionKey,
-        name: o.name,
-        prob: pEach,
-        float_out: fOut,
-        stash_url: o.stash_url || null
-      });
+  collection: collectionKey,
+  name: o.name,
+  prob: pEach,
+  float_out: fOut,
+  stash_url: o.stash_url || null,
+  isStatTrak: Boolean(o.isStatTrak),
+});
       coveredProb += pEach;
     }
   }
@@ -135,14 +151,14 @@ export function simulateTradeup(items) {
     avg_float: round6(avgFloat),
     total_prob_covered: round6(coveredProb),
     missing_collections: missingCollections,
-    outcomes: outcomes.map(o => ({
-      collection: o.collection,
-      name: o.name,
-      prob: round6(o.prob),
-      float_out: round6(o.float_out),
-      // универсальные ссылки "где чекнуть цену"
-      links: buildPriceLinks(o.name, o.stash_url)
-    }))
+   outcomes: outcomes.map(o => ({
+  collection: o.collection,
+  name: o.name,
+  prob: round6(o.prob),
+  float_out: round6(o.float_out),
+  isStatTrak: Boolean(o.isStatTrak),
+  links: buildPriceLinks(o.name, o.stash_url)
+}))
   };
 }
 
@@ -182,11 +198,12 @@ function buildIndex(rawSkins) {
     if (!index[collection][rarity]) index[collection][rarity] = [];
 
     index[collection][rarity].push({
-      name,
-      float_min: range.min,
-      float_max: range.max,
-      stash_url: getStashUrl(s)
-    });
+  name,
+  float_min: range.min,
+  float_max: range.max,
+  stash_url: getStashUrl(s),
+  isStatTrak: isStatTrakSkin(s),
+});
 
     collectionsSet.add(collection);
   }
@@ -230,7 +247,21 @@ function getRarity(s) {
   if (typeof r === "object" && r.name) return String(r.name);
   return "";
 }
+function isStatTrakSkin(s) {
+  if (!s) return false;
 
+  if (s.stattrak === true) return true;
+  if (s.statTrak === true) return true;
+  if (s.has_stattrak === true) return true;
+  if (s.hasStatTrak === true) return true;
+  if (s.is_stattrak === true) return true;
+  if (s.isStatTrak === true) return true;
+
+  const name = String(s?.name || s?.market_hash_name || "").toLowerCase();
+  if (name.includes("stattrak")) return true;
+
+  return false;
+}
 function getFloatRange(s) {
   // В разных версиях могут быть разные поля
   const min =
