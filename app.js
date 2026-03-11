@@ -910,20 +910,59 @@ function rerunWelcomeTyping() {
 }
 
 /* ===== загрузка ===== */
-/* ===== загрузка ===== */
-setTimeout(() => {
-  loading?.classList.add("hidden");
-  app?.classList.remove("hidden");
-  app?.classList.remove("menu-mode");
+let p = 0;
 
-  applyTranslations();
-  showPage("welcome");
-  setTimeout(typeWelcomeText, 200);
+const timer = setInterval(() => {
 
-  if (window.Telegram?.WebApp) {
-    Telegram.WebApp.expand();
+  p += Math.floor(Math.random()*10)+5;
+  if(p>100)p=100;
+
+  const line1 = document.getElementById("loadingLine1");
+  const line2 = document.getElementById("loadingLine2");
+  const line3 = document.getElementById("loadingLine3");
+  const line4 = document.getElementById("loadingLine4");
+
+  if(p>=15 && line1 && !line1.textContent){
+    line1.textContent = "[OK] Initializing interface...";
   }
-}, 800);
+
+  if(p>=35 && line2 && !line2.textContent){
+    line2.textContent = "Loading skins database...";
+  }
+
+  if(p>=60 && line3 && !line3.textContent){
+    line3.textContent = "Loading collections...";
+  }
+
+  if(p>=85 && line4 && !line4.textContent){
+    line4.textContent = "Trade-up module ready";
+  }
+
+  if(bar) bar.style.width = p + "%";
+
+  if(p>=100){
+
+    clearInterval(timer);
+
+    setTimeout(()=>{
+
+      loading?.classList.add("hidden");
+      app?.classList.remove("hidden");
+      app?.classList.remove("menu-mode");
+
+      applyTranslations();
+      showPage("welcome");
+      setTimeout(typeWelcomeText,200);
+
+      if(window.Telegram?.WebApp){
+        Telegram.WebApp.expand();
+      }
+
+    },400);
+
+  }
+
+},120);
 /* ===== закрытие окон ===== */
 const x1 = document.getElementById("x1");
 const x2 = document.getElementById("x2");
