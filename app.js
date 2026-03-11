@@ -477,10 +477,11 @@ function applyTranslations() {
   setText("sboxTrackerOpenBtn", t("sbox_tracker_open"));
 
   renderRarityFilter();
-  renderCollections();
-  renderSkinsTable();
-  renderContract();
-  rerunWelcomeTyping();
+renderStatTrakFilter();
+renderCollections();
+renderSkinsTable();
+renderContract();
+rerunWelcomeTyping();
 }
 
 function setLang(lang) {
@@ -1060,7 +1061,21 @@ function getCollectionName(s) {
   if (typeof c === "object" && c.name) return String(c.name).trim();
   return "";
 }
+function isStatTrakSkin(s) {
+  if (!s) return false;
 
+  if (s.stattrak === true) return true;
+  if (s.statTrak === true) return true;
+  if (s.has_stattrak === true) return true;
+  if (s.hasStatTrak === true) return true;
+  if (s.is_stattrak === true) return true;
+  if (s.isStatTrak === true) return true;
+
+  const name = String(s.name || s.market_hash_name || "").toLowerCase();
+  if (name.includes("stattrak")) return true;
+
+  return false;
+}
 function getMinFloat(s) {
   const v = s?.min_float ?? s?.minFloat ?? s?.float_min ?? s?.floatMin;
   const n = Number(v);
@@ -1462,7 +1477,20 @@ function renderRarityFilter() {
 
   select.value = current;
 }
+function renderStatTrakFilter() {
+  const select = document.getElementById("stattrakFilter");
+  if (!select) return;
 
+  const current = selectedStatTrakMode || "all";
+
+  select.innerHTML = `
+    <option value="all">Все версии</option>
+    <option value="normal">Обычные</option>
+    <option value="stattrak">StatTrak™</option>
+  `;
+
+  select.value = current;
+}
 function renderTradeupResult(result) {
   const out = document.getElementById("tradeupResult");
   if (!out) return;
@@ -1532,7 +1560,10 @@ html += `
 
     <div>
       <div>
-        <b>${p}%</b> — ${rarityDot(result.output_rarity)}${escapeHtml(o.name)}
+       <b>${p}%</b> —
+${rarityDot(result.output_rarity)}
+${o.isStatTrak ? '<span style="color:#ffb347;">StatTrak™ </span>' : ''}
+${escapeHtml(o.name)}
       </div>
          <div class="hl-muted">
         (${escapeHtml(o.collection)})
@@ -1560,6 +1591,7 @@ let collectionsCatalog = [];
 
 let selectedContractCollection = "";
 let contractCollectionSearch = "";
+let selectedStatTrakMode = "all"; // all | normal | stattrak
 
 let collectionsState = {
   main: "weapons",
@@ -1591,15 +1623,16 @@ async function loadTradeupSkins() {
       if (s?.souvenir === true) return null;
 
       return {
-        ...s,
-        id: idx,
-        name,
-        nameLower: name.toLowerCase(),
-        collection,
-        rarity,
-        min,
-        max,
-      };
+  ...s,
+  id: idx,
+  name,
+  nameLower: name.toLowerCase(),
+  collection,
+  rarity,
+  min,
+  max,
+  isStatTrak: isStatTrakSkin(s),
+};
     })
     .filter(Boolean);
 
@@ -1625,18 +1658,26 @@ function renderSkinsTable() {
   const searchEl = document.getElementById("skinSearch");
   const rarityEl = document.getElementById("rarityFilter");
 
-  const search = (searchEl?.value || "").trim().toLowerCase();
-  const rarity = (rarityEl?.value || "").trim();
-  const collection = selectedContractCollection.trim();
+  const stattrakEl = document.getElementById("stattrakFilter");
 
-  let list = skinsDB.filter((s) => {
-    if (isGoldInputItem(s)) return false;
-    if (s.rarity === "Covert") return false;
-    if (search && !s.nameLower.includes(search)) return false;
-    if (rarity && s.rarity !== rarity) return false;
-    if (collection && s.collection !== collection) return false;
-    return true;
-  });
+const search = (searchEl?.value || "").trim().toLowerCase();
+const rarity = (rarityEl?.value || "").trim();
+const collection = selectedContractCollection.trim();
+const stattrakMode = (stattrakEl?.value || selectedStatTrakMode || "all").trim();
+
+let list = skinsDB.filter((s) => {
+  if (isGoldInputItem(s)) return false;
+  if (s.rarity === "Covert") return false;
+
+  if (stattrakMode === "normal" && s.isStatTrak) return false;
+  if (stattrakMode === "stattrak" && !s.isStatTrak) return false;
+
+  if (search && !s.nameLower.includes(search)) return false;
+  if (rarity && s.rarity !== rarity) return false;
+  if (collection && s.collection !== collection) return false;
+
+  return true;
+});
 
   list = list.slice(0, 40);
 
@@ -1673,7 +1714,11 @@ html += `
           : ""
       }
     </td>
-    <td style="padding:6px 4px;">${rarityDot(s.rarity)}${escapeHtml(s.name)}</td>
+    <td style="padding:6px 4px;">
+  ${rarityDot(s.rarity)}
+  ${s.isStatTrak ? '<span style="color:#ffb347;">StatTrak™ </span>' : ''}
+  ${escapeHtml(s.name)}
+</td>
     <td style="padding:6px 4px;opacity:.9;">${escapeHtml(s.collection)}</td>
     <td style="padding:6px 4px;opacity:.9;">${buildFloatRangeBar(s.min, s.max)}</td>
     <td style="padding:6px 4px;text-align:right;">
@@ -1722,7 +1767,10 @@ contractItems.forEach((s, i) => {
 
     <div>
       <div>
-        <b>${i + 1}.</b> ${rarityDot(s.rarity)}${escapeHtml(s.name)}
+        <b>${i + 1}.</b>
+${rarityDot(s.rarity)}
+${s.isStatTrak ? '<span style="color:#ffb347;">StatTrak™ </span>' : ''}
+${escapeHtml(s.name)}
       </div>
       <div class="hl-muted">(${escapeHtml(s.collection)})</div>
     </div>
@@ -1767,8 +1815,12 @@ document.addEventListener("input", (e) => {
 
   if (
     e.target.id === "skinSearch" ||
-    e.target.id === "rarityFilter"
+    e.target.id === "rarityFilter" ||
+    e.target.id === "stattrakFilter"
   ) {
+    if (e.target.id === "stattrakFilter") {
+      selectedStatTrakMode = e.target.value || "all";
+    }
     renderSkinsTable();
   }
 
@@ -1892,11 +1944,18 @@ document.addEventListener("click", (e) => {
     const s = findSkinInDBByName(itemName);
     if (!s) return;
 
-    const currentRarity = contractItems[0]?.rarity;
-    if (currentRarity && s.rarity !== currentRarity) {
-      alert(t("same_rarity_only"));
-      return;
-    }
+  const currentRarity = contractItems[0]?.rarity;
+const currentStatTrak = contractItems[0]?.isStatTrak;
+
+if (currentRarity && s.rarity !== currentRarity) {
+  alert(t("same_rarity_only"));
+  return;
+}
+
+if (typeof currentStatTrak === "boolean" && currentStatTrak !== Boolean(s.isStatTrak)) {
+  alert("Нельзя смешивать StatTrak™ и обычные предметы.");
+  return;
+}
 
     const contractRarity = currentRarity || s.rarity;
     const need = needCountByRarity(contractRarity);
@@ -1909,14 +1968,15 @@ document.addEventListener("click", (e) => {
     let float = s.min <= 0.01 ? 0.01 : s.min;
     float = Math.min(float, s.max);
 
-    contractItems.push({
-      name: s.name,
-      collection: s.collection,
-      rarity: s.rarity,
-      float,
-      min: s.min,
-      max: s.max,
-    });
+  contractItems.push({
+  name: s.name,
+  collection: s.collection,
+  rarity: s.rarity,
+  float,
+  min: s.min,
+  max: s.max,
+  isStatTrak: Boolean(s.isStatTrak),
+});
 
     renderContract();
     return;
@@ -1944,14 +2004,15 @@ document.addEventListener("click", (e) => {
     let float = s.min <= 0.01 ? 0.01 : s.min;
     float = Math.min(float, s.max);
 
-    contractItems.push({
-      name: s.name,
-      collection: s.collection,
-      rarity: s.rarity,
-      float,
-      min: s.min,
-      max: s.max,
-    });
+   contractItems.push({
+  name: s.name,
+  collection: s.collection,
+  rarity: s.rarity,
+  float,
+  min: s.min,
+  max: s.max,
+  isStatTrak: Boolean(s.isStatTrak),
+});
 
     renderContract();
     return;
@@ -2065,7 +2126,11 @@ document.getElementById("tradeupCalc")?.addEventListener("click", async () => {
     renderTradeupResult({ error: t("same_rarity_required") });
     return;
   }
-
+const stMode = contractItems[0]?.isStatTrak;
+if (contractItems.some((x) => Boolean(x.isStatTrak) !== Boolean(stMode))) {
+  renderTradeupResult({ error: "Нельзя смешивать StatTrak™ и обычные предметы." });
+  return;
+}
   try {
     await ensureTradeupReady();
   } catch (e) {
@@ -2074,12 +2139,13 @@ document.getElementById("tradeupCalc")?.addEventListener("click", async () => {
   }
 
   const result = simulateTradeup(
-    contractItems.map((x) => ({
-      collection: x.collection,
-      rarity: x.rarity,
-      float: x.float,
-    }))
-  );
+  contractItems.map((x) => ({
+    collection: x.collection,
+    rarity: x.rarity,
+    float: x.float,
+    isStatTrak: Boolean(x.isStatTrak),
+  }))
+);
 
   renderTradeupResult(result);
 });
@@ -2098,14 +2164,15 @@ document.getElementById("tradeupFill")?.addEventListener("click", () => {
   const need = needCountByRarity(first.rarity);
 
   while (contractItems.length < need) {
-    contractItems.push({
-      name: first.name,
-      collection: first.collection,
-      rarity: first.rarity,
-      float: Number(first.float),
-      min: Number(first.min),
-      max: Number(first.max),
-    });
+   contractItems.push({
+  name: s.name,
+  collection: s.collection,
+  rarity: s.rarity,
+  float,
+  min: s.min,
+  max: s.max,
+  isStatTrak: Boolean(s.isStatTrak),
+});
   }
 
   renderContract();
