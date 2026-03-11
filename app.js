@@ -1551,7 +1551,7 @@ const clashBtn = `
       ? `<button class="hl-btn" data-open="${escapeHtml(o.links.steam)}">Steam</button>`
       : "";
 
-  const outcomeSkin = findSkinInDBByName(o.name);
+  const outcomeSkin = findSkinInDBByName(o.name, Boolean(o.isStatTrak));
 const outcomeImage = outcomeSkin?.image || "";
 
 html += `
@@ -1624,31 +1624,70 @@ async function loadTradeupSkins() {
   }
   const data = await res.json();
 
-  skinsDB = (Array.isArray(data) ? data : [])
-    .map((s, idx) => {
-      const name = (s?.name || s?.market_hash_name || s?.marketHashName || "").trim();
-      const collection = getCollectionName(s);
-      const rarity = normalizeRarityUI(getRarityName(s));
-      const min = getMinFloat(s);
-      const max = getMaxFloat(s);
+skinsDB = [];
+let nextSkinId = 0;
 
-      if (!name || !rarity) return null;
-      if (s?.souvenir === true) return null;
+(Array.isArray(data) ? data : []).forEach((s) => {
+  const rawName = (s?.name || s?.market_hash_name || s?.marketHashName || "").trim();
+  const collection = getCollectionName(s);
+  const rarity = normalizeRarityUI(getRarityName(s));
+  const min = getMinFloat(s);
+  const max = getMaxFloat(s);
 
-      return {
-  ...s,
-  id: idx,
-  name,
-  nameLower: name.toLowerCase(),
-  collection,
-  rarity,
-  min,
-  max,
-  isStatTrak: isStatTrakSkin(s),
-};
-    })
-    .filter(Boolean);
+  if (!rawName || !rarity) return;
+  if (s?.souvenir === true) return;
 
+  const cleanName = rawName.replace(/^StatTrak™\s*/i, "").trim();
+  const hasStatTrak = isStatTrakSkin(s);
+
+  // обычная версия
+  skinsDB.push({
+    ...s,
+    id: nextSkinId++,
+    name: cleanName,
+    nameLower: cleanName.toLowerCase(),
+    collection,
+    rarity,
+    min,
+    max,
+    isStatTrak: false,
+    baseName: cleanName.toLowerCase(),
+  });
+
+  // если доступен ST — создаём отдельную ST-версию
+  if (hasStatTrak) {
+    skinsDB.push({
+      ...s,
+      id: nextSkinId++,
+      name: cleanName,
+      nameLower: cleanName.toLowerCase(),
+      collection,
+      rarity,
+      min,
+      max,
+      isStatTrak: true,
+      baseName: cleanName.toLowerCase(),
+    });
+  }
+});
+const uniqueMap = new Map();
+
+skinsDB.forEach((skin) => {
+
+  const key = [
+    skin.name.trim().toLowerCase(),
+    skin.collection.trim().toLowerCase(),
+    skin.rarity.trim().toLowerCase(),
+    skin.isStatTrak ? "st" : "normal"
+  ].join("|");
+
+  if (!uniqueMap.has(key)) {
+    uniqueMap.set(key, skin);
+  }
+
+});
+
+skinsDB = [...uniqueMap.values()];
     renderCollections();
 
   if (isPageVisible("contracts") && contractsInitialized) {
@@ -1661,11 +1700,22 @@ function renderCollections() {
   renderContractCollectionDropdown();
   renderCollectionsPageDropdown();
 }
-function findSkinInDBByName(name) {
+function findSkinInDBByName(name, isStatTrak = null) {
   const needle = String(name || "").trim().toLowerCase();
   if (!needle) return null;
 
-  return skinsDB.find((skin) => String(skin.name || "").trim().toLowerCase() === needle) || null;
+  return (
+    skinsDB.find((skin) => {
+      const sameName = String(skin.name || "").trim().toLowerCase() === needle;
+      if (!sameName) return false;
+
+      if (typeof isStatTrak === "boolean") {
+        return Boolean(skin.isStatTrak) === isStatTrak;
+      }
+
+      return true;
+    }) || null
+  );
 }
 function renderSkinsTable() {
   const table = document.getElementById("skinsTable");
@@ -1762,7 +1812,7 @@ function renderContract() {
   }
 
 contractItems.forEach((s, i) => {
-  const skinData = findSkinInDBByName(s.name);
+  const skinData = findSkinInDBByName(s.name, Boolean(s.isStatTrak));
   const skinImage = skinData?.image || "";
 
   html += `
@@ -1957,7 +2007,7 @@ document.addEventListener("click", (e) => {
   const addFromCardBtn = e.target.closest("[data-add-from-card]");
   if (addFromCardBtn) {
     const itemName = addFromCardBtn.dataset.addFromCard;
-    const s = findSkinInDBByName(itemName);
+    const s = findSkinInDBByName(itemName, false);
     if (!s) return;
 
   const currentRarity = contractItems[0]?.rarity;
@@ -2244,19 +2294,21 @@ function buildCollectionsCatalog() {
     gloves: [],
   };
 
-  skinsDB.forEach((skin) => {
-    const subtype = detectSkinSubtype(skin);
+ skinsDB.forEach((skin) => {
+  if (skin.isStatTrak) return;
 
-    if (subtype === "knives" || subtype === "gloves") {
-      goldGroups[subtype].push({
-        id: skin?.id || "",
-        name: skin?.name || "Unknown item",
-        image: skin?.image || "",
-        rarity: getRarityName(skin),
-        subtype,
-      });
-    }
-  });
+  const subtype = detectSkinSubtype(skin);
+
+  if (subtype === "knives" || subtype === "gloves") {
+    goldGroups[subtype].push({
+      id: skin?.id || "",
+      name: skin?.name || "Unknown item",
+      image: skin?.image || "",
+      rarity: getRarityName(skin),
+      subtype,
+    });
+  }
+});
 
   catalog.push({
     id: "gold-knives",
