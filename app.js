@@ -2884,3 +2884,46 @@ document.addEventListener("click", (e) => {
   document.body.appendChild(modal);
 });
 
+const titleIcon = document.getElementById("titleIcon");
+
+if (titleIcon) {
+  const titleIconEmoji = titleIcon.querySelector(".title-icon-emoji");
+  const titleIcons = ["🎯", "💣", "💎", "⚡"];
+  let titleIconIndex = 0;
+  let titleAnimating = false;
+
+  titleIcon.classList.add("idle");
+
+  const runTitleIconCycle = () => {
+    if (titleAnimating) return;
+    titleAnimating = true;
+
+    titleIcon.classList.remove("idle", "shoot", "boom", "swap-out", "swap-in");
+    titleIcon.classList.add("shoot");
+
+    setTimeout(() => {
+      titleIcon.classList.add("boom");
+    }, 140);
+
+    setTimeout(() => {
+      titleIcon.classList.remove("shoot");
+      titleIcon.classList.add("swap-out");
+    }, 280);
+
+    setTimeout(() => {
+      titleIconIndex = (titleIconIndex + 1) % titleIcons.length;
+      titleIconEmoji.textContent = titleIcons[titleIconIndex];
+
+      titleIcon.classList.remove("swap-out", "boom");
+      titleIcon.classList.add("swap-in");
+    }, 460);
+
+    setTimeout(() => {
+      titleIcon.classList.remove("swap-in");
+      titleIcon.classList.add("idle");
+      titleAnimating = false;
+    }, 700);
+  };
+
+  setInterval(runTitleIconCycle, 2400);
+}
