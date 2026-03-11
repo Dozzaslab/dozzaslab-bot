@@ -122,7 +122,8 @@ body{margin:0;height:100vh;overflow:hidden;background:#111}
       transparent 10px
     );
   background-size:10px 100%;
-  animation:csLoadMove .35s linear infinite;
+  background-position:0 0;
+  animation:none;
 }
 
 @keyframes csLoadMove{
