@@ -480,7 +480,7 @@ function applyTranslations() {
 renderStatTrakFilter();
 renderCollections();
 
-if (document.querySelector('.page[data-page="contracts"]:not(.hidden)')) {
+if (isPageVisible("contracts") && contractsInitialized) {
   renderSkinsTable();
   renderContract();
 }
@@ -539,6 +539,13 @@ function showPage(page) {
 
   scrollToTop();
 
+  if (page === "contracts") {
+    contractsInitialized = true;
+    renderCollections();
+    renderSkinsTable();
+    renderContract();
+  }
+
   if (page === "catalog" && typeof window.__catalogShowHome === "function") {
     window.__catalogShowHome();
   }
@@ -551,7 +558,10 @@ function showPage(page) {
     setTimeout(typeWelcomeText, 50);
   }
 }
-
+function isPageVisible(pageName) {
+  const page = document.querySelector(`.page[data-page="${pageName}"]`);
+  return page && !page.classList.contains("hidden");
+}
 /* ===== Клики по вкладкам ===== */
 document.addEventListener("click", (e) => {
   const tab = e.target.closest(".hl-tab[data-page]");
@@ -1594,6 +1604,7 @@ let collectionsCatalog = [];
 let selectedContractCollection = "";
 let contractCollectionSearch = "";
 let selectedStatTrakMode = "all"; // all | normal | stattrak
+let contractsInitialized = false;
 
 let collectionsState = {
   main: "weapons",
@@ -1638,9 +1649,12 @@ async function loadTradeupSkins() {
     })
     .filter(Boolean);
 
-  renderCollections();
-  renderSkinsTable();
-  renderContract();
+    renderCollections();
+
+  if (isPageVisible("contracts") && contractsInitialized) {
+    renderSkinsTable();
+    renderContract();
+  }
 }
 
 function renderCollections() {
