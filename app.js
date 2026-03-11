@@ -3,10 +3,6 @@ import { ensureTradeupReady, simulateTradeup } from "./tradeup.js";
 const loading = document.getElementById("loading");
 const app = document.getElementById("app");
 const bar = document.getElementById("bar");
-const loadingLine1 = document.getElementById("loadingLine1");
-const loadingLine2 = document.getElementById("loadingLine2");
-const loadingLine3 = document.getElementById("loadingLine3");
-const loadingLine4 = document.getElementById("loadingLine4");
 const uiClickSound = document.getElementById("uiClickSound");
 /* ===== LINKS ===== */
 const CHANNEL_URL = "https://t.me/dozza_8";
@@ -917,64 +913,85 @@ function rerunWelcomeTyping() {
 let p = 0;
 let loadingStage = 0;
 
-function updateLoadingTerminal(progress) {
-  if (progress >= 10 && loadingStage < 1) {
-    loadingStage = 1;
-    if (loadingLine1) {
-      loadingLine1.textContent = "[OK] Initializing interface...";
-      loadingLine1.className = "loading-line done";
-    }
-  }
-
-  if (progress >= 30 && loadingStage < 2) {
-    loadingStage = 2;
-    if (loadingLine2) {
-      loadingLine2.textContent = "Loading skins database...";
-      loadingLine2.className = "loading-line done";
-    }
-  }
-
-  if (progress >= 55 && loadingStage < 3) {
-    loadingStage = 3;
-    if (loadingLine3) {
-      loadingLine3.textContent = "Loading collections...";
-      loadingLine3.className = "loading-line done";
-    }
-  }
-
-  if (progress >= 80 && loadingStage < 4) {
-    loadingStage = 4;
-    if (loadingLine4) {
-      loadingLine4.textContent = "Trade-up module ready";
-      loadingLine4.className = "loading-line ready";
-    }
-  }
+function getLoadingLine(n){
+  return document.getElementById("loadingLine"+n);
 }
 
-const timer = setInterval(() => {
-  p += Math.floor(Math.random() * 12) + 6;
-  if (p > 100) p = 100;
+function updateLoadingTerminal(progress){
+
+  if(progress >= 10 && loadingStage < 1){
+    loadingStage = 1;
+    const line = getLoadingLine(1);
+    if(line){
+      line.textContent = "[OK] Initializing interface...";
+      line.classList.add("done");
+    }
+  }
+
+  if(progress >= 35 && loadingStage < 2){
+    loadingStage = 2;
+    const line = getLoadingLine(2);
+    if(line){
+      line.textContent = "Loading skins database...";
+      line.classList.add("done");
+    }
+  }
+
+  if(progress >= 60 && loadingStage < 3){
+    loadingStage = 3;
+    const line = getLoadingLine(3);
+    if(line){
+      line.textContent = "Loading collections...";
+      line.classList.add("done");
+    }
+  }
+
+  if(progress >= 85 && loadingStage < 4){
+    loadingStage = 4;
+    const line = getLoadingLine(4);
+    if(line){
+      line.textContent = "Trade-up module ready";
+      line.classList.add("ready");
+    }
+  }
+
+}
+
+const timer = setInterval(()=>{
+
+  p += Math.floor(Math.random()*10)+5;
+
+  if(p>100)p=100;
 
   updateLoadingTerminal(p);
 
-  if (bar) bar.style.width = p + "%";
+  if(bar) bar.style.width = p + "%";
 
-  if (p >= 100) {
+  if(p >= 100){
+
     clearInterval(timer);
 
-    setTimeout(() => {
+    setTimeout(()=>{
+
       loading?.classList.add("hidden");
       app?.classList.remove("hidden");
+
       app?.classList.remove("menu-mode");
 
       applyTranslations();
       showPage("welcome");
-      setTimeout(typeWelcomeText, 200);
 
-      if (window.Telegram?.WebApp) Telegram.WebApp.expand();
-    }, 300);
+      setTimeout(typeWelcomeText,200);
+
+      if(window.Telegram?.WebApp){
+        Telegram.WebApp.expand();
+      }
+
+    },300);
+
   }
-}, 120);
+
+},120);
 /* ===== закрытие окон ===== */
 const x1 = document.getElementById("x1");
 const x2 = document.getElementById("x2");
