@@ -999,3 +999,128 @@ body::after{
   text-align: center;
   color: #f3f7e7;
 }
+.title-icon{
+  position:relative;
+  width:14px;
+  height:14px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  overflow:visible;
+  background:transparent;
+  border:none;
+  flex:0 0 auto;
+}
+
+.title-icon-emoji{
+  position:relative;
+  z-index:2;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:14px;
+  height:14px;
+  font-size:11px;
+  line-height:1;
+  transform-origin:center;
+  will-change:transform, opacity, filter;
+}
+
+.title-icon-flash{
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:4px;
+  height:4px;
+  border-radius:50%;
+  transform:translate(-50%,-50%) scale(.2);
+  opacity:0;
+  pointer-events:none;
+  background:rgba(255,220,120,.95);
+  box-shadow:
+    0 0 4px rgba(255,220,120,.9),
+    0 0 8px rgba(255,190,80,.7);
+}
+
+.title-icon.idle .title-icon-emoji{
+  animation:titleIconIdle 1.6s ease-in-out infinite;
+}
+
+.title-icon.shoot .title-icon-emoji{
+  animation:titleIconShoot .28s ease forwards;
+}
+
+.title-icon.boom .title-icon-flash{
+  animation:titleIconBoom .34s ease forwards;
+}
+
+.title-icon.swap-out .title-icon-emoji{
+  animation:titleIconOut .18s ease forwards;
+}
+
+.title-icon.swap-in .title-icon-emoji{
+  animation:titleIconIn .22s ease forwards;
+}
+
+@keyframes titleIconIdle{
+  0%,100%{
+    transform:translateY(0) scale(1);
+    filter:drop-shadow(0 0 0 rgba(255,255,255,0));
+  }
+  50%{
+    transform:translateY(0) scale(1.08);
+    filter:drop-shadow(0 0 3px rgba(255,255,255,.18));
+  }
+}
+
+@keyframes titleIconShoot{
+  0%{
+    transform:translateX(0) scale(1);
+    filter:drop-shadow(0 0 0 rgba(255,255,255,0));
+  }
+  35%{
+    transform:translateX(-1px) scale(1.04);
+    filter:drop-shadow(0 0 3px rgba(255,255,255,.15));
+  }
+  100%{
+    transform:translateX(1px) scale(1.12);
+    filter:drop-shadow(0 0 4px rgba(255,220,120,.28));
+  }
+}
+
+@keyframes titleIconBoom{
+  0%{
+    opacity:0;
+    transform:translate(-50%,-50%) scale(.2);
+  }
+  35%{
+    opacity:1;
+    transform:translate(-50%,-50%) scale(1.8);
+  }
+  100%{
+    opacity:0;
+    transform:translate(-50%,-50%) scale(2.6);
+  }
+}
+
+@keyframes titleIconOut{
+  from{
+    opacity:1;
+    transform:translateY(0) scale(1);
+  }
+  to{
+    opacity:0;
+    transform:translateY(-4px) scale(.75);
+  }
+}
+
+@keyframes titleIconIn{
+  from{
+    opacity:0;
+    transform:translateY(4px) scale(.75);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0) scale(1);
+  }
+}
