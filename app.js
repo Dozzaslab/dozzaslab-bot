@@ -910,88 +910,20 @@ function rerunWelcomeTyping() {
 }
 
 /* ===== загрузка ===== */
-let p = 0;
-let loadingStage = 0;
+/* ===== загрузка ===== */
+setTimeout(() => {
+  loading?.classList.add("hidden");
+  app?.classList.remove("hidden");
+  app?.classList.remove("menu-mode");
 
-function getLoadingLine(n){
-  return document.getElementById("loadingLine"+n);
-}
+  applyTranslations();
+  showPage("welcome");
+  setTimeout(typeWelcomeText, 200);
 
-function updateLoadingTerminal(progress){
-
-  if(progress >= 10 && loadingStage < 1){
-    loadingStage = 1;
-    const line = getLoadingLine(1);
-    if(line){
-      line.textContent = "[OK] Initializing interface...";
-      line.classList.add("done");
-    }
+  if (window.Telegram?.WebApp) {
+    Telegram.WebApp.expand();
   }
-
-  if(progress >= 35 && loadingStage < 2){
-    loadingStage = 2;
-    const line = getLoadingLine(2);
-    if(line){
-      line.textContent = "Loading skins database...";
-      line.classList.add("done");
-    }
-  }
-
-  if(progress >= 60 && loadingStage < 3){
-    loadingStage = 3;
-    const line = getLoadingLine(3);
-    if(line){
-      line.textContent = "Loading collections...";
-      line.classList.add("done");
-    }
-  }
-
-  if(progress >= 85 && loadingStage < 4){
-    loadingStage = 4;
-    const line = getLoadingLine(4);
-    if(line){
-      line.textContent = "Trade-up module ready";
-      line.classList.add("ready");
-    }
-  }
-
-}
-
-const timer = setInterval(()=>{
-
-  p += Math.floor(Math.random()*10)+5;
-
-  if(p>100)p=100;
-
-  updateLoadingTerminal(p);
-
-  if(bar) bar.style.width = p + "%";
-
-  if(p >= 100){
-
-    clearInterval(timer);
-
-    setTimeout(()=>{
-
-      loading?.classList.add("hidden");
-      app?.classList.remove("hidden");
-
-      app?.classList.remove("menu-mode");
-
-      applyTranslations();
-      showPage("welcome");
-
-      setTimeout(typeWelcomeText,200);
-
-      if(window.Telegram?.WebApp){
-        Telegram.WebApp.expand();
-      }
-
-    },300);
-
-  }
-
-},120);
+}, 800);
 /* ===== закрытие окон ===== */
 const x1 = document.getElementById("x1");
 const x2 = document.getElementById("x2");
