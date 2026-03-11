@@ -891,46 +891,54 @@ body::after{
   color:#9ee37d;
   text-shadow:0 0 6px rgba(158,227,125,.12);
 }
-.about-hero {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  padding: 10px;
-  margin-top: 10px;
-  border: 1px solid rgba(0,0,0,.35);
-  background: rgba(0,0,0,.10);
+.about-hero{
+  display:flex;
+  align-items:center;
+  gap:14px;
+
+  padding:12px;
+  margin-top:10px;
+
+  border:1px solid rgba(0,0,0,.35);
+  background:rgba(0,0,0,.10);
 }
 
 .about-avatar{
-  width:54px;
-  height:54px;
+  width:72px;
+  height:72px;
   display:block;
   object-fit:contain;
-  image-rendering:pixelated;
-  border:1px solid rgba(0,0,0,.35);
-  background:transparent;
+
+  border:none;
+  background:none;
+
+  flex-shrink:0;
+
+  /* мягкая тень как у элементов Valve UI */
+  filter:drop-shadow(0 2px 4px rgba(0,0,0,.6));
 }
 
 .about-hero-text {
   min-width: 0;
 }
 
-.about-name {
-  font-size: 18px;
-  font-weight: 700;
-  color: #f0f3e8;
+.about-name{
+  font-size:19px;
+  font-weight:700;
+  color:#f0f3e8;
+  line-height:1.1;
 }
 
-.about-role {
-  margin-top: 4px;
-  font-size: 13px;
-  color: #d8dfc8;
+.about-role{
+  margin-top:3px;
+  font-size:13px;
+  color:#d8dfc8;
 }
 
-.about-tagline {
-  margin-top: 6px;
-  font-size: 12px;
-  color: #bfc8ad;
+.about-tagline{
+  margin-top:4px;
+  font-size:12px;
+  color:#bfc8ad;
 }
 
 .about-section-title {
