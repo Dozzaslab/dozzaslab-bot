@@ -479,8 +479,11 @@ function applyTranslations() {
   renderRarityFilter();
 renderStatTrakFilter();
 renderCollections();
-renderSkinsTable();
-renderContract();
+
+if (document.querySelector('.page[data-page="contracts"]:not(.hidden)')) {
+  renderSkinsTable();
+  renderContract();
+}
 rerunWelcomeTyping();
 }
 
@@ -520,7 +523,6 @@ const EMOJI_REGEX =
 let emojiWrapQueued = false;
 let emojiObserverStarted = false;
 
-/* ===== Навигация по вкладкам ===== */
 /* ===== Навигация по вкладкам ===== */
 function showPage(page) {
   const root = document.querySelector("#app .hl-body");
