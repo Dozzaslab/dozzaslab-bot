@@ -454,8 +454,103 @@ function applyTranslations() {
   updateSuggestTitle();
 
   setText("aboutTitle", t("about_title"));
-  setMultilineText("aboutContent", t("about_content"));
-  setText("aboutClosing", t("about_closing"));
+setText("aboutClosing", t("about_closing"));
+
+setText(
+  "aboutRole",
+  currentLang === "ru"
+    ? "Аналитик и коллекционер цифровых активов в CS"
+    : "Analyst and collector of digital CS assets"
+);
+
+setText(
+  "aboutTagline",
+  currentLang === "ru"
+    ? "Работаю от данных, логики рынка и психологии спроса."
+    : "I work from data, market logic, and demand psychology."
+);
+
+setHtml(
+  "aboutContent",
+  currentLang === "ru"
+    ? `
+      <div class="about-card">
+        <div class="about-card-icon">🎯</div>
+        <div class="about-card-title">Старт с выходом CS2</div>
+        <div class="about-card-text">Начал инвестировать системно, а не хаотично.</div>
+      </div>
+
+      <div class="about-card">
+        <div class="about-card-icon">📦</div>
+        <div class="about-card-title">Первый капитал</div>
+        <div class="about-card-text">Сделал на перепродаже кейсов, изучая циклы спроса, поведение старых коллекций и влияние дефицита.</div>
+      </div>
+
+      <div class="about-card">
+        <div class="about-card-icon">💎</div>
+        <div class="about-card-title">Ниша редких скинов</div>
+        <div class="about-card-text">Перешёл в нишу редких скинов с наклейками, где важны паттерн, float, история коллекции и редкость комбинации.</div>
+      </div>
+
+      <div class="about-card">
+        <div class="about-card-icon">📊</div>
+        <div class="about-card-title">Основа стратегии</div>
+        <div class="about-card-text">Сейчас основа стратегии — анализ поведения старых коллекций, которые уже доказали свою доходность во времени.</div>
+      </div>
+
+      <div class="about-card">
+        <div class="about-card-icon">🧠</div>
+        <div class="about-card-title">Подход</div>
+        <div class="about-card-text">Я не гадаю — я анализирую. Работаю от данных, логики рынка и психологии спроса.</div>
+      </div>
+    `
+    : `
+      <div class="about-card">
+        <div class="about-card-icon">🎯</div>
+        <div class="about-card-title">Started with CS2</div>
+        <div class="about-card-text">I began investing systematically instead of acting chaotically.</div>
+      </div>
+
+      <div class="about-card">
+        <div class="about-card-icon">📦</div>
+        <div class="about-card-title">First capital</div>
+        <div class="about-card-text">Built it through case reselling while studying demand cycles, old collections, and scarcity.</div>
+      </div>
+
+      <div class="about-card">
+        <div class="about-card-icon">💎</div>
+        <div class="about-card-title">Rare skins niche</div>
+        <div class="about-card-text">Moved into rare stickered skins, where pattern, float, collection history, and combo rarity matter.</div>
+      </div>
+
+      <div class="about-card">
+        <div class="about-card-icon">📊</div>
+        <div class="about-card-title">Core strategy</div>
+        <div class="about-card-text">My strategy is built around analyzing older collections that have already proven profitability over time.</div>
+      </div>
+
+      <div class="about-card">
+        <div class="about-card-icon">🧠</div>
+        <div class="about-card-title">Approach</div>
+        <div class="about-card-text">I do not guess — I analyze. I work from data, market logic, and demand psychology.</div>
+      </div>
+    `
+);
+
+setHtml(
+  "aboutBenefits",
+  currentLang === "ru"
+    ? `
+      <div class="about-benefit">Показываю, где есть ликвидность</div>
+      <div class="about-benefit">Помогаю не терять деньги на эмоциях</div>
+      <div class="about-benefit">Помогаю выбрать первые позиции осознанно</div>
+    `
+    : `
+      <div class="about-benefit">I show where liquidity is</div>
+      <div class="about-benefit">I help avoid emotional decisions</div>
+      <div class="about-benefit">I help choose first positions consciously</div>
+    `
+);
 
   setText("investTitle", t("invest_title"));
   setText("investChooseText", t("choose_project"));
