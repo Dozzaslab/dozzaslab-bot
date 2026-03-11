@@ -904,10 +904,9 @@ body::after{
 .about-avatar {
   width: 54px;
   height: 54px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 28px;
+  display: block;
+  object-fit: cover;
+  image-rendering: pixelated;
   border: 1px solid rgba(0,0,0,.35);
   background: rgba(0,0,0,.12);
   flex-shrink: 0;
