@@ -891,3 +891,105 @@ body::after{
   color:#9ee37d;
   text-shadow:0 0 6px rgba(158,227,125,.12);
 }
+.about-hero {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 10px;
+  margin-top: 10px;
+  border: 1px solid rgba(0,0,0,.35);
+  background: rgba(0,0,0,.10);
+}
+
+.about-avatar {
+  width: 54px;
+  height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  border: 1px solid rgba(0,0,0,.35);
+  background: rgba(0,0,0,.12);
+  flex-shrink: 0;
+}
+
+.about-hero-text {
+  min-width: 0;
+}
+
+.about-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: #f0f3e8;
+}
+
+.about-role {
+  margin-top: 4px;
+  font-size: 13px;
+  color: #d8dfc8;
+}
+
+.about-tagline {
+  margin-top: 6px;
+  font-size: 12px;
+  color: #bfc8ad;
+}
+
+.about-section-title {
+  margin-top: 14px;
+  margin-bottom: 8px;
+  font-weight: 700;
+  color: #eef3df;
+}
+
+.about-timeline {
+  display: grid;
+  gap: 8px;
+}
+
+.about-card {
+  border: 1px solid rgba(0,0,0,.35);
+  background: rgba(0,0,0,.08);
+  padding: 10px;
+}
+
+.about-card-icon {
+  font-size: 18px;
+  margin-bottom: 6px;
+}
+
+.about-card-title {
+  font-weight: 700;
+  color: #f0f3e8;
+  margin-bottom: 4px;
+}
+
+.about-card-text {
+  font-size: 12px;
+  line-height: 1.45;
+  color: #d2d9c4;
+}
+
+.about-benefits {
+  display: grid;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.about-benefit {
+  padding: 9px 10px;
+  border: 1px solid rgba(0,0,0,.35);
+  background: rgba(0,0,0,.08);
+  font-size: 12px;
+  color: #e3ead3;
+}
+
+.about-quote {
+  margin-top: 14px;
+  padding: 10px;
+  border: 1px solid rgba(0,0,0,.35);
+  background: rgba(255,255,255,.04);
+  font-weight: 700;
+  text-align: center;
+  color: #f3f7e7;
+}
