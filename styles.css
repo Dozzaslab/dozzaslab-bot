@@ -848,18 +848,6 @@ body::after{
   top:0;
   bottom:0;
 }
-body,
-.hl-btn,
-.hl-tab,
-.hl-x,
-.filter-dropdown-toggle,
-.filter-dropdown-option,
-.collection-item-open,
-.contract-skin-img,
-.table-skin-img,
-.outcome-skin-img{
-  cursor: crosshair;
-}
 
 .hl-input,
 .hl-search,
