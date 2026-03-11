@@ -112,73 +112,54 @@
         </div>
       </div>
 
-      <!-- CONTRACTS -->
-      <div class="page hidden" data-page="contracts">
-        <div class="hl-muted" data-i18n="contracts_title">🧪 Контракты (Trade-Up)</div>
+     <!-- CONTRACTS -->
+<div class="page hidden" data-page="contracts">
+  <div class="hl-muted" data-i18n="contracts_title">🧪 Контракты (Trade-Up)</div>
 
-        <input id="skinSearch" class="hl-search" placeholder="🔎 Search skin..." data-i18n-placeholder="search_skin">
+  <input id="skinSearch" class="hl-search" placeholder="🔎 Search skin..." data-i18n-placeholder="search_skin">
 
-       <div class="grid2" style="margin-top:6px;">
-  <select id="rarityFilter" class="hl-search"></select>
-  <select id="stattrakFilter" class="hl-search"></select>
-</div>
-
-<div class="grid1" style="margin-top:6px;">
-  <div class="filter-dropdown" id="contractCollectionDropdown">
-    <button
-      type="button"
-      class="hl-search filter-dropdown-toggle"
-      id="collectionFilterToggle"
-    >
-      Любая коллекция
-    </button>
-
-    <div class="filter-dropdown-menu hidden" id="collectionFilterMenu">
-      <input
-        id="collectionFilterSearch"
-        class="hl-search filter-dropdown-search"
-        type="text"
-        placeholder="Поиск коллекции..."
-      />
-      <div id="collectionFilterOptions" class="filter-dropdown-options"></div>
-    </div>
+  <div class="grid2" style="margin-top:6px;">
+    <select id="rarityFilter" class="hl-search"></select>
+    <select id="stattrakFilter" class="hl-search"></select>
   </div>
-</div>
-    <button
-      type="button"
-      class="hl-search filter-dropdown-toggle"
-      id="collectionFilterToggle"
-    >
-      Любая коллекция
-    </button>
 
-    <div class="filter-dropdown-menu hidden" id="collectionFilterMenu">
-      <input
-        id="collectionFilterSearch"
-        class="hl-search filter-dropdown-search"
-        type="text"
-        placeholder="Поиск коллекции..."
-      />
-      <div id="collectionFilterOptions" class="filter-dropdown-options"></div>
-    </div>
-  </div>
-</div>
+  <div class="grid1" style="margin-top:6px;">
+    <div class="filter-dropdown" id="contractCollectionDropdown">
+      <button
+        type="button"
+        class="hl-search filter-dropdown-toggle"
+        id="collectionFilterToggle"
+      >
+        Любая коллекция
+      </button>
 
-        <div id="skinsTable" style="margin-top:10px;"></div>
-
-        <hr style="margin:10px 0;opacity:.2">
-
-        <div class="hl-text" data-i18n="contract_items">Contract Items</div>
-        <div id="contractList"></div>
-
-        <div class="hl-actions">
-  <button class="hl-btn" id="tradeupFill">Заполнить</button>
-  <button class="hl-btn primary" id="tradeupCalc" data-i18n="calculate">Calculate</button>
-  <button class="hl-btn" id="tradeupClear" data-i18n="clear">Clear</button>
-</div>
-
-        <div id="tradeupResult" class="hl-text" style="margin-top:10px;"></div>
+      <div class="filter-dropdown-menu hidden" id="collectionFilterMenu">
+        <input
+          id="collectionFilterSearch"
+          class="hl-search filter-dropdown-search"
+          type="text"
+          placeholder="Поиск коллекции..."
+        />
+        <div id="collectionFilterOptions" class="filter-dropdown-options"></div>
       </div>
+    </div>
+  </div>
+
+  <div id="skinsTable" style="margin-top:10px;"></div>
+
+  <hr style="margin:10px 0;opacity:.2">
+
+  <div class="hl-text" data-i18n="contract_items">Contract Items</div>
+  <div id="contractList"></div>
+
+  <div class="hl-actions">
+    <button class="hl-btn" id="tradeupFill">Заполнить</button>
+    <button class="hl-btn primary" id="tradeupCalc" data-i18n="calculate">Calculate</button>
+    <button class="hl-btn" id="tradeupClear" data-i18n="clear">Clear</button>
+  </div>
+
+  <div id="tradeupResult" class="hl-text" style="margin-top:10px;"></div>
+</div>
 
       <!-- CATALOG -->
       <div class="page hidden" data-page="catalog">
