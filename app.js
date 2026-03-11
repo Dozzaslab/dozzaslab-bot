@@ -3,7 +3,11 @@ import { ensureTradeupReady, simulateTradeup } from "./tradeup.js";
 const loading = document.getElementById("loading");
 const app = document.getElementById("app");
 const bar = document.getElementById("bar");
-
+const loadingLine1 = document.getElementById("loadingLine1");
+const loadingLine2 = document.getElementById("loadingLine2");
+const loadingLine3 = document.getElementById("loadingLine3");
+const loadingLine4 = document.getElementById("loadingLine4");
+const uiClickSound = document.getElementById("uiClickSound");
 /* ===== LINKS ===== */
 const CHANNEL_URL = "https://t.me/dozza_8";
 const CHAT_URL = "https://t.me/+YmGqLAkSQU0yYmUy";
@@ -32,7 +36,23 @@ const scrollBox = document.querySelector("#app .hl-body");
 function scrollToTop() {
   if (scrollBox) scrollBox.scrollTop = 0;
 }
+function playUiClick() {
+  if (!uiClickSound) return;
 
+  try {
+    uiClickSound.currentTime = 0;
+    uiClickSound.play().catch(() => {});
+  } catch (_) {}
+}
+
+document.addEventListener("click", (e) => {
+  const clickable = e.target.closest(
+    ".hl-btn, .hl-tab, .hl-x, .filter-dropdown-toggle, .filter-dropdown-option, .collection-item-open"
+  );
+  if (!clickable) return;
+
+  playUiClick();
+});
 /* ===== I18N ===== */
 const LANG_STORAGE_KEY = "dozzaslab_lang";
 
@@ -895,25 +915,66 @@ function rerunWelcomeTyping() {
 
 /* ===== загрузка ===== */
 let p = 0;
+let loadingStage = 0;
+
+function updateLoadingTerminal(progress) {
+  if (progress >= 10 && loadingStage < 1) {
+    loadingStage = 1;
+    if (loadingLine1) {
+      loadingLine1.textContent = "[OK] Initializing interface...";
+      loadingLine1.className = "loading-line done";
+    }
+  }
+
+  if (progress >= 30 && loadingStage < 2) {
+    loadingStage = 2;
+    if (loadingLine2) {
+      loadingLine2.textContent = "Loading skins database...";
+      loadingLine2.className = "loading-line done";
+    }
+  }
+
+  if (progress >= 55 && loadingStage < 3) {
+    loadingStage = 3;
+    if (loadingLine3) {
+      loadingLine3.textContent = "Loading collections...";
+      loadingLine3.className = "loading-line done";
+    }
+  }
+
+  if (progress >= 80 && loadingStage < 4) {
+    loadingStage = 4;
+    if (loadingLine4) {
+      loadingLine4.textContent = "Trade-up module ready";
+      loadingLine4.className = "loading-line ready";
+    }
+  }
+}
+
 const timer = setInterval(() => {
   p += Math.floor(Math.random() * 12) + 6;
-  if (p >= 100) {
-    p = 100;
-    clearInterval(timer);
-    loading?.classList.add("hidden");
-    app?.classList.remove("hidden");
+  if (p > 100) p = 100;
 
-    app?.classList.remove("menu-mode");
+  updateLoadingTerminal(p);
 
-    applyTranslations();
-    showPage("welcome");
-    setTimeout(typeWelcomeText, 200);
-
-    if (window.Telegram?.WebApp) Telegram.WebApp.expand();
-  }
   if (bar) bar.style.width = p + "%";
-}, 120);
 
+  if (p >= 100) {
+    clearInterval(timer);
+
+    setTimeout(() => {
+      loading?.classList.add("hidden");
+      app?.classList.remove("hidden");
+      app?.classList.remove("menu-mode");
+
+      applyTranslations();
+      showPage("welcome");
+      setTimeout(typeWelcomeText, 200);
+
+      if (window.Telegram?.WebApp) Telegram.WebApp.expand();
+    }, 300);
+  }
+}, 120);
 /* ===== закрытие окон ===== */
 const x1 = document.getElementById("x1");
 const x2 = document.getElementById("x2");
