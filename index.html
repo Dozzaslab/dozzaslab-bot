@@ -120,8 +120,30 @@
 
        <div class="grid2" style="margin-top:6px;">
   <select id="rarityFilter" class="hl-search"></select>
+  <select id="stattrakFilter" class="hl-search"></select>
+</div>
 
+<div class="grid1" style="margin-top:6px;">
   <div class="filter-dropdown" id="contractCollectionDropdown">
+    <button
+      type="button"
+      class="hl-search filter-dropdown-toggle"
+      id="collectionFilterToggle"
+    >
+      Любая коллекция
+    </button>
+
+    <div class="filter-dropdown-menu hidden" id="collectionFilterMenu">
+      <input
+        id="collectionFilterSearch"
+        class="hl-search filter-dropdown-search"
+        type="text"
+        placeholder="Поиск коллекции..."
+      />
+      <div id="collectionFilterOptions" class="filter-dropdown-options"></div>
+    </div>
+  </div>
+</div>
     <button
       type="button"
       class="hl-search filter-dropdown-toggle"
