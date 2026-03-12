@@ -1119,53 +1119,70 @@ body::after{
     transform:translateY(0) scale(1);
   }
 }
+#loading .hl-progress{
+  height:24px;
+  overflow:hidden;
+}
+
+#loading .hl-bar{
+  position:relative;
+  height:100%;
+  width:0%;
+  overflow:hidden;
+  background:
+    linear-gradient(to bottom, #93a96f 0%, #7b915f 55%, #657a4e 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.10),
+    inset 0 -1px 0 rgba(0,0,0,.28);
+}
+
 .bar-scene{
   position:absolute;
   inset:0;
-  pointer-events:none;
   overflow:hidden;
+  pointer-events:none;
   background:
-    linear-gradient(to bottom, rgba(255,255,255,.05), rgba(255,255,255,0) 35%),
-    linear-gradient(to bottom, transparent 0 62%, #4e5d3e 62% 100%);
+    linear-gradient(to bottom, rgba(255,255,255,.08), rgba(255,255,255,0) 38%),
+    linear-gradient(to bottom, transparent 0 58%, #4f5f3f 58% 100%);
 }
 
 .bar-ground{
   position:absolute;
   left:0;
   right:0;
-  bottom:3px;
+  bottom:4px;
   height:2px;
-  background:rgba(25,35,18,.45);
+  background:rgba(20,28,14,.55);
 }
 
-/* ===== Бегуны ===== */
+/* ===== БЕГУНЫ ===== */
 .runner{
   position:absolute;
   bottom:5px;
-  width:12px;
-  height:14px;
+  width:18px;
+  height:18px;
+  z-index:3;
   animation:runner-move linear infinite;
 }
 
 .runner-1{
-  left:-18px;
-  animation-duration:2.4s;
+  left:-24px;
+  animation-duration:2.1s;
   animation-delay:0s;
 }
 
 .runner-2{
-  left:-28px;
-  animation-duration:3.1s;
-  animation-delay:.8s;
-  transform:scale(.9);
-  opacity:.9;
+  left:-36px;
+  animation-duration:2.8s;
+  animation-delay:.7s;
+  opacity:.92;
 }
 
 .runner-3{
-  left:-22px;
-  animation-duration:2.7s;
-  animation-delay:1.5s;
-  transform:scale(1.05);
+  left:-30px;
+  animation-duration:2.4s;
+  animation-delay:1.2s;
+  opacity:.86;
 }
 
 .runner span{
@@ -1174,89 +1191,140 @@ body::after{
 }
 
 .r-head{
-  left:4px;
+  left:6px;
   top:0;
-  width:4px;
-  height:4px;
-  background:#e6d2a2;
+  width:6px;
+  height:6px;
+  background:#fff3c9;
+  box-shadow:0 0 2px rgba(255,243,201,.45);
 }
 
 .r-body{
-  left:4px;
-  top:4px;
-  width:3px;
-  height:5px;
-  background:#1f2a18;
+  left:7px;
+  top:6px;
+  width:4px;
+  height:6px;
+  background:#172014;
 }
 
 .r-arm{
-  top:5px;
-  width:4px;
-  height:1px;
-  background:#1f2a18;
+  top:7px;
+  width:6px;
+  height:2px;
+  background:#172014;
   transform-origin:left center;
-  animation:arm-swing .28s ease-in-out infinite alternate;
+  animation:arm-swing .22s ease-in-out infinite alternate;
 }
 
 .arm-back{
-  left:1px;
-  transform:rotate(28deg);
+  left:2px;
 }
 
 .arm-front{
-  left:6px;
+  left:10px;
   transform-origin:right center;
   animation-name:arm-swing-front;
 }
 
 .r-leg{
-  top:8px;
-  width:5px;
-  height:1px;
-  background:#1f2a18;
+  top:12px;
+  width:7px;
+  height:2px;
+  background:#172014;
   transform-origin:left center;
-  animation:leg-swing .28s ease-in-out infinite alternate;
+  animation:leg-swing .22s ease-in-out infinite alternate;
 }
 
 .leg-back{
-  left:2px;
-  transform:rotate(30deg);
+  left:3px;
 }
 
 .leg-front{
-  left:5px;
+  left:8px;
   animation-name:leg-swing-front;
 }
 
-/* ===== Пыль ===== */
+/* ===== ПЫЛЬ ===== */
 .dust{
   position:absolute;
   bottom:4px;
-  width:6px;
-  height:3px;
-  border-radius:50%;
-  background:rgba(230,220,170,.28);
-  filter:blur(.4px);
+  width:10px;
+  height:4px;
+  border-radius:999px;
+  background:rgba(255,234,170,.38);
+  filter:blur(.6px);
   opacity:0;
+  z-index:2;
   animation:dust-move linear infinite;
 }
 
 .dust-1{
-  left:-8px;
-  animation-duration:2.4s;
+  left:-10px;
+  animation-duration:2.1s;
   animation-delay:.1s;
 }
 .dust-2{
-  left:-14px;
-  animation-duration:3.1s;
-  animation-delay:1s;
+  left:-16px;
+  animation-duration:2.8s;
+  animation-delay:.8s;
 }
 .dust-3{
-  left:-10px;
-  animation-duration:2.7s;
-  animation-delay:1.7s;
+  left:-12px;
+  animation-duration:2.4s;
+  animation-delay:1.3s;
 }
 
+/* ===== АНИМАЦИИ ===== */
+@keyframes runner-move{
+  0%   { transform:translateX(0) translateY(0); }
+  10%  { transform:translateX(14px) translateY(-1px); }
+  20%  { transform:translateX(28px) translateY(0); }
+  30%  { transform:translateX(42px) translateY(-1px); }
+  40%  { transform:translateX(56px) translateY(0); }
+  50%  { transform:translateX(70px) translateY(-1px); }
+  60%  { transform:translateX(84px) translateY(0); }
+  70%  { transform:translateX(98px) translateY(-1px); }
+  80%  { transform:translateX(112px) translateY(0); }
+  90%  { transform:translateX(126px) translateY(-1px); }
+  100% { transform:translateX(142px) translateY(0); }
+}
+
+@keyframes arm-swing{
+  from{ transform:rotate(35deg); }
+  to{ transform:rotate(-30deg); }
+}
+
+@keyframes arm-swing-front{
+  from{ transform:rotate(-35deg); }
+  to{ transform:rotate(28deg); }
+}
+
+@keyframes leg-swing{
+  from{ transform:rotate(38deg); }
+  to{ transform:rotate(-32deg); }
+}
+
+@keyframes leg-swing-front{
+  from{ transform:rotate(-38deg); }
+  to{ transform:rotate(30deg); }
+}
+
+@keyframes dust-move{
+  0%{
+    transform:translateX(0) scale(.8);
+    opacity:0;
+  }
+  10%{
+    opacity:.55;
+  }
+  60%{
+    opacity:.20;
+  }
+  100%{
+    transform:translateX(130px) scale(1.35);
+    opacity:0;
+  }
+}
 /* ===== Анимации ===== */
 @keyframes runner-move{
   0%{
