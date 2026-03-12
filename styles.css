@@ -123,11 +123,11 @@ body{margin:0;height:100vh;overflow:hidden;background:#111}
     repeating-linear-gradient(
       to right,
       #d7c35a 0px,
-      #d7c35a 6px,
-      #b49e3a 6px,
+      #d7c35a 8px,
       #b49e3a 8px,
-      transparent 8px,
-      transparent 10px
+      #b49e3a 10px,
+      transparent 10px,
+      transparent 12px
     );
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,.18),
