@@ -1022,7 +1022,7 @@ let p = 0;
 
 const timer = setInterval(() => {
 
-  p += Math.floor(Math.random()*10)+5;
+  p += 4;
   if(p>100)p=100;
 
   const line1 = document.getElementById("loadingLine1");
@@ -1070,7 +1070,7 @@ const timer = setInterval(() => {
 
   }
 
-},120);
+},260);
 /* ===== закрытие окон ===== */
 const x1 = document.getElementById("x1");
 const x2 = document.getElementById("x2");
