@@ -101,17 +101,16 @@ body{margin:0;height:100vh;overflow:hidden;background:#111}
 
 .hl-muted{opacity:.85;font-size:13px;margin-bottom:8px}
 .hl-text{margin:8px 0;font-size:13px;opacity:.95}
-
 .hl-progress{
-  height:18px;
-  border:1px solid rgba(0,0,0,.55);
-  background:#3a482e;
-  padding:2px;
+  height:16px;
   margin:8px 0 10px;
+  padding:2px;
   overflow:hidden;
+  border:1px solid #1f2818;
+  background:#556846;
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.04),
-    inset 0 -1px 0 rgba(0,0,0,.35);
+    inset 1px 1px 0 rgba(255,255,255,.06),
+    inset -1px -1px 0 rgba(0,0,0,.45);
 }
 
 #loading .hl-bar{
@@ -120,34 +119,19 @@ body{margin:0;height:100vh;overflow:hidden;background:#111}
   width:0%;
   min-width:0;
   overflow:hidden;
-
   background:
     repeating-linear-gradient(
       to right,
-      #c7b85a 0px,
-      #c7b85a 6px,
-      #a79644 6px,
-      #a79644 7px,
-      transparent 7px,
-      transparent 8px
-    ),
-    linear-gradient(to bottom, #d6c86a 0%, #b9aa52 55%, #8f823a 100%);
-
+      #d7c35a 0px,
+      #d7c35a 3px,
+      #b49e3a 3px,
+      #b49e3a 4px,
+      transparent 4px,
+      transparent 5px
+    );
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.14),
-    inset 0 -1px 0 rgba(0,0,0,.28);
-}
-.hl-progress{
-  height:18px;
-  border:1px solid rgba(0,0,0,.6);
-  background:
-    linear-gradient(to bottom, #4a5a3b 0%, #3a482e 100%);
-  padding:2px;
-  margin:8px 0 10px;
-  overflow:hidden;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.03),
-    inset 0 -1px 0 rgba(0,0,0,.4);
+    inset 0 1px 0 rgba(255,255,255,.18),
+    inset 0 -1px 0 rgba(0,0,0,.22);
 }
 @keyframes csLoadMove{
   from { background-position:0 0; }
