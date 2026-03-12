@@ -1022,8 +1022,8 @@ let p = 0;
 
 const timer = setInterval(() => {
 
-  p += 4;
-  if(p>100)p=100;
+  p += 6;
+  if (p > 100) p = 100;
 
   const line1 = document.getElementById("loadingLine1");
   const line2 = document.getElementById("loadingLine2");
@@ -1066,11 +1066,11 @@ const timer = setInterval(() => {
         Telegram.WebApp.expand();
       }
 
-    },400);
+    },180);
 
   }
 
-},260);
+},160);
 /* ===== закрытие окон ===== */
 const x1 = document.getElementById("x1");
 const x2 = document.getElementById("x2");
